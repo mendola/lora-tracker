@@ -144,6 +144,7 @@ void filler(void){
 	}
 }
 
+
 void radio_tx_callback(void) {
 	static int call_counter = 0;
 	char payload[20] = {0};
@@ -159,6 +160,61 @@ void radio_tx_callback(void) {
 	RadioError_t status = RADIO_Transmit(&tx_packet);
 	printf("Payload: %s  Ret=%d\r\n", payload, status);
 	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
+}
+
+
+void PrintRadioSettings(void) {
+    printf("********* RADIO Settings *********\r\n");
+    uint32_t frequency = 0;
+    RadioMode_t ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency)
+    if (ret != ERR_NONE) {
+        printf("Failed to read CHANNEL_FREQUENCY\r\n");
+        return ret;
+    } else {
+        printf("%d\r\n", frequency);
+    }
+
+    RadioModulation_t modulation;
+    RadioMode_t ret = RADIO_GetAttr(MODULATION, &modulation);
+    if (ret != ERR_NONE) {
+        printf("Failed to read MODULATION\r\n");
+        return ret;
+    } else {
+        if(modulation == MODULATION_FSK) {
+            printf("MODULATION: MODULATION_FSK\r\n");
+        } else if (modulation == MODULATION_LORA) {
+            printf("MODULATION: MODULATION_LORA\r\n");
+        } else {
+            printf("Invalid Modulation type.\r\n");
+        }
+    }
+
+    RadioLoRaBandWidth_t bandwidth;
+    RadioMode_t ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
+    if (ret != ERR_NONE) {
+        printf("Failed to read BANDWIDTH\r\n");
+        return ret;
+    } else {
+        if(bandwidth == BW_125KHZ) {
+            printf("BANDWIDTH: BW_125KHZ\r\n");
+        } else if (bandwidth == BW_250KHZ) {
+            printf("BANDWIDTH: BW_250KHZ\r\n");
+        } else if (bandwidth == BW_500KHZ) {
+            printf("BANDWIDTH: BW_500KHZ\r\n");
+        } else if (bandwidth == BW_UNDEFINED) {
+            printf("BANDWIDTH: BW_UNDEFINED\r\n");
+        } else {
+            printf("Invalid Modulation type (FSK?). \r\n");
+        }
+    }
+}
+
+RadioError_t InitializeRadio(void) {
+    RadioError_t ret = Radio_WriteMode(MODE_TX, MODULATION_LORA, 1);
+    if (ret != ERR_NONE) {
+        return ret;
+    }
+
 }
 
 /**
@@ -195,6 +251,8 @@ int main(void)
 	
 	SleepTimerInit();
     //mote_demo_init();
+    PrintRadioSettings();
+
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
     while (1)
     {
