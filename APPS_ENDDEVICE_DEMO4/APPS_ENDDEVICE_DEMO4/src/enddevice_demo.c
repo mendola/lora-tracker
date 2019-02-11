@@ -638,7 +638,7 @@ static void demo_handle_evt_rx_data(void *appHandle, appCbParams_t *appdata)
 \brief Callback function for the ending of Bidirectional communication of
        Application data
  *************************************************************************/
-void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
+void demo_appdata_callback1(void *appHandle, appCbParams_t *appdata)
 {
     StackRetStatus_t status = LORAWAN_INVALID_REQUEST;
 
@@ -843,7 +843,7 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
 /*********************************************************************//*
 \brief Callback function for the ending of Activation procedure
  ************************************************************************/
-void demo_joindata_callback(bool status)
+void demo_joindata_callback1(bool status)
 {
     /* This is called every time the join process is finished */
     set_LED_data(LED_GREEN,&off);

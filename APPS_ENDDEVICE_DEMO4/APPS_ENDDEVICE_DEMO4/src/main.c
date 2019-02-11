@@ -48,6 +48,7 @@
 #include "extint.h"
 #include "conf_app.h"
 #include "sw_timer.h"
+#include "led.h"
 #ifdef CONF_PMM_ENABLE
 #include "pmm.h"
 #include  "conf_pmm.h"
@@ -82,6 +83,10 @@ bool deviceResetsForWakeup = false;
 
 /************************** Function Prototypes ********************************/
 static void driver_init(void);
+
+static uint8_t on = LON;
+static uint8_t off = LOFF;
+static uint8_t toggle = LTOGGLE;
 
 #if (_DEBUG_ == 1)
 static void assertHandler(SystemAssertLevel_t level, uint16_t code);
@@ -163,22 +168,341 @@ void radio_tx_callback(void) {
 }
 
 
+/*********************************************************************//**
+\brief Callback function for the ending of Bidirectional communication of
+       Application data
+ *************************************************************************/
+void demo_appdata_callback(void *appHandle, appCbParams_t *appdata){
+	StackRetStatus_t status = LORAWAN_INVALID_REQUEST;
+
+	if (LORAWAN_EVT_RX_DATA_AVAILABLE == appdata->evt)
+	{
+		status = appdata->param.rxData.status;
+		switch(status)
+		{
+			case LORAWAN_SUCCESS:
+			{
+				//demo_handle_evt_rx_data(appHandle, appdata);
+				printf("\n\rLORAWAN_SUCCESS (normally calls demo_handle_evt_rx_data(appHandle, appdata);\n\r");
+			}
+			break;
+			case LORAWAN_RADIO_NO_DATA:
+			{
+				printf("\n\rRADIO_NO_DATA \n\r");
+			}
+			break;
+			case LORAWAN_RADIO_DATA_SIZE:
+			printf("\n\rRADIO_DATA_SIZE \n\r");
+			break;
+			case LORAWAN_RADIO_INVALID_REQ:
+			printf("\n\rRADIO_INVALID_REQ \n\r");
+			break;
+			case LORAWAN_RADIO_BUSY:
+			printf("\n\rRADIO_BUSY \n\r");
+			break;
+			case LORAWAN_RADIO_OUT_OF_RANGE:
+			printf("\n\rRADIO_OUT_OF_RANGE \n\r");
+			break;
+			case LORAWAN_RADIO_UNSUPPORTED_ATTR:
+			printf("\n\rRADIO_UNSUPPORTED_ATTR \n\r");
+			break;
+			case LORAWAN_RADIO_CHANNEL_BUSY:
+			printf("\n\rRADIO_CHANNEL_BUSY \n\r");
+			break;
+			case LORAWAN_NWK_NOT_JOINED:
+			printf("\n\rNWK_NOT_JOINED \n\r");
+			break;
+			case LORAWAN_INVALID_PARAMETER:
+			printf("\n\rINVALID_PARAMETER \n\r");
+			break;
+			case LORAWAN_KEYS_NOT_INITIALIZED:
+			printf("\n\rKEYS_NOT_INITIALIZED \n\r");
+			break;
+			case LORAWAN_SILENT_IMMEDIATELY_ACTIVE:
+			printf("\n\rSILENT_IMMEDIATELY_ACTIVE\n\r");
+			break;
+			case LORAWAN_FCNTR_ERROR_REJOIN_NEEDED:
+			printf("\n\rFCNTR_ERROR_REJOIN_NEEDED \n\r");
+			break;
+			case LORAWAN_INVALID_BUFFER_LENGTH:
+			printf("\n\rINVALID_BUFFER_LENGTH \n\r");
+			break;
+			case LORAWAN_MAC_PAUSED :
+			printf("\n\rMAC_PAUSED  \n\r");
+			break;
+			case LORAWAN_NO_CHANNELS_FOUND:
+			printf("\n\rNO_CHANNELS_FOUND \n\r");
+			break;
+			case LORAWAN_BUSY:
+			printf("\n\rBUSY\n\r");
+			break;
+			case LORAWAN_NO_ACK:
+			printf("\n\rNO_ACK \n\r");
+			break;
+			case LORAWAN_NWK_JOIN_IN_PROGRESS:
+			printf("\n\rALREADY JOINING IS IN PROGRESS \n\r");
+			break;
+			case LORAWAN_RESOURCE_UNAVAILABLE:
+			printf("\n\rRESOURCE_UNAVAILABLE \n\r");
+			break;
+			case LORAWAN_INVALID_REQUEST:
+			printf("\n\rINVALID_REQUEST \n\r");
+			break;
+			case LORAWAN_FCNTR_ERROR:
+			printf("\n\rFCNTR_ERROR \n\r");
+			break;
+			case LORAWAN_MIC_ERROR:
+			printf("\n\rMIC_ERROR \n\r");
+			break;
+			case LORAWAN_INVALID_MTYPE:
+			printf("\n\rINVALID_MTYPE \n\r");
+			break;
+			case LORAWAN_MCAST_HDR_INVALID:
+			printf("\n\rMCAST_HDR_INVALID \n\r");
+			break;
+			//m16946 - payload received in p2p
+			case LORAWAN_RADIO_SUCCESS:
+			{
+				uint8_t dataLength = appdata->param.rxData.dataLength ;	// length of the packet received
+				uint8_t *pData = appdata->param.rxData.pData ;
+				if((dataLength > 0U) && (NULL != pData))
+				{
+					printf ("\nPayload Received: ") ;
+					print_array(pData, dataLength) ;
+					printf("\r\n*************************\r\n");
+				}
+			}
+			break ;
+			default:
+			printf("UNKNOWN ERROR\n\r");
+			break;
+		}
+	}
+	else if(LORAWAN_EVT_TRANSACTION_COMPLETE == appdata->evt)
+	{
+		switch(status = appdata->param.transCmpl.status)
+		{
+			case LORAWAN_SUCCESS:
+			{
+				printf("Transmission Success\r\n");
+			}
+			break;
+			case LORAWAN_RADIO_SUCCESS:
+			{
+				printf("Transmission Success\r\n");
+			}
+			break;
+			case LORAWAN_RADIO_NO_DATA:
+			{
+				printf("\n\rRADIO_NO_DATA \n\r");
+			}
+			break;
+			case LORAWAN_RADIO_DATA_SIZE:
+			printf("\n\rRADIO_DATA_SIZE \n\r");
+			break;
+			case LORAWAN_RADIO_INVALID_REQ:
+			printf("\n\rRADIO_INVALID_REQ \n\r");
+			break;
+			case LORAWAN_RADIO_BUSY:
+			printf("\n\rRADIO_BUSY \n\r");
+			break;
+			case LORAWAN_TX_TIMEOUT:
+			printf("\nTx Timeout\n\r");
+			break;
+			case LORAWAN_RADIO_OUT_OF_RANGE:
+			printf("\n\rRADIO_OUT_OF_RANGE \n\r");
+			break;
+			case LORAWAN_RADIO_UNSUPPORTED_ATTR:
+			printf("\n\rRADIO_UNSUPPORTED_ATTR \n\r");
+			break;
+			case LORAWAN_RADIO_CHANNEL_BUSY:
+			printf("\n\rRADIO_CHANNEL_BUSY \n\r");
+			break;
+			case LORAWAN_NWK_NOT_JOINED:
+			printf("\n\rNWK_NOT_JOINED \n\r");
+			break;
+			case LORAWAN_INVALID_PARAMETER:
+			printf("\n\rINVALID_PARAMETER \n\r");
+			break;
+			case LORAWAN_KEYS_NOT_INITIALIZED:
+			printf("\n\rKEYS_NOT_INITIALIZED \n\r");
+			break;
+			case LORAWAN_SILENT_IMMEDIATELY_ACTIVE:
+			printf("\n\rSILENT_IMMEDIATELY_ACTIVE\n\r");
+			break;
+			case LORAWAN_FCNTR_ERROR_REJOIN_NEEDED:
+			printf("\n\rFCNTR_ERROR_REJOIN_NEEDED \n\r");
+			break;
+			case LORAWAN_INVALID_BUFFER_LENGTH:
+			printf("\n\rINVALID_BUFFER_LENGTH \n\r");
+			break;
+			case LORAWAN_MAC_PAUSED :
+			printf("\n\rMAC_PAUSED  \n\r");
+			break;
+			case LORAWAN_NO_CHANNELS_FOUND:
+			printf("\n\rNO_CHANNELS_FOUND \n\r");
+			break;
+			case LORAWAN_BUSY:
+			printf("\n\rBUSY\n\r");
+			break;
+			case LORAWAN_NO_ACK:
+			printf("\n\rNO_ACK \n\r");
+			break;
+			case LORAWAN_NWK_JOIN_IN_PROGRESS:
+			printf("\n\rALREADY JOINING IS IN PROGRESS \n\r");
+			break;
+			case LORAWAN_RESOURCE_UNAVAILABLE:
+			printf("\n\rRESOURCE_UNAVAILABLE \n\r");
+			break;
+			case LORAWAN_INVALID_REQUEST:
+			printf("\n\rINVALID_REQUEST \n\r");
+			break;
+			case LORAWAN_FCNTR_ERROR:
+			printf("\n\rFCNTR_ERROR \n\r");
+			break;
+			case LORAWAN_MIC_ERROR:
+			printf("\n\rMIC_ERROR \n\r");
+			break;
+			case LORAWAN_INVALID_MTYPE:
+			printf("\n\rINVALID_MTYPE \n\r");
+			break;
+			case LORAWAN_MCAST_HDR_INVALID:
+			printf("\n\rMCAST_HDR_INVALID \n\r");
+			break;
+			default:
+			printf("\n\rUNKNOWN ERROR\n\r");
+			break;
+
+		}
+		printf("\n\r*************************************************\n\r");
+	}
+}
+
+
+/*********************************************************************//*
+\brief Callback function for the ending of Activation procedure
+ ************************************************************************/
+void demo_joindata_callback(bool status)
+{
+    /* This is called every time the join process is finished */
+    set_LED_data(LED_GREEN,&off);
+    if(true == status)
+    {
+        uint32_t devAddress;
+        bool mcastEnabled;
+
+        printf("\nJoining Successful\n\r");
+        LORAWAN_GetAttr(DEV_ADDR, NULL, &devAddress);
+        LORAWAN_GetAttr(MCAST_ENABLE, NULL, &mcastEnabled);
+
+        if (devAddress != DEMO_APP_MCAST_GROUP_ADDRESS)
+        {
+            printf("\nDevAddr: 0x%lx\n\r", devAddress);
+        }
+        else if ((devAddress == DEMO_APP_MCAST_GROUP_ADDRESS) && (true == mcastEnabled))
+        {
+            printf("\nAddress conflict between Device Address and Multicast group address\n\r");
+        }
+        print_application_config();
+        set_LED_data(LED_GREEN,&on);
+    }
+    else
+    {
+        set_LED_data(LED_AMBER,&on);
+        printf("\nJoining Denied\n\r");
+    }
+    printf("\n\r*******************************************************\n\r");
+    //PDS_StoreAll();
+	
+	//appTaskState = JOIN_SEND_STATE;
+    //appPostTask(DISPLAY_TASK_HANDLER);
+}
+
+void SetRadioSettings(void) {
+	// Configure Radio Parameters
+	// --------------------------
+	// Bandwidth = BW_125KHZ
+	// Channel frequency = FREQ_868100KHZ
+	// Channel frequency deviation = 25000
+	// CRC = enabled
+	// Error Coding Rate = 4/5
+	// IQ Inverted = disabled
+	// LoRa Sync Word = 0x34
+	// Modulation = LoRa
+	// PA Boost = disabled (disabled for EU , enabled for NA)
+	// Output Power = 1 (up to +14dBm for EU / up to +20dBm for NA)
+	// Spreading Factor = SF7
+	// Watchdog timeout = 60000
+
+	// Bandwidth
+	RadioLoRaBandWidth_t bw = BW_125KHZ ;
+	RADIO_SetAttr(BANDWIDTH, &bw) ;
+	printf("Configuring Radio Bandwidth: 125kHz\r\n") ;
+	// Channel Frequency
+	uint32_t freq = FREQ_868100KHZ ;
+	RADIO_SetAttr(CHANNEL_FREQUENCY, &freq) ;
+	printf("Configuring Channel Frequency %ld\r\n", freq) ;
+	// Channel Frequency Deviation
+	uint32_t fdev = 25000 ;
+	RADIO_SetAttr(CHANNEL_FREQUENCY_DEVIATION, &fdev) ;
+	printf("Configuring Channel Frequency Deviation %ld\r\n", fdev) ;
+	// CRC
+	uint8_t crc_state = 1 ;
+	RADIO_SetAttr(CRC, &crc_state) ;
+	printf("Configuring CRC state: %d\r\n", crc_state) ;
+	// Error Coding Rate
+	RadioErrorCodingRate_t cr = CR_4_5 ;
+	RADIO_SetAttr(ERROR_CODING_RATE, &cr) ;
+	printf("Configuring Error Coding Rate 4/5\r\n") ;
+	// IQ Inverted
+	uint8_t iqi = 0 ;
+	RADIO_SetAttr(IQINVERTED, &iqi) ;
+	printf("Configuring IQ Inverted: %d\r\n", iqi) ;
+	// LoRa Sync Word
+	uint8_t sync_word = 0x34 ;
+	RADIO_SetAttr(LORA_SYNC_WORD, &sync_word) ;
+	printf("Configuring LoRa sync word 0x%x\r\n", sync_word) ;
+	// Modulation
+	RadioModulation_t mod = MODULATION_LORA ;
+	RADIO_SetAttr(MODULATION, &mod) ;
+	printf("Configuring Modulation: LORA\r\n") ;
+	// PA Boost
+	uint8_t pa_boost = 0 ;
+	RADIO_SetAttr(PABOOST, &pa_boost) ;
+	printf("Configuring PA Boost: %d\r\n", pa_boost) ;
+	// Tx Output Power
+	int16_t outputPwr = 1 ;
+	RADIO_SetAttr(OUTPUT_POWER, (void *)&outputPwr) ;
+	printf("Configuring Radio Output Power %d\r\n", outputPwr) ;
+	// Spreading Factor
+	int16_t sf = SF_7 ;
+	RADIO_SetAttr(SPREADING_FACTOR, (void *)&sf) ;
+	printf("Configuring Radio SF %d\r\n", sf) ;
+	// Watchdog Timeout
+	uint32_t wdt = 60000 ;
+	RADIO_SetAttr(WATCHDOG_TIMEOUT, (void *)&wdt) ;
+	printf("Configuring Radio Watch Dog Timeout %ld\r\n", wdt) ;
+	//appTaskState = JOIN_SEND_STATE ;
+	//appPostTask(DISPLAY_TASK_HANDLER) ;
+}
+
+
 void PrintRadioSettings(void) {
     printf("********* RADIO Settings *********\r\n");
     uint32_t frequency = 0;
-    RadioMode_t ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency)
+    RadioError_t ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency);
     if (ret != ERR_NONE) {
         printf("Failed to read CHANNEL_FREQUENCY\r\n");
         return ret;
     } else {
-        printf("%d\r\n", frequency);
+        printf("Frequency: %d Hz\r\n", frequency);
     }
 
     RadioModulation_t modulation;
-    RadioMode_t ret = RADIO_GetAttr(MODULATION, &modulation);
-    if (ret != ERR_NONE) {
+    RadioError_t mod_ret = RADIO_GetAttr(MODULATION, &modulation);
+    if (mod_ret != ERR_NONE) {
         printf("Failed to read MODULATION\r\n");
-        return ret;
+        return mod_ret;
     } else {
         if(modulation == MODULATION_FSK) {
             printf("MODULATION: MODULATION_FSK\r\n");
@@ -190,10 +514,10 @@ void PrintRadioSettings(void) {
     }
 
     RadioLoRaBandWidth_t bandwidth;
-    RadioMode_t ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
-    if (ret != ERR_NONE) {
+    RadioError_t bw_ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
+    if (bw_ret != ERR_NONE) {
         printf("Failed to read BANDWIDTH\r\n");
-        return ret;
+        return bw_ret;
     } else {
         if(bandwidth == BW_125KHZ) {
             printf("BANDWIDTH: BW_125KHZ\r\n");
@@ -209,13 +533,6 @@ void PrintRadioSettings(void) {
     }
 }
 
-RadioError_t InitializeRadio(void) {
-    RadioError_t ret = Radio_WriteMode(MODE_TX, MODULATION_LORA, 1);
-    if (ret != ERR_NONE) {
-        return ret;
-    }
-
-}
 
 /**
  * \mainpage
@@ -246,14 +563,38 @@ int main(void)
 
     SwTimerCreate(&demoTimerId);
     //SwTimerCreate(&lTimerId);
-	
-	RADIO_Init();
-	
+		
 	SleepTimerInit();
     //mote_demo_init();
-    PrintRadioSettings();
 
-	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
+    LORAWAN_Init(demo_appdata_callback, demo_joindata_callback);
+    printf("\n\n\r*******************************************************\n\r");
+    printf("\n\rMicrochip LoRaWAN Stack %s\r\n",STACK_VER);
+    printf("\r\nInit - Successful\r\n");
+	
+	StackRetStatus_t rst_ret = LORAWAN_Reset(ISM_NA915);
+	if (rst_ret != LORAWAN_RADIO_SUCCESS && rst_ret != LORAWAN_SUCCESS) {
+		printf("Failed to reset LORAWAN: %d\r\n", rst_ret);
+	}
+	
+	// Lets us mess with LoRa settings
+	LORAWAN_Pause();
+	
+	// Set LoRa Settings
+	SetRadioSettings();
+	PrintRadioSettings();
+
+	// Enter Radio Receive mode
+	RadioReceiveParam_t radioReceiveParam ;
+	uint32_t rxTimeout = 0 ;	// forever
+	radioReceiveParam.action = RECEIVE_START ;
+	radioReceiveParam.rxWindowSize = rxTimeout;
+	if (RADIO_Receive(&radioReceiveParam) == 0)
+	{
+		printf("Radio in Receive mode\r\n") ;
+	}
+	
+	//SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
     while (1)
     {
 		SYSTEM_RunTasks();
