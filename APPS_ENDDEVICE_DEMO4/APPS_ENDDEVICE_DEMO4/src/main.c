@@ -62,6 +62,8 @@
 #include "conf_certification.h"
 #include "enddevice_cert.h"
 #endif
+
+#include "radio_interface.h"
 /************************** Macro definition ***********************************/
 /* Button debounce time in ms */
 #define APP_DEBOUNCE_TIME       50
@@ -136,6 +138,29 @@ static void assertHandler(SystemAssertLevel_t level, uint16_t code)
 }
 #endif /* #if (_DEBUG_ == 1) */
 
+void filler(void){
+	for (int j = 0; j < 1000; j++){
+		int k = j*j -1000;
+	}
+}
+
+void radio_tx_callback(void) {
+	static int call_counter = 0;
+	char payload[20] = {0};
+	strcpy(payload, "Transmit #");
+	itoa(++call_counter, payload+10,10);
+	//strcpy(payload+10,itoa(++call_counter));
+	
+	RadioTransmitParam_t tx_packet;
+	//payload[13] = "\r\n";
+	tx_packet.bufferLen = 20;
+	tx_packet.bufferPtr = (uint8_t*)payload;
+	
+	RadioError_t status = RADIO_Transmit(&tx_packet);
+	printf("Payload: %s  Ret=%d\r\n", payload, status);
+	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
+}
+
 /**
  * \mainpage
  * \section preface Preface
@@ -164,42 +189,18 @@ int main(void)
     Stack_Init();
 
     SwTimerCreate(&demoTimerId);
-    SwTimerCreate(&lTimerId);
-
-    mote_demo_init();
-
+    //SwTimerCreate(&lTimerId);
+	
+	RADIO_Init();
+	
+	SleepTimerInit();
+    //mote_demo_init();
+	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
     while (1)
     {
-		serial_data_handler();
-        SYSTEM_RunTasks();
-#ifdef CONF_PMM_ENABLE
-        if (false == certAppEnabled)
-        {
-            if(bandSelected == true)
-            {
-                PMM_SleepReq_t sleepReq;
-                /* Put the application to sleep */
-                sleepReq.sleepTimeMs = DEMO_CONF_DEFAULT_APP_SLEEP_TIME_MS;
-                sleepReq.pmmWakeupCallback = appWakeup;
-                sleepReq.sleep_mode = CONF_PMM_SLEEPMODE_WHEN_IDLE;
-                if (CONF_PMM_SLEEPMODE_WHEN_IDLE == SLEEP_MODE_STANDBY)
-                {
-                    deviceResetsForWakeup = false;
-                }
-                if (true == LORAWAN_ReadyToSleep(deviceResetsForWakeup))
-                {
-                    app_resources_uninit();
-                    if (PMM_SLEEP_REQ_DENIED == PMM_Sleep(&sleepReq))
-                    {
-                        HAL_Radio_resources_init();
-                        sio2host_init();
-                        /*printf("\r\nsleep_not_ok\r\n");*/
-                    }
-                }
-            }
-        }
-#endif
-    }
+		SYSTEM_RunTasks();
+		//printf("Main looped");
+	}
 }
 
 /* Initializes all the hardware and software modules used for Stack operation */
