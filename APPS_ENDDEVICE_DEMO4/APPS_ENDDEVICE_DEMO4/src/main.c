@@ -267,10 +267,10 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata){
 				uint8_t *pData = appdata->param.rxData.pData ;
 				if((dataLength > 0U) && (NULL != pData))
 				{
-					printf ("\nPayload Received. Length: %d\r\n", dataLength) ;
-					for (int idx=0; idx<dataLength; idx++){
-						printf("%d ", pData[idx]);
-					}
+					printf ("\r\nPayload of length %d received: %s", dataLength, (char*)pData) ;
+					//for (int idx=0; idx<dataLength; idx++){
+					//	printf("%d ", pData[idx]);
+					//}
 
 					// Enter Radio Receive mode
 					RadioReceiveParam_t radioReceiveParam ;
