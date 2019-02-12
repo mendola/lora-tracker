@@ -3,45 +3,45 @@ APPS_ENDDEVICE_DEMO4.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0001c78c  00000000  00000000  00010000  2**3
+  0 .text         0001c79c  00000000  00000000  00010000  2**3
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .ARM.exidx    00000008  0001c78c  0001c78c  0002c78c  2**2
+  1 .ARM.exidx    00000008  0001c79c  0001c79c  0002c79c  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  2 .relocate     00000a78  20000000  0001c794  00030000  2**3
+  2 .relocate     00000a78  20000000  0001c7a4  00030000  2**3
                   CONTENTS, ALLOC, LOAD, DATA
   3 .lpram        00000000  30000000  30000000  00030a78  2**0
                   CONTENTS
-  4 .bss          00001340  20000a78  0001d210  00030a78  2**3
+  4 .bss          00001378  20000a78  0001d220  00030a78  2**3
                   ALLOC
-  5 .stack        00002000  20001db8  0001e550  00030a78  2**0
+  5 .stack        00002000  20001df0  0001e598  00030a78  2**0
                   ALLOC
   6 .ARM.attributes 00000028  00000000  00000000  00030a78  2**0
                   CONTENTS, READONLY
   7 .comment      0000008c  00000000  00000000  00030aa0  2**0
                   CONTENTS, READONLY
-  8 .debug_info   0007cbc4  00000000  00000000  00030b2c  2**0
+  8 .debug_info   0007cb9f  00000000  00000000  00030b2c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 0000c15f  00000000  00000000  000ad6f0  2**0
+  9 .debug_abbrev 0000c151  00000000  00000000  000ad6cb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000178d5  00000000  00000000  000b984f  2**0
+ 10 .debug_loc    000178d5  00000000  00000000  000b981c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_aranges 000014a8  00000000  00000000  000d1124  2**0
+ 11 .debug_aranges 000014a8  00000000  00000000  000d10f1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00001c68  00000000  00000000  000d25cc  2**0
+ 12 .debug_ranges 00001c68  00000000  00000000  000d2599  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0002f4ff  00000000  00000000  000d4234  2**0
+ 13 .debug_macro  0002f4ff  00000000  00000000  000d4201  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   0002f672  00000000  00000000  00103733  2**0
+ 14 .debug_line   0002f671  00000000  00000000  00103700  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    000b125f  00000000  00000000  00132da5  2**0
+ 15 .debug_str    000b1261  00000000  00000000  00132d71  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00004bd4  00000000  00000000  001e4004  2**2
+ 16 .debug_frame  00004bd4  00000000  00000000  001e3fd4  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <exception_table>:
-       0:	b8 3d 00 20 cd 29 00 00 c9 29 00 00 c9 29 00 00     .=. .)...)...)..
+       0:	f0 3d 00 20 cd 29 00 00 c9 29 00 00 c9 29 00 00     .=. .)...)...)..
 	...
       2c:	c9 29 00 00 00 00 00 00 00 00 00 00 c9 29 00 00     .)...........)..
       3c:	c9 29 00 00 c9 29 00 00 c9 29 00 00 59 0d 00 00     .)...)...)..Y...
@@ -70,7 +70,7 @@ Disassembly of section .text:
       ce:	bd10      	pop	{r4, pc}
       d0:	20000a78 	.word	0x20000a78
       d4:	00000000 	.word	0x00000000
-      d8:	0001c794 	.word	0x0001c794
+      d8:	0001c7a4 	.word	0x0001c7a4
 
 000000dc <frame_dummy>:
       dc:	4b08      	ldr	r3, [pc, #32]	; (100 <frame_dummy+0x24>)
@@ -93,8 +93,8 @@ Disassembly of section .text:
       fe:	e7f9      	b.n	f4 <frame_dummy+0x18>
      100:	00000000 	.word	0x00000000
      104:	20000a7c 	.word	0x20000a7c
-     108:	0001c794 	.word	0x0001c794
-     10c:	0001c794 	.word	0x0001c794
+     108:	0001c7a4 	.word	0x0001c7a4
+     10c:	0001c7a4 	.word	0x0001c7a4
      110:	00000000 	.word	0x00000000
 
 00000114 <delay_init>:
@@ -582,7 +582,7 @@ void ADC_Handler(void)
 }
      344:	e7ea      	b.n	31c <ADC_Handler+0x94>
      346:	46c0      	nop			; (mov r8, r8)
-     348:	200010e4 	.word	0x200010e4
+     348:	2000111c 	.word	0x2000111c
 
 0000034c <aes_get_config_defaults>:
 		struct aes_config *const config)
@@ -1015,7 +1015,7 @@ void aes_write_input_data(
 		return STATUS_OK;
      514:	2300      	movs	r3, #0
      516:	e7ee      	b.n	4f6 <extint_register_callback+0x6>
-     518:	200010ec 	.word	0x200010ec
+     518:	20001124 	.word	0x20001124
 
 0000051c <extint_chan_enable_callback>:
 
@@ -1132,9 +1132,9 @@ static inline bool extint_chan_is_detected(
 	}
 }
      582:	bd70      	pop	{r4, r5, r6, pc}
-     584:	200010e8 	.word	0x200010e8
+     584:	20001120 	.word	0x20001120
      588:	40002400 	.word	0x40002400
-     58c:	200010ec 	.word	0x200010ec
+     58c:	20001124 	.word	0x20001124
 
 00000590 <_extint_enable>:
 {
@@ -1259,7 +1259,7 @@ static inline void system_interrupt_enable(
      61a:	bd10      	pop	{r4, pc}
      61c:	40000400 	.word	0x40000400
      620:	40002400 	.word	0x40002400
-     624:	200010ec 	.word	0x200010ec
+     624:	20001124 	.word	0x20001124
      628:	e000e100 	.word	0xe000e100
      62c:	00000591 	.word	0x00000591
 
@@ -2719,7 +2719,7 @@ enum status_code rtc_count_set_compare(
      c84:	40000400 	.word	0x40000400
      c88:	40001000 	.word	0x40001000
      c8c:	00000af1 	.word	0x00000af1
-     c90:	2000112c 	.word	0x2000112c
+     c90:	20001164 	.word	0x20001164
      c94:	00000b99 	.word	0x00000b99
 
 00000c98 <rtc_count_register_callback>:
@@ -3044,7 +3044,7 @@ void RTC_Handler(void)
      e0e:	4798      	blx	r3
      e10:	e7f7      	b.n	e02 <RTC_Handler+0xaa>
      e12:	46c0      	nop			; (mov r8, r8)
-     e14:	2000112c 	.word	0x2000112c
+     e14:	20001164 	.word	0x20001164
      e18:	ffff8000 	.word	0xffff8000
 
 00000e1c <long_division>:
@@ -3683,7 +3683,7 @@ void _sercom_set_handler(
     11a4:	20000aa6 	.word	0x20000aa6
     11a8:	20000aa8 	.word	0x20000aa8
     11ac:	00001175 	.word	0x00001175
-    11b0:	20001130 	.word	0x20001130
+    11b0:	20001168 	.word	0x20001168
 
 000011b4 <_sercom_get_interrupt_vector>:
  * \retval SYSTEM_INTERRUPT_MODULE_SERCOM6
@@ -5130,7 +5130,7 @@ enum status_code usart_init(
     1970:	0000248d 	.word	0x0000248d
     1974:	00001ab5 	.word	0x00001ab5
     1978:	00001179 	.word	0x00001179
-    197c:	20001130 	.word	0x20001130
+    197c:	20001168 	.word	0x20001168
 
 00001980 <usart_write_wait>:
 
@@ -5792,7 +5792,7 @@ void _usart_interrupt_handler(
     1c40:	4798      	blx	r3
 }
     1c42:	e7f2      	b.n	1c2a <_usart_interrupt_handler+0x176>
-    1c44:	20001130 	.word	0x20001130
+    1c44:	20001168 	.word	0x20001168
 
 00001c48 <system_clock_source_get_hz>:
  *
@@ -7734,7 +7734,7 @@ void _tc_interrupt_handler(
 }
     257c:	e7e2      	b.n	2544 <_tc_interrupt_handler+0x24>
     257e:	46c0      	nop			; (mov r8, r8)
-    2580:	20001148 	.word	0x20001148
+    2580:	20001180 	.word	0x20001180
 
 00002584 <TC0_Handler>:
 	MRECURSION(TC_INST_NUM, _TC_INTERRUPT_HANDLER, TC_INST_MAX_ID)
@@ -8387,7 +8387,7 @@ enum status_code tc_init(
     28da:	46c0      	nop			; (mov r8, r8)
     28dc:	000025d5 	.word	0x000025d5
     28e0:	0001aaac 	.word	0x0001aaac
-    28e4:	20001148 	.word	0x20001148
+    28e4:	20001180 	.word	0x20001180
     28e8:	0001aa84 	.word	0x0001aa84
     28ec:	0000248d 	.word	0x0000248d
     28f0:	40000400 	.word	0x40000400
@@ -8675,12 +8675,12 @@ void Dummy_Handler(void)
     2a32:	4798      	blx	r3
     2a34:	e7fe      	b.n	2a34 <Reset_Handler+0x68>
     2a36:	46c0      	nop			; (mov r8, r8)
-    2a38:	0001c794 	.word	0x0001c794
+    2a38:	0001c7a4 	.word	0x0001c7a4
     2a3c:	20000000 	.word	0x20000000
     2a40:	20000a78 	.word	0x20000a78
     2a44:	20000004 	.word	0x20000004
     2a48:	20000a78 	.word	0x20000a78
-    2a4c:	20001db8 	.word	0x20001db8
+    2a4c:	20001df0 	.word	0x20001df0
     2a50:	e000ed00 	.word	0xe000ed00
     2a54:	00000000 	.word	0x00000000
     2a58:	41004000 	.word	0x41004000
@@ -8740,8 +8740,8 @@ _read (int file, char * ptr, int len)
     2a9a:	4680      	mov	r8, r0
     2a9c:	e7f5      	b.n	2a8a <_read+0x26>
     2a9e:	46c0      	nop			; (mov r8, r8)
-    2aa0:	20001164 	.word	0x20001164
-    2aa4:	2000115c 	.word	0x2000115c
+    2aa0:	2000119c 	.word	0x2000119c
+    2aa4:	20001194 	.word	0x20001194
 
 00002aa8 <_write>:
 int __attribute__((weak))
@@ -8804,8 +8804,8 @@ _write (int file, char * ptr, int len)
     2aea:	bc04      	pop	{r2}
     2aec:	4690      	mov	r8, r2
     2aee:	bdf0      	pop	{r4, r5, r6, r7, pc}
-    2af0:	20001164 	.word	0x20001164
-    2af4:	20001160 	.word	0x20001160
+    2af0:	2000119c 	.word	0x2000119c
+    2af4:	20001198 	.word	0x20001198
 
 00002af8 <_sbrk>:
 extern void _exit(int status);
@@ -8842,7 +8842,7 @@ extern caddr_t _sbrk(int incr)
     2b10:	6011      	str	r1, [r2, #0]
     2b12:	e7f6      	b.n	2b02 <_sbrk+0xa>
     2b14:	20000ad8 	.word	0x20000ad8
-    2b18:	20003db8 	.word	0x20003db8
+    2b18:	20003df0 	.word	0x20003df0
 
 00002b1c <_close>:
 }
@@ -9273,11 +9273,11 @@ static inline void stdio_serial_init(
     2ce8:	00040003 	.word	0x00040003
     2cec:	00050003 	.word	0x00050003
     2cf0:	20000adc 	.word	0x20000adc
-    2cf4:	20001164 	.word	0x20001164
+    2cf4:	2000119c 	.word	0x2000119c
     2cf8:	00002b61 	.word	0x00002b61
-    2cfc:	20001160 	.word	0x20001160
+    2cfc:	20001198 	.word	0x20001198
     2d00:	00002b35 	.word	0x00002b35
-    2d04:	2000115c 	.word	0x2000115c
+    2d04:	20001194 	.word	0x20001194
     2d08:	00001615 	.word	0x00001615
     2d0c:	200000cc 	.word	0x200000cc
     2d10:	0001422d 	.word	0x0001422d
@@ -9646,7 +9646,7 @@ static uint8_t HAL_SPISend(uint8_t data)
 }
     2f24:	bd10      	pop	{r4, pc}
     2f26:	46c0      	nop			; (mov r8, r8)
-    2f28:	20001168 	.word	0x20001168
+    2f28:	200011a0 	.word	0x200011a0
     2f2c:	20000ba0 	.word	0x20000ba0
     2f30:	00001521 	.word	0x00001521
 
@@ -9662,7 +9662,7 @@ static uint8_t HAL_SPISend(uint8_t data)
 }
     2f40:	bd10      	pop	{r4, pc}
     2f42:	46c0      	nop			; (mov r8, r8)
-    2f44:	20001168 	.word	0x20001168
+    2f44:	200011a0 	.word	0x200011a0
     2f48:	20000ba0 	.word	0x20000ba0
     2f4c:	00001521 	.word	0x00001521
 
@@ -9926,7 +9926,7 @@ static uint8_t HAL_SPISend(uint8_t data)
     30d4:	0000051d 	.word	0x0000051d
     30d8:	00002ed9 	.word	0x00002ed9
     30dc:	00002eb9 	.word	0x00002eb9
-    30e0:	20001168 	.word	0x20001168
+    30e0:	200011a0 	.word	0x200011a0
     30e4:	40002800 	.word	0x40002800
     30e8:	00014079 	.word	0x00014079
     30ec:	001e8480 	.word	0x001e8480
@@ -10409,7 +10409,7 @@ void SleepTimerInit(void)
 }
     3350:	b004      	add	sp, #16
     3352:	bd10      	pop	{r4, pc}
-    3354:	2000116c 	.word	0x2000116c
+    3354:	200011a4 	.word	0x200011a4
     3358:	40002000 	.word	0x40002000
     335c:	00000bfd 	.word	0x00000bfd
     3360:	00000a7d 	.word	0x00000a7d
@@ -10429,7 +10429,7 @@ uint32_t SleepTimerGetElapsedTime(void)
 }
     336c:	bd10      	pop	{r4, pc}
     336e:	46c0      	nop			; (mov r8, r8)
-    3370:	2000116c 	.word	0x2000116c
+    3370:	200011a4 	.word	0x200011a4
     3374:	00000b6d 	.word	0x00000b6d
 
 00003378 <SleepTimerStart>:
@@ -10468,7 +10468,7 @@ void SleepTimerStart(uint32_t sleepTicks, void (*cb)(void))
 }
     33a4:	bd70      	pop	{r4, r5, r6, pc}
     33a6:	46c0      	nop			; (mov r8, r8)
-    33a8:	2000116c 	.word	0x2000116c
+    33a8:	200011a4 	.word	0x200011a4
     33ac:	00000b29 	.word	0x00000b29
     33b0:	00000c99 	.word	0x00000c99
     33b4:	00000b99 	.word	0x00000b99
@@ -10489,7 +10489,7 @@ void SleepTimerStop(void)
     33c4:	4798      	blx	r3
 }
     33c6:	bd10      	pop	{r4, pc}
-    33c8:	2000116c 	.word	0x2000116c
+    33c8:	200011a4 	.word	0x200011a4
     33cc:	00000d19 	.word	0x00000d19
 
 000033d0 <SystemBlockingWaitMs>:
@@ -11076,8 +11076,8 @@ void LorawanReg_AS_Pds_Cb(void)
 	StackRetStatus_t result = LORAWAN_SUCCESS;
     3760:	2408      	movs	r4, #8
     3762:	e771      	b.n	3648 <LORAReg_InitAS+0xc4>
-    3764:	200013c8 	.word	0x200013c8
-    3768:	200013c4 	.word	0x200013c4
+    3764:	20001400 	.word	0x20001400
+    3768:	200013fc 	.word	0x200013fc
     376c:	20000bb4 	.word	0x20000bb4
     3770:	00007265 	.word	0x00007265
     3774:	00007951 	.word	0x00007951
@@ -11090,7 +11090,7 @@ void LorawanReg_AS_Pds_Cb(void)
     3790:	0001ab44 	.word	0x0001ab44
     3794:	0001ab04 	.word	0x0001ab04
     3798:	00003581 	.word	0x00003581
-    379c:	200011a4 	.word	0x200011a4
+    379c:	200011dc 	.word	0x200011dc
     37a0:	0001ab54 	.word	0x0001ab54
     37a4:	00008165 	.word	0x00008165
 
@@ -11358,12 +11358,12 @@ void LorawanReg_AU_Pds_Cb(void)
     394a:	46a2      	mov	sl, r4
     394c:	46ab      	mov	fp, r5
     394e:	bdf0      	pop	{r4, r5, r6, r7, pc}
-    3950:	200013c8 	.word	0x200013c8
+    3950:	20001400 	.word	0x20001400
     3954:	0001ab6c 	.word	0x0001ab6c
     3958:	00013ff5 	.word	0x00013ff5
     395c:	0001abfc 	.word	0x0001abfc
     3960:	000037a9 	.word	0x000037a9
-    3964:	200011a8 	.word	0x200011a8
+    3964:	200011e0 	.word	0x200011e0
     3968:	0001ac6c 	.word	0x0001ac6c
     396c:	00008165 	.word	0x00008165
     3970:	000073a1 	.word	0x000073a1
@@ -11729,18 +11729,18 @@ void LorawanReg_EU868_Pds_Cb(void)
     3bb6:	75da      	strb	r2, [r3, #23]
     3bb8:	e7b2      	b.n	3b20 <LORAReg_InitEU+0x1a0>
     3bba:	46c0      	nop			; (mov r8, r8)
-    3bbc:	200013c8 	.word	0x200013c8
-    3bc0:	200013c4 	.word	0x200013c4
+    3bbc:	20001400 	.word	0x20001400
+    3bc0:	200013fc 	.word	0x200013fc
     3bc4:	0001accc 	.word	0x0001accc
     3bc8:	00013ff5 	.word	0x00013ff5
     3bcc:	0001aca0 	.word	0x0001aca0
     3bd0:	0001ad2c 	.word	0x0001ad2c
     3bd4:	0001ad14 	.word	0x0001ad14
     3bd8:	0000397d 	.word	0x0000397d
-    3bdc:	200011ac 	.word	0x200011ac
+    3bdc:	200011e4 	.word	0x200011e4
     3be0:	0001ad74 	.word	0x0001ad74
     3be4:	00008165 	.word	0x00008165
-    3be8:	200011b0 	.word	0x200011b0
+    3be8:	200011e8 	.word	0x200011e8
     3bec:	0001ad7c 	.word	0x0001ad7c
     3bf0:	0001acd4 	.word	0x0001acd4
     3bf4:	00007129 	.word	0x00007129
@@ -11994,7 +11994,7 @@ void LorawanReg_IND_Pds_Cb(void)
     3d86:	2408      	movs	r4, #8
     3d88:	e795      	b.n	3cb6 <LORAReg_InitIN+0xa6>
     3d8a:	46c0      	nop			; (mov r8, r8)
-    3d8c:	200013c8 	.word	0x200013c8
+    3d8c:	20001400 	.word	0x20001400
     3d90:	000074d1 	.word	0x000074d1
     3d94:	00007a29 	.word	0x00007a29
     3d98:	00007c35 	.word	0x00007c35
@@ -12003,7 +12003,7 @@ void LorawanReg_IND_Pds_Cb(void)
     3da4:	0001ad84 	.word	0x0001ad84
     3da8:	0001adb0 	.word	0x0001adb0
     3dac:	00003c0d 	.word	0x00003c0d
-    3db0:	200011b4 	.word	0x200011b4
+    3db0:	200011ec 	.word	0x200011ec
     3db4:	0001adf0 	.word	0x0001adf0
     3db8:	00008165 	.word	0x00008165
 
@@ -12322,8 +12322,8 @@ void LorawanReg_JPN_Pds_Cb(void)
     3faa:	2408      	movs	r4, #8
     3fac:	e778      	b.n	3ea0 <LORAReg_InitJP+0xe0>
     3fae:	46c0      	nop			; (mov r8, r8)
-    3fb0:	200013c8 	.word	0x200013c8
-    3fb4:	200013c4 	.word	0x200013c4
+    3fb0:	20001400 	.word	0x20001400
+    3fb4:	200013fc 	.word	0x200013fc
     3fb8:	000075fd 	.word	0x000075fd
     3fbc:	00007a91 	.word	0x00007a91
     3fc0:	00007c71 	.word	0x00007c71
@@ -12334,7 +12334,7 @@ void LorawanReg_JPN_Pds_Cb(void)
     3fd4:	0001ae5c 	.word	0x0001ae5c
     3fd8:	0001ae1c 	.word	0x0001ae1c
     3fdc:	00003dbd 	.word	0x00003dbd
-    3fe0:	200011b8 	.word	0x200011b8
+    3fe0:	200011f0 	.word	0x200011f0
     3fe4:	0001ae6c 	.word	0x0001ae6c
     3fe8:	00008165 	.word	0x00008165
 
@@ -12707,8 +12707,8 @@ void LorawanReg_KR_Pds_Cb(void)
     423a:	2408      	movs	r4, #8
     423c:	e73f      	b.n	40be <LORAReg_InitKR+0xce>
     423e:	46c0      	nop			; (mov r8, r8)
-    4240:	200013c8 	.word	0x200013c8
-    4244:	200013c4 	.word	0x200013c4
+    4240:	20001400 	.word	0x20001400
+    4244:	200013fc 	.word	0x200013fc
     4248:	0000773d 	.word	0x0000773d
     424c:	00007afd 	.word	0x00007afd
     4250:	00007cbd 	.word	0x00007cbd
@@ -12717,7 +12717,7 @@ void LorawanReg_KR_Pds_Cb(void)
     425c:	0001ae7c 	.word	0x0001ae7c
     4260:	0001aea8 	.word	0x0001aea8
     4264:	00003fed 	.word	0x00003fed
-    4268:	200011bc 	.word	0x200011bc
+    4268:	200011f4 	.word	0x200011f4
     426c:	0001aed8 	.word	0x0001aed8
     4270:	00008165 	.word	0x00008165
 
@@ -12985,12 +12985,12 @@ void LorawanReg_NA_Pds_Cb(void)
     4416:	46a2      	mov	sl, r4
     4418:	46ab      	mov	fp, r5
     441a:	bdf0      	pop	{r4, r5, r6, r7, pc}
-    441c:	200013c8 	.word	0x200013c8
+    441c:	20001400 	.word	0x20001400
     4420:	0001aee8 	.word	0x0001aee8
     4424:	00013ff5 	.word	0x00013ff5
     4428:	0001af78 	.word	0x0001af78
     442c:	00004275 	.word	0x00004275
-    4430:	200011c0 	.word	0x200011c0
+    4430:	200011f8 	.word	0x200011f8
     4434:	0001afe8 	.word	0x0001afe8
     4438:	00008165 	.word	0x00008165
     443c:	00006ff5 	.word	0x00006ff5
@@ -13031,7 +13031,7 @@ static StackRetStatus_t LORAREG_GetAttr_MaxChannel(LorawanRegionalAttributes_t a
 }
     4458:	2008      	movs	r0, #8
     445a:	4770      	bx	lr
-    445c:	200013c8 	.word	0x200013c8
+    445c:	20001400 	.word	0x20001400
 
 00004460 <LORAREG_GetAttr_MinNewChIndex>:
 
@@ -13060,7 +13060,7 @@ static StackRetStatus_t LORAREG_GetAttr_MinNewChIndex(LorawanRegionalAttributes_
 		result = LORAWAN_INVALID_PARAMETER;
     4470:	3002      	adds	r0, #2
     4472:	e7fc      	b.n	446e <LORAREG_GetAttr_MinNewChIndex+0xe>
-    4474:	200013c8 	.word	0x200013c8
+    4474:	20001400 	.word	0x20001400
 
 00004478 <LORAREG_GetAttr_DefRx1DataRate>:
 }
@@ -13077,7 +13077,7 @@ static StackRetStatus_t LORAREG_GetAttr_DefRx1DataRate(LorawanRegionalAttributes
     447e:	2008      	movs	r0, #8
     4480:	4770      	bx	lr
     4482:	46c0      	nop			; (mov r8, r8)
-    4484:	200013c8 	.word	0x200013c8
+    4484:	20001400 	.word	0x20001400
 
 00004488 <LORAREG_GetAttr_DefRx2DataRate>:
 
@@ -13092,7 +13092,7 @@ static StackRetStatus_t LORAREG_GetAttr_DefRx2DataRate(LorawanRegionalAttributes
     448e:	2008      	movs	r0, #8
     4490:	4770      	bx	lr
     4492:	46c0      	nop			; (mov r8, r8)
-    4494:	200013c8 	.word	0x200013c8
+    4494:	20001400 	.word	0x20001400
 
 00004498 <LORAREG_GetAttr_RegFeatures>:
 	return LORAWAN_SUCCESS;
@@ -13109,7 +13109,7 @@ static StackRetStatus_t LORAREG_GetAttr_RegFeatures(LorawanRegionalAttributes_t 
     449e:	2008      	movs	r0, #8
     44a0:	4770      	bx	lr
     44a2:	46c0      	nop			; (mov r8, r8)
-    44a4:	200013c8 	.word	0x200013c8
+    44a4:	20001400 	.word	0x20001400
 
 000044a8 <LORAREG_GetAttr_DataRange>:
 
@@ -13170,7 +13170,7 @@ static StackRetStatus_t LORAREG_GetAttr_DataRange(LorawanRegionalAttributes_t at
     44ec:	e7ed      	b.n	44ca <LORAREG_GetAttr_DataRange+0x22>
     44ee:	46c0      	nop			; (mov r8, r8)
     44f0:	20000d70 	.word	0x20000d70
-    44f4:	200013c8 	.word	0x200013c8
+    44f4:	20001400 	.word	0x20001400
 
 000044f8 <LORAREG_GetAttr_ChIdStatus>:
 }
@@ -13233,7 +13233,7 @@ static StackRetStatus_t LORAREG_GetAttr_ChIdStatus(LorawanRegionalAttributes_t a
     4538:	702b      	strb	r3, [r5, #0]
     453a:	e7ee      	b.n	451a <LORAREG_GetAttr_ChIdStatus+0x22>
     453c:	20000d70 	.word	0x20000d70
-    4540:	200013c8 	.word	0x200013c8
+    4540:	20001400 	.word	0x20001400
 
 00004544 <LORAREG_GetAttr_DutyCycleT1>:
 
@@ -13380,7 +13380,7 @@ static StackRetStatus_t LORAREG_GetAttr_RegDefTxPwr(LorawanRegionalAttributes_t 
     45ae:	2008      	movs	r0, #8
     45b0:	4770      	bx	lr
     45b2:	46c0      	nop			; (mov r8, r8)
-    45b4:	200013c8 	.word	0x200013c8
+    45b4:	20001400 	.word	0x20001400
 
 000045b8 <LORAREG_GetAttr_RegDefTxDR>:
 
@@ -13395,7 +13395,7 @@ static StackRetStatus_t LORAREG_GetAttr_RegDefTxDR(LorawanRegionalAttributes_t a
     45be:	2008      	movs	r0, #8
     45c0:	4770      	bx	lr
     45c2:	46c0      	nop			; (mov r8, r8)
-    45c4:	200013c8 	.word	0x200013c8
+    45c4:	20001400 	.word	0x20001400
 
 000045c8 <LORAREG_GetAttr_CurChIndx>:
 
@@ -13410,7 +13410,7 @@ static StackRetStatus_t LORAREG_GetAttr_CurChIndx(LorawanRegionalAttributes_t at
 }
     45d0:	2008      	movs	r0, #8
     45d2:	4770      	bx	lr
-    45d4:	200013c8 	.word	0x200013c8
+    45d4:	20001400 	.word	0x20001400
 
 000045d8 <LORAREG_GetAttr_DefLBTParams>:
 static StackRetStatus_t LORAREG_GetAttr_DefLBTParams(LorawanRegionalAttributes_t attr, void *attrInput, void *attrOutput)
@@ -13445,7 +13445,7 @@ static StackRetStatus_t LORAREG_GetAttr_DefLBTParams(LorawanRegionalAttributes_t
     45fa:	2000      	movs	r0, #0
     45fc:	4770      	bx	lr
     45fe:	46c0      	nop			; (mov r8, r8)
-    4600:	200013c8 	.word	0x200013c8
+    4600:	20001400 	.word	0x20001400
 
 00004604 <LORAREG_GetAttr_FreqT1>:
 {
@@ -13538,7 +13538,7 @@ static uint32_t GenerateFrequency2 (uint8_t channelIndex)
     4688:	2008      	movs	r0, #8
 }
     468a:	bd30      	pop	{r4, r5, pc}
-    468c:	200013c8 	.word	0x200013c8
+    468c:	20001400 	.word	0x20001400
     4690:	00186a00 	.word	0x00186a00
     4694:	00030d40 	.word	0x00030d40
 
@@ -13567,7 +13567,7 @@ static uint32_t GenerateFrequency2 (uint8_t channelIndex)
 	return result;
 }
     46aa:	4770      	bx	lr
-    46ac:	200013c8 	.word	0x200013c8
+    46ac:	20001400 	.word	0x20001400
 
 000046b0 <ValidateDataRateTxT2>:
 #if (AS_BAND == 1 || JPN_BAND == 1)
@@ -13609,7 +13609,7 @@ static StackRetStatus_t ValidateDataRateTxT2(LorawanRegionalAttributes_t attr, v
 	return result;
 }
     46d2:	4770      	bx	lr
-    46d4:	200013c8 	.word	0x200013c8
+    46d4:	20001400 	.word	0x20001400
 
 000046d8 <ValidateDataRateRxT1>:
 #if (NA_BAND == 1 || AU_BAND == 1)
@@ -13645,7 +13645,7 @@ static StackRetStatus_t ValidateDataRateRxT1 (LorawanRegionalAttributes_t attr, 
 	return result;
 }
     46f6:	4770      	bx	lr
-    46f8:	200013c8 	.word	0x200013c8
+    46f8:	20001400 	.word	0x20001400
 
 000046fc <ValidateDataRateRxT2>:
 #if (AS_BAND == 1 || JPN_BAND == 1)
@@ -13687,7 +13687,7 @@ static StackRetStatus_t ValidateDataRateRxT2 (LorawanRegionalAttributes_t attr, 
 	return result;
 }
     471e:	4770      	bx	lr
-    4720:	200013c8 	.word	0x200013c8
+    4720:	20001400 	.word	0x20001400
 
 00004724 <ValidateChannelId>:
 {
@@ -13714,7 +13714,7 @@ static StackRetStatus_t ValidateDataRateRxT2 (LorawanRegionalAttributes_t attr, 
 }
     4734:	4770      	bx	lr
     4736:	46c0      	nop			; (mov r8, r8)
-    4738:	200013c8 	.word	0x200013c8
+    4738:	20001400 	.word	0x20001400
 
 0000473c <ValidateChannelIdT2>:
 static StackRetStatus_t ValidateChannelIdT2 (LorawanRegionalAttributes_t attr, void *attrInput)
@@ -13756,7 +13756,7 @@ static StackRetStatus_t ValidateChannelIdT2 (LorawanRegionalAttributes_t attr, v
 }
     4760:	4770      	bx	lr
     4762:	46c0      	nop			; (mov r8, r8)
-    4764:	200013c8 	.word	0x200013c8
+    4764:	20001400 	.word	0x20001400
 
 00004768 <LORAREG_GetAttr_DutyCycleT2>:
 {
@@ -13801,7 +13801,7 @@ static StackRetStatus_t ValidateChannelIdT2 (LorawanRegionalAttributes_t attr, v
     47a4:	8023      	strh	r3, [r4, #0]
     47a6:	e7ed      	b.n	4784 <LORAREG_GetAttr_DutyCycleT2+0x1c>
     47a8:	0000473d 	.word	0x0000473d
-    47ac:	200013c8 	.word	0x200013c8
+    47ac:	20001400 	.word	0x20001400
 
 000047b0 <LORAREG_GetAttr_MinMaxDr>:
 {
@@ -13884,7 +13884,7 @@ static StackRetStatus_t ValidateChannelIdT2 (LorawanRegionalAttributes_t attr, v
     481a:	2008      	movs	r0, #8
     481c:	bdf0      	pop	{r4, r5, r6, r7, pc}
     481e:	46c0      	nop			; (mov r8, r8)
-    4820:	200013c8 	.word	0x200013c8
+    4820:	20001400 	.word	0x20001400
 
 00004824 <ValidateChannelMaskCntl>:
 #if (NA_BAND == 1 || AU_BAND == 1)
@@ -13941,7 +13941,7 @@ static StackRetStatus_t ValidateChannelMaskCntl (LorawanRegionalAttributes_t att
 }
     4848:	4770      	bx	lr
     484a:	46c0      	nop			; (mov r8, r8)
-    484c:	200013c8 	.word	0x200013c8
+    484c:	20001400 	.word	0x20001400
 
 00004850 <ValidateChannelMask>:
  */
@@ -14022,7 +14022,7 @@ static StackRetStatus_t ValidateChannelMaskT2 (LorawanRegionalAttributes_t attr,
     489e:	2008      	movs	r0, #8
     48a0:	bd30      	pop	{r4, r5, pc}
     48a2:	46c0      	nop			; (mov r8, r8)
-    48a4:	200013c8 	.word	0x200013c8
+    48a4:	20001400 	.word	0x20001400
 
 000048a8 <ValidateChannelMaskCntlT2>:
 #endif
@@ -14126,7 +14126,7 @@ static StackRetStatus_t ValidateChannelMaskCntlT2 (LorawanRegionalAttributes_t a
     return result;
 }
     491e:	4770      	bx	lr
-    4920:	200013c8 	.word	0x200013c8
+    4920:	20001400 	.word	0x20001400
 
 00004924 <ValidateSupportedDr>:
 #endif
@@ -14197,7 +14197,7 @@ static StackRetStatus_t ValidateSupportedDr (LorawanRegionalAttributes_t attr, v
 	StackRetStatus_t result = LORAWAN_INVALID_PARAMETER;
     4978:	200a      	movs	r0, #10
     497a:	e7fc      	b.n	4976 <ValidateSupportedDr+0x52>
-    497c:	200013c8 	.word	0x200013c8
+    497c:	20001400 	.word	0x20001400
 
 00004980 <ValidateRxFreqT1>:
 
@@ -14265,7 +14265,7 @@ static StackRetStatus_t ValidateRxFreqT1 (LorawanRegionalAttributes_t attr, void
 }
     49c4:	4770      	bx	lr
     49c6:	46c0      	nop			; (mov r8, r8)
-    49c8:	200013c8 	.word	0x200013c8
+    49c8:	20001400 	.word	0x20001400
 
 000049cc <getSubBandId>:
 }
@@ -14343,7 +14343,7 @@ static uint8_t getSubBandId(uint32_t frequency)
 	uint8_t subBandId = 0xFF;
     4a34:	20ff      	movs	r0, #255	; 0xff
     4a36:	e7fc      	b.n	4a32 <getSubBandId+0x66>
-    4a38:	200013c8 	.word	0x200013c8
+    4a38:	20001400 	.word	0x20001400
 
 00004a3c <ValidateFreq>:
 {
@@ -14458,7 +14458,7 @@ static StackRetStatus_t ValidateFrequencyAS (LorawanRegionalAttributes_t attr, v
 			result = LORAWAN_INVALID_PARAMETER;
     4ac0:	3002      	adds	r0, #2
     4ac2:	e7d8      	b.n	4a76 <ValidateFrequencyAS+0x1e>
-    4ac4:	200013c8 	.word	0x200013c8
+    4ac4:	20001400 	.word	0x20001400
     4ac8:	c8fc2340 	.word	0xc8fc2340
     4acc:	001e8480 	.word	0x001e8480
     4ad0:	c90b6580 	.word	0xc90b6580
@@ -14509,7 +14509,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     4b12:	2008      	movs	r0, #8
     4b14:	bdf0      	pop	{r4, r5, r6, r7, pc}
     4b16:	46c0      	nop			; (mov r8, r8)
-    4b18:	200013c8 	.word	0x200013c8
+    4b18:	20001400 	.word	0x20001400
 
 00004b1c <SearchAvailableChannel1>:
 {
@@ -14643,7 +14643,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     4bee:	e7ef      	b.n	4bd0 <SearchAvailableChannel1+0xb4>
     4bf0:	000141f9 	.word	0x000141f9
     4bf4:	0001112d 	.word	0x0001112d
-    4bf8:	200013c8 	.word	0x200013c8
+    4bf8:	20001400 	.word	0x20001400
 
 00004bfc <LORAREG_GetAttr_FreeChannel1>:
 {
@@ -14672,7 +14672,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     4c1c:	e7f6      	b.n	4c0c <LORAREG_GetAttr_FreeChannel1+0x10>
     4c1e:	46c0      	nop			; (mov r8, r8)
-    4c20:	200013c8 	.word	0x200013c8
+    4c20:	20001400 	.word	0x20001400
     4c24:	00004b1d 	.word	0x00004b1d
 
 00004c28 <SearchAvailableChannel2>:
@@ -14891,7 +14891,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 	StackRetStatus_t result = LORAWAN_SUCCESS;
     4d9c:	2008      	movs	r0, #8
     4d9e:	e7f4      	b.n	4d8a <SearchAvailableChannel2+0x162>
-    4da0:	200013c8 	.word	0x200013c8
+    4da0:	20001400 	.word	0x20001400
     4da4:	000141f9 	.word	0x000141f9
     4da8:	0001112d 	.word	0x0001112d
     4dac:	00007fe3 	.word	0x00007fe3
@@ -14923,7 +14923,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     4dd0:	e7f6      	b.n	4dc0 <LORAREG_GetAttr_FreeChannel2+0x10>
     4dd2:	46c0      	nop			; (mov r8, r8)
-    4dd4:	200013c8 	.word	0x200013c8
+    4dd4:	20001400 	.word	0x20001400
     4dd8:	00004c29 	.word	0x00004c29
 
 00004ddc <UpdateChannelIdStatus>:
@@ -14976,7 +14976,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     4e30:	4798      	blx	r3
 }
     4e32:	bd10      	pop	{r4, pc}
-    4e34:	200013c8 	.word	0x200013c8
+    4e34:	20001400 	.word	0x20001400
     4e38:	00007ff9 	.word	0x00007ff9
 
 00004e3c <EnableChannels2>:
@@ -15173,7 +15173,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     4f82:	72ab      	strb	r3, [r5, #10]
     4f84:	72eb      	strb	r3, [r5, #11]
     4f86:	e79a      	b.n	4ebe <UpdateChannelIdStatusT2+0x3e>
-    4f88:	200013c8 	.word	0x200013c8
+    4f88:	20001400 	.word	0x20001400
     4f8c:	00007ff9 	.word	0x00007ff9
 
 00004f90 <setChannelIdStatusT2>:
@@ -15222,7 +15222,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     4fd0:	e7ed      	b.n	4fae <setChannelIdStatusT2+0x1e>
     4fd2:	46c0      	nop			; (mov r8, r8)
     4fd4:	0000473d 	.word	0x0000473d
-    4fd8:	200013c8 	.word	0x200013c8
+    4fd8:	20001400 	.word	0x20001400
     4fdc:	00004e81 	.word	0x00004e81
     4fe0:	00004ddd 	.word	0x00004ddd
 
@@ -15314,7 +15314,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     507a:	7283      	strb	r3, [r0, #10]
     507c:	e7ee      	b.n	505c <UpdateChannelIdStatusT4+0x78>
     507e:	46c0      	nop			; (mov r8, r8)
-    5080:	200013c8 	.word	0x200013c8
+    5080:	20001400 	.word	0x20001400
     5084:	00007ff9 	.word	0x00007ff9
     5088:	36f6211f 	.word	0x36f6211f
 
@@ -15417,7 +15417,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 }
     5138:	e7d0      	b.n	50dc <UpdateChannelIdStatusT3+0x50>
     513a:	46c0      	nop			; (mov r8, r8)
-    513c:	200013c8 	.word	0x200013c8
+    513c:	20001400 	.word	0x20001400
     5140:	00007ff9 	.word	0x00007ff9
 
 00005144 <setChannelIdStatusT3>:
@@ -15466,7 +15466,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5184:	e7ed      	b.n	5162 <setChannelIdStatusT3+0x1e>
     5186:	46c0      	nop			; (mov r8, r8)
     5188:	0000473d 	.word	0x0000473d
-    518c:	200013c8 	.word	0x200013c8
+    518c:	20001400 	.word	0x20001400
     5190:	0000508d 	.word	0x0000508d
     5194:	00004fe5 	.word	0x00004fe5
 
@@ -15570,7 +15570,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5236:	b002      	add	sp, #8
     5238:	bd10      	pop	{r4, pc}
     523a:	46c0      	nop			; (mov r8, r8)
-    523c:	200013c8 	.word	0x200013c8
+    523c:	20001400 	.word	0x20001400
     5240:	000927c0 	.word	0x000927c0
     5244:	00013ff5 	.word	0x00013ff5
 
@@ -15752,7 +15752,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5362:	e7cd      	b.n	5300 <LORAREG_GetAttr_DRangeChBandT1+0xb8>
     5364:	00013ff5 	.word	0x00013ff5
     5368:	00004825 	.word	0x00004825
-    536c:	200013c8 	.word	0x200013c8
+    536c:	20001400 	.word	0x20001400
     5370:	0001aff8 	.word	0x0001aff8
 
 00005374 <LORAREG_GetAttr_DefRx2Freq>:
@@ -15767,7 +15767,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 }
     5380:	2008      	movs	r0, #8
     5382:	bd10      	pop	{r4, pc}
-    5384:	200013dc 	.word	0x200013dc
+    5384:	20001414 	.word	0x20001414
     5388:	00013ff5 	.word	0x00013ff5
 
 0000538c <LORAREG_GetAttr_DlFrequency>:
@@ -15811,7 +15811,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
 	StackRetStatus_t result = LORAWAN_SUCCESS;
     53c8:	2008      	movs	r0, #8
     53ca:	e7e8      	b.n	539e <LORAREG_GetAttr_DlFrequency+0x12>
-    53cc:	200013c8 	.word	0x200013c8
+    53cc:	20001400 	.word	0x20001400
     53d0:	00013ff5 	.word	0x00013ff5
 
 000053d4 <LORAREG_GetAttr_Rx1WindowparamsType2>:
@@ -15873,7 +15873,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5432:	7113      	strb	r3, [r2, #4]
     5434:	e7d8      	b.n	53e8 <LORAREG_GetAttr_Rx1WindowparamsType2+0x14>
     5436:	46c0      	nop			; (mov r8, r8)
-    5438:	200013c8 	.word	0x200013c8
+    5438:	20001400 	.word	0x20001400
     543c:	00013ff5 	.word	0x00013ff5
 
 00005440 <LORAREG_GetAttr_DRangeChBandT2>:
@@ -16025,7 +16025,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5530:	e7f1      	b.n	5516 <LORAREG_GetAttr_DRangeChBandT2+0xd6>
     5532:	46c0      	nop			; (mov r8, r8)
     5534:	00013ff5 	.word	0x00013ff5
-    5538:	200013c8 	.word	0x200013c8
+    5538:	20001400 	.word	0x20001400
 
 0000553c <LORAREG_GetAttr_FreqT2>:
 {
@@ -16068,7 +16068,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5576:	2008      	movs	r0, #8
     5578:	e7e9      	b.n	554e <LORAREG_GetAttr_FreqT2+0x12>
     557a:	46c0      	nop			; (mov r8, r8)
-    557c:	200013c8 	.word	0x200013c8
+    557c:	20001400 	.word	0x20001400
     5580:	00013ff5 	.word	0x00013ff5
 
 00005584 <LORAREG_GetAttr_Rx1WindowparamsType4>:
@@ -16209,7 +16209,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5666:	2008      	movs	r0, #8
     5668:	b002      	add	sp, #8
     566a:	bd10      	pop	{r4, pc}
-    566c:	200013c8 	.word	0x200013c8
+    566c:	20001400 	.word	0x20001400
     5670:	00007fe0 	.word	0x00007fe0
     5674:	00013ff5 	.word	0x00013ff5
 
@@ -16254,7 +16254,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     56b2:	2008      	movs	r0, #8
     56b4:	e7e9      	b.n	568a <LORAREG_GetAttr_FreqT3+0x12>
     56b6:	46c0      	nop			; (mov r8, r8)
-    56b8:	200013c8 	.word	0x200013c8
+    56b8:	20001400 	.word	0x20001400
     56bc:	00013ff5 	.word	0x00013ff5
 
 000056c0 <LORAREG_GetAttr_Rx1WindowparamsType3>:
@@ -16335,7 +16335,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     573a:	b003      	add	sp, #12
     573c:	bd00      	pop	{pc}
     573e:	46c0      	nop			; (mov r8, r8)
-    5740:	200013c8 	.word	0x200013c8
+    5740:	20001400 	.word	0x20001400
     5744:	00013ff5 	.word	0x00013ff5
 
 00005748 <LORAREG_GetAttr_minLBTChPauseTimer>:
@@ -16453,7 +16453,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     580a:	9303      	str	r3, [sp, #12]
     580c:	e7ef      	b.n	57ee <LORAREG_GetAttr_minLBTChPauseTimer+0xa6>
     580e:	46c0      	nop			; (mov r8, r8)
-    5810:	200013c8 	.word	0x200013c8
+    5810:	20001400 	.word	0x20001400
     5814:	00013ff5 	.word	0x00013ff5
 
 00005818 <ValidateTxFreqT2>:
@@ -16761,7 +16761,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5a08:	00013ff5 	.word	0x00013ff5
     5a0c:	20000d70 	.word	0x20000d70
     5a10:	0000473d 	.word	0x0000473d
-    5a14:	200013c8 	.word	0x200013c8
+    5a14:	20001400 	.word	0x20001400
     5a18:	00007ff9 	.word	0x00007ff9
 
 00005a1c <setNewChannel>:
@@ -16899,7 +16899,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5aea:	0020      	movs	r0, r4
     5aec:	47b8      	blx	r7
     5aee:	e7f0      	b.n	5ad2 <setNewChannel+0xb6>
-    5af0:	200013c8 	.word	0x200013c8
+    5af0:	20001400 	.word	0x20001400
     5af4:	00007fc0 	.word	0x00007fc0
     5af8:	00004e81 	.word	0x00004e81
     5afc:	0000508d 	.word	0x0000508d
@@ -17061,7 +17061,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5c18:	00013ff5 	.word	0x00013ff5
     5c1c:	20000d70 	.word	0x20000d70
     5c20:	0000473d 	.word	0x0000473d
-    5c24:	200013c8 	.word	0x200013c8
+    5c24:	20001400 	.word	0x20001400
     5c28:	00007ff9 	.word	0x00007ff9
     5c2c:	000049cd 	.word	0x000049cd
 
@@ -17176,7 +17176,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5cee:	e7b4      	b.n	5c5a <setDutyCycle+0x2a>
     5cf0:	00013ff5 	.word	0x00013ff5
     5cf4:	0000473d 	.word	0x0000473d
-    5cf8:	200013c8 	.word	0x200013c8
+    5cf8:	20001400 	.word	0x20001400
     5cfc:	00007ff9 	.word	0x00007ff9
 
 00005d00 <LORAREG_GetAttr_DutyCycleTimer>:
@@ -17399,7 +17399,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     5e7e:	4699      	mov	r9, r3
     5e80:	46a2      	mov	sl, r4
     5e82:	bdf0      	pop	{r4, r5, r6, r7, pc}
-    5e84:	200013c8 	.word	0x200013c8
+    5e84:	20001400 	.word	0x20001400
     5e88:	00009069 	.word	0x00009069
     5e8c:	00010e4d 	.word	0x00010e4d
     5e90:	00013ff5 	.word	0x00013ff5
@@ -17829,7 +17829,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     6198:	e7b6      	b.n	6108 <setDutyCycleTimer+0x274>
     619a:	46c0      	nop			; (mov r8, r8)
     619c:	00013ff5 	.word	0x00013ff5
-    61a0:	200013c8 	.word	0x200013c8
+    61a0:	20001400 	.word	0x20001400
     61a4:	00009055 	.word	0x00009055
     61a8:	000091c1 	.word	0x000091c1
     61ac:	00009069 	.word	0x00009069
@@ -18130,7 +18130,7 @@ static StackRetStatus_t setTxParams(LorawanRegionalAttributes_t attr, void *attr
     63c6:	3b01      	subs	r3, #1
     63c8:	9303      	str	r3, [sp, #12]
     63ca:	e790      	b.n	62ee <DutyCycleCallback+0x132>
-    63cc:	200013c8 	.word	0x200013c8
+    63cc:	20001400 	.word	0x20001400
     63d0:	000061bd 	.word	0x000061bd
     63d4:	00008ebd 	.word	0x00008ebd
 
@@ -18439,7 +18439,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     65a6:	4c07      	ldr	r4, [pc, #28]	; (65c4 <setLBTTimer+0x1ec>)
     65a8:	47a0      	blx	r4
     65aa:	e7d8      	b.n	655e <setLBTTimer+0x186>
-    65ac:	200013c8 	.word	0x200013c8
+    65ac:	20001400 	.word	0x20001400
     65b0:	00009055 	.word	0x00009055
     65b4:	000091c1 	.word	0x000091c1
     65b8:	00009069 	.word	0x00009069
@@ -18623,7 +18623,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 }
     6700:	e7d9      	b.n	66b6 <LBTChannelPauseCallback+0xee>
     6702:	46c0      	nop			; (mov r8, r8)
-    6704:	200013c8 	.word	0x200013c8
+    6704:	20001400 	.word	0x20001400
     6708:	000065c9 	.word	0x000065c9
     670c:	00008ebd 	.word	0x00008ebd
 
@@ -18659,7 +18659,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6730:	3002      	adds	r0, #2
 	return retVal;
     6732:	e7f5      	b.n	6720 <ValidateDataRangeT2+0x10>
-    6734:	200013c8 	.word	0x200013c8
+    6734:	20001400 	.word	0x20001400
 
 00006738 <setDataRangeT2>:
 {
@@ -18764,7 +18764,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     67e2:	e7b9      	b.n	6758 <setDataRangeT2+0x20>
     67e4:	00006711 	.word	0x00006711
     67e8:	0000473d 	.word	0x0000473d
-    67ec:	200013c8 	.word	0x200013c8
+    67ec:	20001400 	.word	0x20001400
     67f0:	00007ff9 	.word	0x00007ff9
 
 000067f4 <LORAREG_GetAttr_MaxPayloadT3>:
@@ -18826,7 +18826,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     684e:	7013      	strb	r3, [r2, #0]
     6850:	e7ec      	b.n	682c <LORAREG_GetAttr_MaxPayloadT3+0x38>
     6852:	46c0      	nop			; (mov r8, r8)
-    6854:	200013c8 	.word	0x200013c8
+    6854:	20001400 	.word	0x20001400
 
 00006858 <LORAREG_GetAttr_RxWindowSizeT2>:
 {
@@ -18865,7 +18865,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     688c:	2008      	movs	r0, #8
     688e:	e7ea      	b.n	6866 <LORAREG_GetAttr_RxWindowSizeT2+0xe>
-    6890:	200013c8 	.word	0x200013c8
+    6890:	20001400 	.word	0x20001400
 
 00006894 <LORAREG_GetAttr_RxWindowOffsetT2>:
 {
@@ -18902,7 +18902,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     68c4:	2008      	movs	r0, #8
     68c6:	e7ec      	b.n	68a2 <LORAREG_GetAttr_RxWindowOffsetT2+0xe>
-    68c8:	200013c8 	.word	0x200013c8
+    68c8:	20001400 	.word	0x20001400
 
 000068cc <LORAREG_GetAttr_MaxPayloadT2>:
 {
@@ -18940,7 +18940,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     68fc:	e7ed      	b.n	68da <LORAREG_GetAttr_MaxPayloadT2+0xe>
     68fe:	46c0      	nop			; (mov r8, r8)
-    6900:	200013c8 	.word	0x200013c8
+    6900:	20001400 	.word	0x20001400
 
 00006904 <LORAREG_GetAttr_ModulationAttrT2>:
 {
@@ -18978,7 +18978,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     6934:	e7ed      	b.n	6912 <LORAREG_GetAttr_ModulationAttrT2+0xe>
     6936:	46c0      	nop			; (mov r8, r8)
-    6938:	200013c8 	.word	0x200013c8
+    6938:	20001400 	.word	0x20001400
 
 0000693c <LORAREG_GetAttr_BandwidthAttrT2>:
 {
@@ -19016,7 +19016,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     696c:	e7ed      	b.n	694a <LORAREG_GetAttr_BandwidthAttrT2+0xe>
     696e:	46c0      	nop			; (mov r8, r8)
-    6970:	200013c8 	.word	0x200013c8
+    6970:	20001400 	.word	0x20001400
 
 00006974 <LORAREG_GetAttr_SpreadFactorT2>:
 {
@@ -19054,7 +19054,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	return result;
     69a4:	e7ed      	b.n	6982 <LORAREG_GetAttr_SpreadFactorT2+0xe>
     69a6:	46c0      	nop			; (mov r8, r8)
-    69a8:	200013c8 	.word	0x200013c8
+    69a8:	20001400 	.word	0x20001400
 
 000069ac <ValidateChMaskChCntl>:
 {
@@ -19204,7 +19204,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6a92:	71eb      	strb	r3, [r5, #7]
     6a94:	e7a7      	b.n	69e6 <LORAREG_GetAttr_NewTxChConfigT2+0x12>
     6a96:	46c0      	nop			; (mov r8, r8)
-    6a98:	200013c8 	.word	0x200013c8
+    6a98:	20001400 	.word	0x20001400
     6a9c:	00007fe0 	.word	0x00007fe0
     6aa0:	00004c29 	.word	0x00004c29
 
@@ -19231,7 +19231,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6abc:	2008      	movs	r0, #8
 	return retVal;
     6abe:	e7f9      	b.n	6ab4 <setChannelIdStatus+0x10>
-    6ac0:	200013c8 	.word	0x200013c8
+    6ac0:	20001400 	.word	0x20001400
     6ac4:	00004ddd 	.word	0x00004ddd
 
 00006ac8 <ValidateDataRange>:
@@ -19311,7 +19311,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 	StackRetStatus_t retVal = LORAWAN_SUCCESS;
     6b28:	2008      	movs	r0, #8
     6b2a:	e7d7      	b.n	6adc <ValidateDataRange+0x14>
-    6b2c:	200013c8 	.word	0x200013c8
+    6b2c:	20001400 	.word	0x20001400
 
 00006b30 <setDataRange>:
 {
@@ -19374,7 +19374,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6b8c:	e7d9      	b.n	6b42 <setDataRange+0x12>
     6b8e:	46c0      	nop			; (mov r8, r8)
     6b90:	00006ac9 	.word	0x00006ac9
-    6b94:	200013c8 	.word	0x200013c8
+    6b94:	20001400 	.word	0x20001400
     6b98:	00007ff9 	.word	0x00007ff9
 
 00006b9c <LORAREG_GetAttr_RxWindowSizeT1>:
@@ -19423,7 +19423,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 }
     6be0:	0018      	movs	r0, r3
     6be2:	bd70      	pop	{r4, r5, r6, pc}
-    6be4:	200013c8 	.word	0x200013c8
+    6be4:	20001400 	.word	0x20001400
     6be8:	000046d9 	.word	0x000046d9
 
 00006bec <LORAREG_GetAttr_RxWindowOffsetT1>:
@@ -19470,7 +19470,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
 }
     6c2c:	0018      	movs	r0, r3
     6c2e:	bd70      	pop	{r4, r5, r6, pc}
-    6c30:	200013c8 	.word	0x200013c8
+    6c30:	20001400 	.word	0x20001400
     6c34:	000046d9 	.word	0x000046d9
 
 00006c38 <LORAREG_GetAttr_MaxPayloadT1>:
@@ -19517,7 +19517,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6c76:	0018      	movs	r0, r3
     6c78:	bd70      	pop	{r4, r5, r6, pc}
     6c7a:	46c0      	nop			; (mov r8, r8)
-    6c7c:	200013c8 	.word	0x200013c8
+    6c7c:	20001400 	.word	0x20001400
     6c80:	000046d9 	.word	0x000046d9
 
 00006c84 <LORAREG_GetAttr_ModulationAttrT1>:
@@ -19564,7 +19564,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6cc2:	0018      	movs	r0, r3
     6cc4:	bd70      	pop	{r4, r5, r6, pc}
     6cc6:	46c0      	nop			; (mov r8, r8)
-    6cc8:	200013c8 	.word	0x200013c8
+    6cc8:	20001400 	.word	0x20001400
     6ccc:	000046d9 	.word	0x000046d9
 
 00006cd0 <LORAREG_GetAttr_BandwidthAttrT1>:
@@ -19611,7 +19611,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6d0e:	0018      	movs	r0, r3
     6d10:	bd70      	pop	{r4, r5, r6, pc}
     6d12:	46c0      	nop			; (mov r8, r8)
-    6d14:	200013c8 	.word	0x200013c8
+    6d14:	20001400 	.word	0x20001400
     6d18:	000046d9 	.word	0x000046d9
 
 00006d1c <LORAREG_GetAttr_SpreadFactorT1>:
@@ -19658,7 +19658,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6d5a:	0018      	movs	r0, r3
     6d5c:	bd70      	pop	{r4, r5, r6, pc}
     6d5e:	46c0      	nop			; (mov r8, r8)
-    6d60:	200013c8 	.word	0x200013c8
+    6d60:	20001400 	.word	0x20001400
     6d64:	000046d9 	.word	0x000046d9
 
 00006d68 <ValidateTxFreqT1>:
@@ -19747,7 +19747,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6df0:	b003      	add	sp, #12
     6df2:	bd30      	pop	{r4, r5, pc}
     6df4:	00013ff5 	.word	0x00013ff5
-    6df8:	200013c8 	.word	0x200013c8
+    6df8:	20001400 	.word	0x20001400
     6dfc:	00030d40 	.word	0x00030d40
     6e00:	00186a00 	.word	0x00186a00
 
@@ -20041,7 +20041,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     6fda:	54d1      	strb	r1, [r2, r3]
     6fdc:	e720      	b.n	6e20 <LORAREG_GetAttr_NewTxChConfigT1+0x1c>
     6fde:	46c0      	nop			; (mov r8, r8)
-    6fe0:	200013c8 	.word	0x200013c8
+    6fe0:	20001400 	.word	0x20001400
     6fe4:	00004b1d 	.word	0x00004b1d
     6fe8:	00186a00 	.word	0x00186a00
     6fec:	00007ff9 	.word	0x00007ff9
@@ -21851,9 +21851,9 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     7d6a:	4798      	blx	r3
     7d6c:	e7fa      	b.n	7d64 <CreateAllRegSoftwareTimers+0xc>
     7d6e:	46c0      	nop			; (mov r8, r8)
-    7d70:	200013c4 	.word	0x200013c4
+    7d70:	200013fc 	.word	0x200013fc
     7d74:	00008e89 	.word	0x00008e89
-    7d78:	200013c5 	.word	0x200013c5
+    7d78:	200013fd 	.word	0x200013fd
 
 00007d7c <StopAllRegSoftwareTimers>:
 {
@@ -21868,7 +21868,7 @@ static StackRetStatus_t setLBTTimer(LorawanRegionalAttributes_t attr, void *attr
     7d88:	47a0      	blx	r4
 }
     7d8a:	bd70      	pop	{r4, r5, r6, pc}
-    7d8c:	200013c4 	.word	0x200013c4
+    7d8c:	200013fc 	.word	0x200013fc
     7d90:	000091c1 	.word	0x000091c1
 
 00007d94 <LORAREG_Init>:
@@ -22062,7 +22062,7 @@ StackRetStatus_t LORAREG_UnInit(void)
     7ea8:	4798      	blx	r3
     7eaa:	e7ec      	b.n	7e86 <LORAREG_UnInit+0x12>
     7eac:	00007d7d 	.word	0x00007d7d
-    7eb0:	200013c8 	.word	0x200013c8
+    7eb0:	20001400 	.word	0x20001400
     7eb4:	00014079 	.word	0x00014079
     7eb8:	000081a5 	.word	0x000081a5
 
@@ -22239,9 +22239,9 @@ static inline void aes_clear_new_message(struct aes_module *const module)
 }
     7f70:	b003      	add	sp, #12
     7f72:	bdf0      	pop	{r4, r5, r6, r7, pc}
-    7f74:	200015c8 	.word	0x200015c8
+    7f74:	20001600 	.word	0x20001600
     7f78:	42003400 	.word	0x42003400
-    7f7c:	200015d4 	.word	0x200015d4
+    7f7c:	2000160c 	.word	0x2000160c
     7f80:	00000389 	.word	0x00000389
     7f84:	20000e4c 	.word	0x20000e4c
     7f88:	0000041d 	.word	0x0000041d
@@ -22284,9 +22284,9 @@ void AESInit(void)
 }
     7fb4:	bd70      	pop	{r4, r5, r6, pc}
     7fb6:	46c0      	nop			; (mov r8, r8)
-    7fb8:	200015c8 	.word	0x200015c8
+    7fb8:	20001600 	.word	0x20001600
     7fbc:	0000034d 	.word	0x0000034d
-    7fc0:	200015d4 	.word	0x200015d4
+    7fc0:	2000160c 	.word	0x2000160c
     7fc4:	42003400 	.word	0x42003400
     7fc8:	000003fd 	.word	0x000003fd
     7fcc:	00000367 	.word	0x00000367
@@ -22415,8 +22415,8 @@ PdsStatus_t PDS_Store(PdsFileItemIdx_t pdsFileItemIdx, uint8_t item)
     8048:	2305      	movs	r3, #5
     804a:	e7e2      	b.n	8012 <PDS_Store+0x1a>
     804c:	20000e5c 	.word	0x20000e5c
-    8050:	200015e8 	.word	0x200015e8
-    8054:	200015dc 	.word	0x200015dc
+    8050:	20001620 	.word	0x20001620
+    8054:	20001614 	.word	0x20001614
     8058:	0000837d 	.word	0x0000837d
 
 0000805c <PDS_DeleteAll>:
@@ -22602,7 +22602,7 @@ PdsStatus_t PDS_RestoreAll(void)
     8148:	bdf0      	pop	{r4, r5, r6, r7, pc}
     814a:	46c0      	nop			; (mov r8, r8)
     814c:	20000e5c 	.word	0x20000e5c
-    8150:	200015e8 	.word	0x200015e8
+    8150:	20001620 	.word	0x20001620
     8154:	00013ff5 	.word	0x00013ff5
     8158:	00014079 	.word	0x00014079
     815c:	1fffffff 	.word	0x1fffffff
@@ -22663,7 +22663,7 @@ PdsStatus_t PDS_RegFile(PdsFileItemIdx_t argFileId, PdsFileMarks_t argFileMarks)
     8198:	2300      	movs	r3, #0
     819a:	e7f0      	b.n	817e <PDS_RegFile+0x1a>
     819c:	20000e5c 	.word	0x20000e5c
-    81a0:	200015e8 	.word	0x200015e8
+    81a0:	20001620 	.word	0x20001620
 
 000081a4 <PDS_UnRegFile>:
 
@@ -22712,7 +22712,7 @@ PdsStatus_t PDS_UnRegFile(PdsFileItemIdx_t argFileId)
     81c8:	2300      	movs	r3, #0
     81ca:	e7f4      	b.n	81b6 <PDS_UnRegFile+0x12>
     81cc:	20000e5c 	.word	0x20000e5c
-    81d0:	200015e8 	.word	0x200015e8
+    81d0:	20001620 	.word	0x20001620
     81d4:	00014079 	.word	0x00014079
 
 000081d8 <pdsNvmInit>:
@@ -23316,8 +23316,8 @@ static SYSTEM_TaskStatus_t pdsStoreDeleteHandler(void)
 			break;
     850e:	e767      	b.n	83e0 <pdsStoreDeleteHandler+0x38>
     8510:	00014079 	.word	0x00014079
-    8514:	200015dc 	.word	0x200015dc
-    8518:	200015e8 	.word	0x200015e8
+    8514:	20001614 	.word	0x20001614
+    8518:	20001620 	.word	0x20001620
     851c:	1fffffff 	.word	0x1fffffff
     8520:	00013ff5 	.word	0x00013ff5
     8524:	00008841 	.word	0x00008841
@@ -24482,7 +24482,7 @@ void get_temp_sensor_data(uint8_t *data)
     8ba8:	457ff000 	.word	0x457ff000
     8bac:	20000f84 	.word	0x20000f84
     8bb0:	20000f80 	.word	0x20000f80
-    8bb4:	200016a8 	.word	0x200016a8
+    8bb4:	200016e0 	.word	0x200016e0
     8bb8:	00011d75 	.word	0x00011d75
     8bbc:	00013ff5 	.word	0x00013ff5
 
@@ -24517,7 +24517,7 @@ static void hwTimerExpiryCallback(void)
     8bd8:	e7f7      	b.n	8bca <hwTimerExpiryCallback+0xa>
     8bda:	46c0      	nop			; (mov r8, r8)
     8bdc:	20000fa0 	.word	0x20000fa0
-    8be0:	2000185a 	.word	0x2000185a
+    8be0:	20001892 	.word	0x20001892
     8be4:	000094e1 	.word	0x000094e1
 
 00008be8 <hwTimerOverflowCallback>:
@@ -24640,13 +24640,13 @@ static inline void cpu_irq_restore(irqflags_t flags)
     8c7a:	4b08      	ldr	r3, [pc, #32]	; (8c9c <hwTimerOverflowCallback+0xb4>)
     8c7c:	4798      	blx	r3
     8c7e:	e7e0      	b.n	8c42 <hwTimerOverflowCallback+0x5a>
-    8c80:	20001858 	.word	0x20001858
-    8c84:	2000185c 	.word	0x2000185c
+    8c80:	20001890 	.word	0x20001890
+    8c84:	20001894 	.word	0x20001894
     8c88:	20000008 	.word	0x20000008
     8c8c:	20000f9c 	.word	0x20000f9c
-    8c90:	200016c8 	.word	0x200016c8
+    8c90:	20001700 	.word	0x20001700
     8c94:	0000b0f9 	.word	0x0000b0f9
-    8c98:	2000185a 	.word	0x2000185a
+    8c98:	20001892 	.word	0x20001892
     8c9c:	000094e1 	.word	0x000094e1
 
 00008ca0 <loadHwTimer>:
@@ -24726,14 +24726,14 @@ static inline void cpu_irq_restore(irqflags_t flags)
     8d0c:	4798      	blx	r3
 }
     8d0e:	bd70      	pop	{r4, r5, r6, pc}
-    8d10:	2000185c 	.word	0x2000185c
-    8d14:	20001858 	.word	0x20001858
+    8d10:	20001894 	.word	0x20001894
+    8d14:	20001890 	.word	0x20001890
     8d18:	0000b051 	.word	0x0000b051
-    8d1c:	200016c8 	.word	0x200016c8
+    8d1c:	20001700 	.word	0x20001700
     8d20:	7ffffffe 	.word	0x7ffffffe
     8d24:	0000ffff 	.word	0x0000ffff
     8d28:	0000b0f9 	.word	0x0000b0f9
-    8d2c:	2000185a 	.word	0x2000185a
+    8d2c:	20001892 	.word	0x20001892
     8d30:	000094e1 	.word	0x000094e1
     8d34:	0000b09d 	.word	0x0000b09d
 
@@ -24837,12 +24837,12 @@ static void swtimerInternalHandler(void)
     8dac:	4798      	blx	r3
 }
     8dae:	e7f0      	b.n	8d92 <swtimerInternalHandler+0x5a>
-    8db0:	2000185a 	.word	0x2000185a
+    8db0:	20001892 	.word	0x20001892
     8db4:	20000fa0 	.word	0x20000fa0
     8db8:	20000f94 	.word	0x20000f94
     8dbc:	20000f9c 	.word	0x20000f9c
     8dc0:	20000f98 	.word	0x20000f98
-    8dc4:	200016c8 	.word	0x200016c8
+    8dc4:	20001700 	.word	0x20001700
     8dc8:	00008ca1 	.word	0x00008ca1
 
 00008dcc <SwTimerReset>:
@@ -24898,11 +24898,11 @@ static void swtimerInternalHandler(void)
     8e00:	4770      	bx	lr
     8e02:	46c0      	nop			; (mov r8, r8)
     8e04:	20000fa0 	.word	0x20000fa0
-    8e08:	2000185a 	.word	0x2000185a
+    8e08:	20001892 	.word	0x20001892
     8e0c:	20000f9c 	.word	0x20000f9c
     8e10:	20000f94 	.word	0x20000f94
     8e14:	20000f98 	.word	0x20000f98
-    8e18:	200016cc 	.word	0x200016cc
+    8e18:	20001704 	.word	0x20001704
     8e1c:	20000f90 	.word	0x20000f90
 
 00008e20 <SystemTimerInit>:
@@ -24940,8 +24940,8 @@ void SystemTimerInit(void)
     8e40:	bd10      	pop	{r4, pc}
     8e42:	46c0      	nop			; (mov r8, r8)
     8e44:	00008dcd 	.word	0x00008dcd
-    8e48:	20001858 	.word	0x20001858
-    8e4c:	2000185c 	.word	0x2000185c
+    8e48:	20001890 	.word	0x20001890
+    8e4c:	20001894 	.word	0x20001894
     8e50:	0000b165 	.word	0x0000b165
     8e54:	00008be9 	.word	0x00008be9
     8e58:	0000b1e9 	.word	0x0000b1e9
@@ -24972,8 +24972,8 @@ uint64_t SwTimerGetTime(void)
     8e76:	0021      	movs	r1, r4
     8e78:	bd70      	pop	{r4, r5, r6, pc}
     8e7a:	46c0      	nop			; (mov r8, r8)
-    8e7c:	2000185c 	.word	0x2000185c
-    8e80:	20001858 	.word	0x20001858
+    8e7c:	20001894 	.word	0x20001894
+    8e80:	20001890 	.word	0x20001890
     8e84:	0000b051 	.word	0x0000b051
 
 00008e88 <SwTimerCreate>:
@@ -25287,9 +25287,9 @@ StackRetStatus_t SwTimerStart(uint8_t timerId, uint32_t timerCount,
   __ASM volatile ("cpsie i" : : : "memory");
     9024:	b662      	cpsie	i
     9026:	e760      	b.n	8eea <SwTimerStart+0x2e>
-    9028:	200016c8 	.word	0x200016c8
-    902c:	2000185c 	.word	0x2000185c
-    9030:	20001858 	.word	0x20001858
+    9028:	20001700 	.word	0x20001700
+    902c:	20001894 	.word	0x20001894
+    9030:	20001890 	.word	0x20001890
     9034:	0000b051 	.word	0x0000b051
     9038:	7fffff00 	.word	0x7fffff00
     903c:	20000008 	.word	0x20000008
@@ -25320,7 +25320,7 @@ bool SwTimerIsRunning(uint8_t timerId)
     return true;
 }
     9062:	4770      	bx	lr
-    9064:	200016c8 	.word	0x200016c8
+    9064:	20001700 	.word	0x20001700
 
 00009068 <SwTimerReadValue>:
 \brief Returns the remaining timeout for the given timerId
@@ -25367,10 +25367,10 @@ uint32_t SwTimerReadValue(uint8_t timerId)
 }
     9090:	bd70      	pop	{r4, r5, r6, pc}
     9092:	46c0      	nop			; (mov r8, r8)
-    9094:	2000185c 	.word	0x2000185c
-    9098:	20001858 	.word	0x20001858
+    9094:	20001894 	.word	0x20001894
+    9098:	20001890 	.word	0x20001890
     909c:	0000b051 	.word	0x0000b051
-    90a0:	200016c8 	.word	0x200016c8
+    90a0:	20001700 	.word	0x20001700
 
 000090a4 <SwTimerNextExpiryDuration>:
 /**************************************************************************//**
@@ -25574,13 +25574,13 @@ void SwTimersExecute(void)
     918a:	46ab      	mov	fp, r5
     918c:	bdf0      	pop	{r4, r5, r6, r7, pc}
     918e:	46c0      	nop			; (mov r8, r8)
-    9190:	2000185c 	.word	0x2000185c
-    9194:	20001858 	.word	0x20001858
+    9190:	20001894 	.word	0x20001894
+    9194:	20001890 	.word	0x20001890
     9198:	0000b051 	.word	0x0000b051
     919c:	20000008 	.word	0x20000008
     91a0:	00008d39 	.word	0x00008d39
     91a4:	20000f94 	.word	0x20000f94
-    91a8:	200016c8 	.word	0x200016c8
+    91a8:	20001700 	.word	0x20001700
     91ac:	20000f98 	.word	0x20000f98
 
 000091b0 <TIMER_TaskHandler>:
@@ -25823,7 +25823,7 @@ StackRetStatus_t SwTimerStop(uint8_t timerId)
     9304:	00008d39 	.word	0x00008d39
     9308:	20000fa0 	.word	0x20000fa0
     930c:	20000f9c 	.word	0x20000f9c
-    9310:	200016c8 	.word	0x200016c8
+    9310:	20001700 	.word	0x20001700
     9314:	0000b09d 	.word	0x0000b09d
     9318:	00008ca1 	.word	0x00008ca1
     931c:	20000f94 	.word	0x20000f94
@@ -25865,7 +25865,7 @@ StackRetStatus_t SwTimerStop(uint8_t timerId)
 }
     9356:	e7f5      	b.n	9344 <SwTimerRunRemainingTime+0x20>
     9358:	20000f9c 	.word	0x20000f9c
-    935c:	200016c8 	.word	0x200016c8
+    935c:	20001700 	.word	0x20001700
     9360:	000091c1 	.word	0x000091c1
     9364:	00008ebd 	.word	0x00008ebd
 
@@ -25899,8 +25899,8 @@ void SystemTimerSuspend(void)
 }
     9384:	bd70      	pop	{r4, r5, r6, pc}
     9386:	46c0      	nop			; (mov r8, r8)
-    9388:	2000185c 	.word	0x2000185c
-    938c:	20001858 	.word	0x20001858
+    9388:	20001894 	.word	0x20001894
+    938c:	20001890 	.word	0x20001890
     9390:	0000b051 	.word	0x0000b051
     9394:	20000fa8 	.word	0x20000fa8
     9398:	0000b0dd 	.word	0x0000b0dd
@@ -26029,11 +26029,11 @@ void SystemTimerSync(uint64_t timeToSync)
     9424:	e7f7      	b.n	9416 <SystemTimerSync+0x7a>
     9426:	46c0      	nop			; (mov r8, r8)
     9428:	20000fa8 	.word	0x20000fa8
-    942c:	2000185c 	.word	0x2000185c
-    9430:	20001858 	.word	0x20001858
+    942c:	20001894 	.word	0x20001894
+    9430:	20001890 	.word	0x20001890
     9434:	20000f9c 	.word	0x20000f9c
     9438:	20000fa0 	.word	0x20000fa0
-    943c:	200016c8 	.word	0x200016c8
+    943c:	20001700 	.word	0x20001700
     9440:	0000b165 	.word	0x0000b165
     9444:	00008be9 	.word	0x00008be9
     9448:	0000b1e9 	.word	0x0000b1e9
@@ -26041,7 +26041,7 @@ void SystemTimerSync(uint64_t timeToSync)
     9450:	0000b1f5 	.word	0x0000b1f5
     9454:	000090a5 	.word	0x000090a5
     9458:	00009325 	.word	0x00009325
-    945c:	2000185a 	.word	0x2000185a
+    945c:	20001892 	.word	0x20001892
     9460:	000094e1 	.word	0x000094e1
 
 00009464 <Stack_Init>:
@@ -26455,8 +26455,8 @@ void RADIO_FHSSChangeChannel(void)
     9634:	4798      	blx	r3
     9636:	e7f2      	b.n	961e <RADIO_FHSSChangeChannel+0x22>
     9638:	000031b5 	.word	0x000031b5
-    963c:	20001860 	.word	0x20001860
-    9640:	20001d8e 	.word	0x20001d8e
+    963c:	20001898 	.word	0x20001898
+    9640:	20001dc6 	.word	0x20001dc6
     9644:	0000318d 	.word	0x0000318d
     9648:	0000f725 	.word	0x0000f725
 
@@ -26636,7 +26636,7 @@ RadioError_t Radio_ReadRssi(int16_t *rssi)
 	return ERR_NONE;
     9724:	2000      	movs	r0, #0
     9726:	e7e3      	b.n	96f0 <Radio_ReadRssi+0x14>
-    9728:	20001860 	.word	0x20001860
+    9728:	20001898 	.word	0x20001898
     972c:	3361137f 	.word	0x3361137f
     9730:	000031b5 	.word	0x000031b5
 
@@ -26675,7 +26675,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
     9754:	b280      	uxth	r0, r0
 }
     9756:	bd10      	pop	{r4, pc}
-    9758:	200018f0 	.word	0x200018f0
+    9758:	20001928 	.word	0x20001928
     975c:	00002901 	.word	0x00002901
 
 00009760 <tmr_disable_cc_interrupt>:
@@ -26695,7 +26695,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
     976c:	765a      	strb	r2, [r3, #25]
 }
     976e:	4770      	bx	lr
-    9770:	200018f0 	.word	0x200018f0
+    9770:	20001928 	.word	0x20001928
 
 00009774 <tmr_enable_cc_interrupt>:
 {
@@ -26727,7 +26727,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
 }
     979c:	bd10      	pop	{r4, pc}
     979e:	46c0      	nop			; (mov r8, r8)
-    97a0:	200018f0 	.word	0x200018f0
+    97a0:	20001928 	.word	0x20001928
     97a4:	000025d5 	.word	0x000025d5
     97a8:	0001b02c 	.word	0x0001b02c
     97ac:	e000e100 	.word	0xe000e100
@@ -26749,7 +26749,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
     97bc:	765a      	strb	r2, [r3, #25]
 }
     97be:	4770      	bx	lr
-    97c0:	200018f0 	.word	0x200018f0
+    97c0:	20001928 	.word	0x20001928
 
 000097c4 <tmr_stop>:
 	TcCount8 *const tc_module = &(module_inst->hw->COUNT8);
@@ -26773,7 +26773,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
 }
     97dc:	4770      	bx	lr
     97de:	46c0      	nop			; (mov r8, r8)
-    97e0:	200018f0 	.word	0x200018f0
+    97e0:	20001928 	.word	0x20001928
 
 000097e4 <tmr_write_cmpreg>:
 {
@@ -26787,7 +26787,7 @@ static void tc_cca_callback(struct tc_module *const module_instance)
 }
     97f0:	bd10      	pop	{r4, pc}
     97f2:	46c0      	nop			; (mov r8, r8)
-    97f4:	200018f0 	.word	0x200018f0
+    97f4:	20001928 	.word	0x20001928
     97f8:	00002941 	.word	0x00002941
 
 000097fc <save_cpu_interrupt>:
@@ -26996,8 +26996,8 @@ uint8_t tmr_init(void)
 }
     9904:	bd70      	pop	{r4, r5, r6, pc}
     9906:	46c0      	nop			; (mov r8, r8)
-    9908:	200018b8 	.word	0x200018b8
-    990c:	200018f0 	.word	0x200018f0
+    9908:	200018f0 	.word	0x200018f0
+    990c:	20001928 	.word	0x20001928
     9910:	42002000 	.word	0x42002000
     9914:	00002611 	.word	0x00002611
     9918:	00009741 	.word	0x00009741
@@ -30004,67 +30004,67 @@ static float convert_celsius_to_fahrenheit(float celsius_val)
 
 
 void radio_tx_callback(void) {
-    ac74:	b510      	push	{r4, lr}
-    ac76:	b088      	sub	sp, #32
+    ac74:	b530      	push	{r4, r5, lr}
+    ac76:	b083      	sub	sp, #12
 	static int call_counter = 0;
-	char payload[20] = {0};
-    ac78:	ac03      	add	r4, sp, #12
-    ac7a:	2214      	movs	r2, #20
-    ac7c:	2100      	movs	r1, #0
-    ac7e:	0020      	movs	r0, r4
-    ac80:	4b10      	ldr	r3, [pc, #64]	; (acc4 <radio_tx_callback+0x50>)
-    ac82:	4798      	blx	r3
-	strcpy(payload, "ABCDE");
-    ac84:	4b10      	ldr	r3, [pc, #64]	; (acc8 <radio_tx_callback+0x54>)
-    ac86:	681a      	ldr	r2, [r3, #0]
-    ac88:	9203      	str	r2, [sp, #12]
-    ac8a:	889b      	ldrh	r3, [r3, #4]
-    ac8c:	80a3      	strh	r3, [r4, #4]
-	itoa(++call_counter, payload+5,10);
+	//char payload[20] = {0};
+	strcpy(g_payload, "Team ALINA's LoRa packet #");
+    ac78:	4c12      	ldr	r4, [pc, #72]	; (acc4 <radio_tx_callback+0x50>)
+    ac7a:	4b13      	ldr	r3, [pc, #76]	; (acc8 <radio_tx_callback+0x54>)
+    ac7c:	0022      	movs	r2, r4
+    ac7e:	cb23      	ldmia	r3!, {r0, r1, r5}
+    ac80:	c223      	stmia	r2!, {r0, r1, r5}
+    ac82:	cb23      	ldmia	r3!, {r0, r1, r5}
+    ac84:	c223      	stmia	r2!, {r0, r1, r5}
+    ac86:	8819      	ldrh	r1, [r3, #0]
+    ac88:	8011      	strh	r1, [r2, #0]
+    ac8a:	789b      	ldrb	r3, [r3, #2]
+    ac8c:	7093      	strb	r3, [r2, #2]
+	itoa(++call_counter, g_payload+26,10);
     ac8e:	4b0f      	ldr	r3, [pc, #60]	; (accc <radio_tx_callback+0x58>)
     ac90:	681a      	ldr	r2, [r3, #0]
     ac92:	1c50      	adds	r0, r2, #1
     ac94:	6018      	str	r0, [r3, #0]
-    ac96:	220a      	movs	r2, #10
-    ac98:	2111      	movs	r1, #17
-    ac9a:	4469      	add	r1, sp
+    ac96:	0021      	movs	r1, r4
+    ac98:	311a      	adds	r1, #26
+    ac9a:	220a      	movs	r2, #10
     ac9c:	4b0c      	ldr	r3, [pc, #48]	; (acd0 <radio_tx_callback+0x5c>)
     ac9e:	4798      	blx	r3
 	//strcpy(payload+10,itoa(++call_counter));
 	
 	RadioTransmitParam_t tx_packet;
 	//payload[13] = "\r\n";
-	tx_packet.bufferLen = 20;
-    aca0:	a801      	add	r0, sp, #4
-    aca2:	2314      	movs	r3, #20
-    aca4:	7003      	strb	r3, [r0, #0]
-	tx_packet.bufferPtr = (uint8_t*)payload;
-    aca6:	6044      	str	r4, [r0, #4]
+	tx_packet.bufferLen = 30;
+    aca0:	231e      	movs	r3, #30
+    aca2:	466a      	mov	r2, sp
+    aca4:	7013      	strb	r3, [r2, #0]
+	tx_packet.bufferPtr = (uint8_t*)g_payload;
+    aca6:	9401      	str	r4, [sp, #4]
 	
 	RadioError_t status = RADIO_Transmit(&tx_packet);
-    aca8:	4b0a      	ldr	r3, [pc, #40]	; (acd4 <radio_tx_callback+0x60>)
-    acaa:	4798      	blx	r3
-    acac:	0002      	movs	r2, r0
-	printf("Payload: %s  Ret=%d\r\n", payload, status);
-    acae:	0021      	movs	r1, r4
-    acb0:	4809      	ldr	r0, [pc, #36]	; (acd8 <radio_tx_callback+0x64>)
-    acb2:	4b0a      	ldr	r3, [pc, #40]	; (acdc <radio_tx_callback+0x68>)
-    acb4:	4798      	blx	r3
+    aca8:	4668      	mov	r0, sp
+    acaa:	4b0a      	ldr	r3, [pc, #40]	; (acd4 <radio_tx_callback+0x60>)
+    acac:	4798      	blx	r3
+    acae:	0002      	movs	r2, r0
+	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+    acb0:	0021      	movs	r1, r4
+    acb2:	4809      	ldr	r0, [pc, #36]	; (acd8 <radio_tx_callback+0x64>)
+    acb4:	4b09      	ldr	r3, [pc, #36]	; (acdc <radio_tx_callback+0x68>)
+    acb6:	4798      	blx	r3
 	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
-    acb6:	490a      	ldr	r1, [pc, #40]	; (ace0 <radio_tx_callback+0x6c>)
-    acb8:	480a      	ldr	r0, [pc, #40]	; (ace4 <radio_tx_callback+0x70>)
-    acba:	4b0b      	ldr	r3, [pc, #44]	; (ace8 <radio_tx_callback+0x74>)
-    acbc:	4798      	blx	r3
+    acb8:	4909      	ldr	r1, [pc, #36]	; (ace0 <radio_tx_callback+0x6c>)
+    acba:	480a      	ldr	r0, [pc, #40]	; (ace4 <radio_tx_callback+0x70>)
+    acbc:	4b0a      	ldr	r3, [pc, #40]	; (ace8 <radio_tx_callback+0x74>)
+    acbe:	4798      	blx	r3
 }
-    acbe:	b008      	add	sp, #32
-    acc0:	bd10      	pop	{r4, pc}
-    acc2:	46c0      	nop			; (mov r8, r8)
-    acc4:	00014079 	.word	0x00014079
+    acc0:	b003      	add	sp, #12
+    acc2:	bd30      	pop	{r4, r5, pc}
+    acc4:	20001074 	.word	0x20001074
     acc8:	0001bf10 	.word	0x0001bf10
     accc:	20001070 	.word	0x20001070
     acd0:	00013fed 	.word	0x00013fed
     acd4:	0000fe01 	.word	0x0000fe01
-    acd8:	0001bf18 	.word	0x0001bf18
+    acd8:	0001bf2c 	.word	0x0001bf2c
     acdc:	0001410d 	.word	0x0001410d
     ace0:	0000ac75 	.word	0x0000ac75
     ace4:	00028005 	.word	0x00028005
@@ -30628,8 +30628,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b084:	b280      	uxth	r0, r0
     b086:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
     b088:	0000974d 	.word	0x0000974d
-    b08c:	20001074 	.word	0x20001074
-    b090:	2000190c 	.word	0x2000190c
+    b08c:	200010a8 	.word	0x200010a8
+    b090:	20001944 	.word	0x20001944
     b094:	00010f61 	.word	0x00010f61
     b098:	0000ffff 	.word	0x0000ffff
 
@@ -30648,7 +30648,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b0b2:	bd08      	pop	{r3, pc}
     b0b4:	00009761 	.word	0x00009761
     b0b8:	000097fd 	.word	0x000097fd
-    b0bc:	20001074 	.word	0x20001074
+    b0bc:	200010a8 	.word	0x200010a8
     b0c0:	00009821 	.word	0x00009821
 
 0000b0c4 <common_tc_overflow_stop>:
@@ -30661,7 +30661,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b0d0:	bd08      	pop	{r3, pc}
     b0d2:	46c0      	nop			; (mov r8, r8)
     b0d4:	000097b1 	.word	0x000097b1
-    b0d8:	20001074 	.word	0x20001074
+    b0d8:	200010a8 	.word	0x200010a8
 
 0000b0dc <common_tc_stop>:
     b0dc:	b508      	push	{r3, lr}
@@ -30720,8 +30720,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b148:	bd10      	pop	{r4, pc}
     b14a:	46c0      	nop			; (mov r8, r8)
     b14c:	0000974d 	.word	0x0000974d
-    b150:	2000190c 	.word	0x2000190c
-    b154:	20001074 	.word	0x20001074
+    b150:	20001944 	.word	0x20001944
+    b154:	200010a8 	.word	0x200010a8
     b158:	00009761 	.word	0x00009761
     b15c:	00009775 	.word	0x00009775
     b160:	000097e5 	.word	0x000097e5
@@ -30737,9 +30737,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b172:	7018      	strb	r0, [r3, #0]
     b174:	bd08      	pop	{r3, pc}
     b176:	46c0      	nop			; (mov r8, r8)
-    b178:	20001074 	.word	0x20001074
+    b178:	200010a8 	.word	0x200010a8
     b17c:	00009839 	.word	0x00009839
-    b180:	2000190c 	.word	0x2000190c
+    b180:	20001944 	.word	0x20001944
 
 0000b184 <tmr_ovf_callback>:
     b184:	b508      	push	{r3, lr}
@@ -30772,9 +30772,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b1ba:	d000      	beq.n	b1be <tmr_ovf_callback+0x3a>
     b1bc:	4798      	blx	r3
     b1be:	bd08      	pop	{r3, pc}
-    b1c0:	20001074 	.word	0x20001074
+    b1c0:	200010a8 	.word	0x200010a8
     b1c4:	00009775 	.word	0x00009775
-    b1c8:	2000190c 	.word	0x2000190c
+    b1c8:	20001944 	.word	0x20001944
 
 0000b1cc <tmr_cca_callback>:
     b1cc:	b508      	push	{r3, lr}
@@ -30788,21 +30788,21 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b1dc:	bd08      	pop	{r3, pc}
     b1de:	46c0      	nop			; (mov r8, r8)
     b1e0:	00009761 	.word	0x00009761
-    b1e4:	20001074 	.word	0x20001074
+    b1e4:	200010a8 	.word	0x200010a8
 
 0000b1e8 <set_common_tc_overflow_callback>:
     b1e8:	4b01      	ldr	r3, [pc, #4]	; (b1f0 <set_common_tc_overflow_callback+0x8>)
     b1ea:	60d8      	str	r0, [r3, #12]
     b1ec:	4770      	bx	lr
     b1ee:	46c0      	nop			; (mov r8, r8)
-    b1f0:	20001074 	.word	0x20001074
+    b1f0:	200010a8 	.word	0x200010a8
 
 0000b1f4 <set_common_tc_expiry_callback>:
     b1f4:	4b01      	ldr	r3, [pc, #4]	; (b1fc <set_common_tc_expiry_callback+0x8>)
     b1f6:	6118      	str	r0, [r3, #16]
     b1f8:	4770      	bx	lr
     b1fa:	46c0      	nop			; (mov r8, r8)
-    b1fc:	20001074 	.word	0x20001074
+    b1fc:	200010a8 	.word	0x200010a8
 
 0000b200 <MacClearCommands>:
     b200:	490e      	ldr	r1, [pc, #56]	; (b23c <MacClearCommands+0x3c>)
@@ -30835,8 +30835,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b236:	3203      	adds	r2, #3
     b238:	e7f0      	b.n	b21c <MacClearCommands+0x1c>
     b23a:	46c0      	nop			; (mov r8, r8)
-    b23c:	20001a34 	.word	0x20001a34
-    b240:	20001a99 	.word	0x20001a99
+    b23c:	20001a6c 	.word	0x20001a6c
+    b240:	20001ad1 	.word	0x20001ad1
 
 0000b244 <CountfOptsLength>:
     b244:	2200      	movs	r2, #0
@@ -30867,8 +30867,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b276:	b2d8      	uxtb	r0, r3
     b278:	3201      	adds	r2, #1
     b27a:	e7ec      	b.n	b256 <CountfOptsLength+0x12>
-    b27c:	20001a34 	.word	0x20001a34
-    b280:	0001bf31 	.word	0x0001bf31
+    b27c:	20001a6c 	.word	0x20001a6c
+    b280:	0001bf45 	.word	0x0001bf45
 
 0000b284 <StopAllSoftwareTimers>:
     b284:	b570      	push	{r4, r5, r6, lr}
@@ -30919,7 +30919,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b2de:	47a8      	blx	r5
     b2e0:	bd70      	pop	{r4, r5, r6, pc}
     b2e2:	46c0      	nop			; (mov r8, r8)
-    b2e4:	20001a34 	.word	0x20001a34
+    b2e4:	20001a6c 	.word	0x20001a6c
     b2e8:	000091c1 	.word	0x000091c1
 
 0000b2ec <LorawanGetMaxPayloadSize>:
@@ -30935,7 +30935,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b2fe:	4798      	blx	r3
     b300:	7820      	ldrb	r0, [r4, #0]
     b302:	bd16      	pop	{r1, r2, r4, pc}
-    b304:	20001ae7 	.word	0x20001ae7
+    b304:	20001b1f 	.word	0x20001b1f
     b308:	00007d05 	.word	0x00007d05
 
 0000b30c <UpdateReceiveDelays>:
@@ -30965,7 +30965,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b33a:	8023      	strh	r3, [r4, #0]
     b33c:	47a8      	blx	r5
     b33e:	bd70      	pop	{r4, r5, r6, pc}
-    b340:	20001a34 	.word	0x20001a34
+    b340:	20001a6c 	.word	0x20001a6c
     b344:	00007ff9 	.word	0x00007ff9
 
 0000b348 <IncludeMacCommandsResponse>:
@@ -31182,10 +31182,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b4ee:	5529      	strb	r1, [r5, r4]
     b4f0:	e7dc      	b.n	b4ac <IncludeMacCommandsResponse+0x164>
     b4f2:	46c0      	nop			; (mov r8, r8)
-    b4f4:	20001a34 	.word	0x20001a34
-    b4f8:	0001bf31 	.word	0x0001bf31
+    b4f4:	20001a6c 	.word	0x20001a6c
+    b4f8:	0001bf45 	.word	0x0001bf45
     b4fc:	00014079 	.word	0x00014079
-    b500:	20001b57 	.word	0x20001b57
+    b500:	20001b8f 	.word	0x20001b8f
     b504:	0000f3c5 	.word	0x0000f3c5
 
 0000b508 <UpdateJoinSuccessState>:
@@ -31259,11 +31259,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b58e:	2001      	movs	r0, #1
     b590:	4798      	blx	r3
     b592:	bdf7      	pop	{r0, r1, r2, r4, r5, r6, r7, pc}
-    b594:	20001a34 	.word	0x20001a34
+    b594:	20001a6c 	.word	0x20001a6c
     b598:	00007ff9 	.word	0x00007ff9
     b59c:	0000b6a5 	.word	0x0000b6a5
     b5a0:	00008ebd 	.word	0x00008ebd
-    b5a4:	20001c74 	.word	0x20001c74
+    b5a4:	20001cac 	.word	0x20001cac
 
 0000b5a8 <PrepareSessionKeys>:
     b5a8:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
@@ -31292,7 +31292,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b5d6:	46c0      	nop			; (mov r8, r8)
     b5d8:	00014079 	.word	0x00014079
     b5dc:	00013ff5 	.word	0x00013ff5
-    b5e0:	20001acc 	.word	0x20001acc
+    b5e0:	20001b04 	.word	0x20001b04
 
 0000b5e4 <AssembleEncryptionBlock>:
     b5e4:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
@@ -31321,7 +31321,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b612:	47a8      	blx	r5
     b614:	73e7      	strb	r7, [r4, #15]
     b616:	bdf7      	pop	{r0, r1, r2, r4, r5, r6, r7, pc}
-    b618:	20001088 	.word	0x20001088
+    b618:	200010bc 	.word	0x200010bc
     b61c:	00014079 	.word	0x00014079
     b620:	00013ff5 	.word	0x00013ff5
 
@@ -31365,8 +31365,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b66c:	e7f4      	b.n	b658 <ConfigureRadio+0x34>
     b66e:	46c0      	nop			; (mov r8, r8)
     b670:	0000f4b1 	.word	0x0000f4b1
-    b674:	20001aff 	.word	0x20001aff
-    b678:	0001bf2e 	.word	0x0001bf2e
+    b674:	20001b37 	.word	0x20001b37
+    b678:	0001bf42 	.word	0x0001bf42
 
 0000b67c <LorawanLinkCheckCallback.part.1>:
     b67c:	b513      	push	{r0, r1, r4, lr}
@@ -31383,7 +31383,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b692:	4b03      	ldr	r3, [pc, #12]	; (b6a0 <LorawanLinkCheckCallback.part.1+0x24>)
     b694:	47a0      	blx	r4
     b696:	bd13      	pop	{r0, r1, r4, pc}
-    b698:	20001a34 	.word	0x20001a34
+    b698:	20001a6c 	.word	0x20001a6c
     b69c:	00008ebd 	.word	0x00008ebd
     b6a0:	0000b6a5 	.word	0x0000b6a5
 
@@ -31436,7 +31436,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b6fe:	4b02      	ldr	r3, [pc, #8]	; (b708 <LorawanLinkCheckCallback+0x64>)
     b700:	4798      	blx	r3
     b702:	bd10      	pop	{r4, pc}
-    b704:	20001a34 	.word	0x20001a34
+    b704:	20001a6c 	.word	0x20001a6c
     b708:	0000b67d 	.word	0x0000b67d
 
 0000b70c <LORAWAN_Init>:
@@ -31570,11 +31570,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b80a:	e79c      	b.n	b746 <LORAWAN_Init+0x3a>
     b80c:	41003fe8 	.word	0x41003fe8
     b810:	41003fe4 	.word	0x41003fe4
-    b814:	20001a34 	.word	0x20001a34
-    b818:	20001aea 	.word	0x20001aea
+    b814:	20001a6c 	.word	0x20001a6c
+    b818:	20001b22 	.word	0x20001b22
     b81c:	00008e89 	.word	0x00008e89
     b820:	00008dcd 	.word	0x00008dcd
-    b824:	20001c74 	.word	0x20001c74
+    b824:	20001cac 	.word	0x20001cac
     b828:	0000f6cd 	.word	0x0000f6cd
     b82c:	0000d1f5 	.word	0x0000d1f5
     b830:	0000f4b1 	.word	0x0000f4b1
@@ -31582,21 +31582,21 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b838:	000141e5 	.word	0x000141e5
     b83c:	0000f135 	.word	0x0000f135
     b840:	00008165 	.word	0x00008165
-    b844:	20001a1d 	.word	0x20001a1d
-    b848:	0001bf4c 	.word	0x0001bf4c
+    b844:	20001a55 	.word	0x20001a55
+    b848:	0001bf60 	.word	0x0001bf60
     b84c:	0000f14d 	.word	0x0000f14d
-    b850:	20001910 	.word	0x20001910
-    b854:	0001c004 	.word	0x0001c004
-    b858:	20001aeb 	.word	0x20001aeb
-    b85c:	20001aec 	.word	0x20001aec
-    b860:	20001aed 	.word	0x20001aed
-    b864:	20001aef 	.word	0x20001aef
-    b868:	20001af0 	.word	0x20001af0
-    b86c:	20001aee 	.word	0x20001aee
-    b870:	20001af1 	.word	0x20001af1
-    b874:	20001afa 	.word	0x20001afa
-    b878:	20001afb 	.word	0x20001afb
-    b87c:	20001b24 	.word	0x20001b24
+    b850:	20001948 	.word	0x20001948
+    b854:	0001c018 	.word	0x0001c018
+    b858:	20001b23 	.word	0x20001b23
+    b85c:	20001b24 	.word	0x20001b24
+    b860:	20001b25 	.word	0x20001b25
+    b864:	20001b27 	.word	0x20001b27
+    b868:	20001b28 	.word	0x20001b28
+    b86c:	20001b26 	.word	0x20001b26
+    b870:	20001b29 	.word	0x20001b29
+    b874:	20001b32 	.word	0x20001b32
+    b878:	20001b33 	.word	0x20001b33
+    b87c:	20001b5c 	.word	0x20001b5c
     b880:	0000b285 	.word	0x0000b285
 
 0000b884 <LORAWAN_Send>:
@@ -31710,7 +31710,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b95a:	2511      	movs	r5, #17
     b95c:	601a      	str	r2, [r3, #0]
     b95e:	e7e9      	b.n	b934 <LORAWAN_Send+0xb0>
-    b960:	20001a34 	.word	0x20001a34
+    b960:	20001a6c 	.word	0x20001a6c
     b964:	00007ff9 	.word	0x00007ff9
     b968:	0000b245 	.word	0x0000b245
     b96c:	0000b2ed 	.word	0x0000b2ed
@@ -31746,7 +31746,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     b9aa:	4798      	blx	r3
     b9ac:	e7f1      	b.n	b992 <AutomaticReplyCallback+0x1a>
     b9ae:	46c0      	nop			; (mov r8, r8)
-    b9b0:	20001a34 	.word	0x20001a34
+    b9b0:	20001a6c 	.word	0x20001a6c
     b9b4:	0000b885 	.word	0x0000b885
     b9b8:	0000fde5 	.word	0x0000fde5
 
@@ -31819,7 +31819,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ba3e:	4b04      	ldr	r3, [pc, #16]	; (ba50 <LorawanLinkCheckConfigure+0x94>)
     ba40:	4798      	blx	r3
     ba42:	e7e3      	b.n	ba0c <LorawanLinkCheckConfigure+0x50>
-    ba44:	20001a34 	.word	0x20001a34
+    ba44:	20001a6c 	.word	0x20001a6c
     ba48:	00007ff9 	.word	0x00007ff9
     ba4c:	000091c1 	.word	0x000091c1
     ba50:	0000b67d 	.word	0x0000b67d
@@ -31835,7 +31835,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ba62:	4798      	blx	r3
     ba64:	bd10      	pop	{r4, pc}
     ba66:	46c0      	nop			; (mov r8, r8)
-    ba68:	20001a34 	.word	0x20001a34
+    ba68:	20001a6c 	.word	0x20001a6c
     ba6c:	00007ff9 	.word	0x00007ff9
 
 0000ba70 <UpdateDLSettings>:
@@ -31874,7 +31874,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bab0:	4798      	blx	r3
     bab2:	bd73      	pop	{r0, r1, r4, r5, r6, pc}
     bab4:	00007d21 	.word	0x00007d21
-    bab8:	20001a34 	.word	0x20001a34
+    bab8:	20001a6c 	.word	0x20001a6c
     babc:	00007ff9 	.word	0x00007ff9
 
 0000bac0 <UpdateTxPower>:
@@ -31888,7 +31888,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bace:	4798      	blx	r3
     bad0:	bd10      	pop	{r4, pc}
     bad2:	46c0      	nop			; (mov r8, r8)
-    bad4:	20001a34 	.word	0x20001a34
+    bad4:	20001a6c 	.word	0x20001a6c
     bad8:	00007ff9 	.word	0x00007ff9
 
 0000badc <UpdateRetransmissionAckTimeoutState>:
@@ -31926,7 +31926,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bb1a:	4b03      	ldr	r3, [pc, #12]	; (bb28 <UpdateRetransmissionAckTimeoutState+0x4c>)
     bb1c:	47a0      	blx	r4
     bb1e:	bd13      	pop	{r0, r1, r4, pc}
-    bb20:	20001a34 	.word	0x20001a34
+    bb20:	20001a6c 	.word	0x20001a6c
     bb24:	00008ebd 	.word	0x00008ebd
     bb28:	0000d349 	.word	0x0000d349
 
@@ -31945,7 +31945,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bb42:	4b02      	ldr	r3, [pc, #8]	; (bb4c <UpdateReceiveWindow2Parameters+0x20>)
     bb44:	4798      	blx	r3
     bb46:	bd10      	pop	{r4, pc}
-    bb48:	20001a34 	.word	0x20001a34
+    bb48:	20001a6c 	.word	0x20001a6c
     bb4c:	00007ff9 	.word	0x00007ff9
 
 0000bb50 <ResetParametersForConfirmedTransmission>:
@@ -31971,7 +31971,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bb76:	438a      	bics	r2, r1
     bb78:	701a      	strb	r2, [r3, #0]
     bb7a:	4770      	bx	lr
-    bb7c:	20001a34 	.word	0x20001a34
+    bb7c:	20001a6c 	.word	0x20001a6c
 
 0000bb80 <ResetParametersForUnconfirmedTransmission>:
     bb80:	4b07      	ldr	r3, [pc, #28]	; (bba0 <ResetParametersForUnconfirmedTransmission+0x20>)
@@ -31990,7 +31990,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bb9a:	33af      	adds	r3, #175	; 0xaf
     bb9c:	701a      	strb	r2, [r3, #0]
     bb9e:	4770      	bx	lr
-    bba0:	20001a34 	.word	0x20001a34
+    bba0:	20001a6c 	.word	0x20001a6c
 
 0000bba4 <SetJoinFailState>:
     bba4:	b570      	push	{r4, r5, r6, lr}
@@ -32029,8 +32029,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bbe6:	2001      	movs	r0, #1
     bbe8:	4798      	blx	r3
     bbea:	bd70      	pop	{r4, r5, r6, pc}
-    bbec:	20001a34 	.word	0x20001a34
-    bbf0:	20001c74 	.word	0x20001c74
+    bbec:	20001a6c 	.word	0x20001a6c
+    bbf0:	20001cac 	.word	0x20001cac
     bbf4:	00007ff9 	.word	0x00007ff9
 
 0000bbf8 <ExecuteRxParamSetupReq>:
@@ -32152,7 +32152,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bcde:	bdf0      	pop	{r4, r5, r6, r7, pc}
     bce0:	00013ff5 	.word	0x00013ff5
     bce4:	00007d21 	.word	0x00007d21
-    bce8:	20001a34 	.word	0x20001a34
+    bce8:	20001a6c 	.word	0x20001a6c
     bcec:	00007ff9 	.word	0x00007ff9
     bcf0:	0000bb2d 	.word	0x0000bb2d
 
@@ -32181,7 +32181,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bd1e:	0030      	movs	r0, r6
     bd20:	bd70      	pop	{r4, r5, r6, pc}
     bd22:	46c0      	nop			; (mov r8, r8)
-    bd24:	20001a34 	.word	0x20001a34
+    bd24:	20001a6c 	.word	0x20001a6c
     bd28:	00007ff9 	.word	0x00007ff9
 
 0000bd2c <ExecuteDlChannel>:
@@ -32268,7 +32268,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bdcc:	00013ff5 	.word	0x00013ff5
     bdd0:	00007d21 	.word	0x00007d21
     bdd4:	00007d05 	.word	0x00007d05
-    bdd8:	20001a34 	.word	0x20001a34
+    bdd8:	20001a6c 	.word	0x20001a6c
     bddc:	00007d3d 	.word	0x00007d3d
 
 0000bde0 <ExecuteTxParamSetup>:
@@ -32306,9 +32306,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     be1e:	701a      	strb	r2, [r3, #0]
     be20:	0020      	movs	r0, r4
     be22:	bd16      	pop	{r1, r2, r4, pc}
-    be24:	0001bf3a 	.word	0x0001bf3a
+    be24:	0001bf4e 	.word	0x0001bf4e
     be28:	00007d3d 	.word	0x00007d3d
-    be2c:	20001a34 	.word	0x20001a34
+    be2c:	20001a6c 	.word	0x20001a6c
 
 0000be30 <ExecuteLinkAdr>:
     be30:	220f      	movs	r2, #15
@@ -32454,7 +32454,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bf48:	bdf0      	pop	{r4, r5, r6, r7, pc}
     bf4a:	46c0      	nop			; (mov r8, r8)
     bf4c:	00013ff5 	.word	0x00013ff5
-    bf50:	20001a34 	.word	0x20001a34
+    bf50:	20001a6c 	.word	0x20001a6c
     bf54:	00007d21 	.word	0x00007d21
     bf58:	00007d05 	.word	0x00007d05
 
@@ -32517,18 +32517,18 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     bfca:	2017      	movs	r0, #23
     bfcc:	bd76      	pop	{r1, r2, r4, r5, r6, pc}
     bfce:	46c0      	nop			; (mov r8, r8)
-    bfd0:	20001b61 	.word	0x20001b61
+    bfd0:	20001b99 	.word	0x20001b99
     bfd4:	00014079 	.word	0x00014079
-    bfd8:	20001a34 	.word	0x20001a34
+    bfd8:	20001a6c 	.word	0x20001a6c
     bfdc:	000141f9 	.word	0x000141f9
     bfe0:	0001112d 	.word	0x0001112d
     bfe4:	0000ffff 	.word	0x0000ffff
-    bfe8:	20001b72 	.word	0x20001b72
+    bfe8:	20001baa 	.word	0x20001baa
     bfec:	00013ff5 	.word	0x00013ff5
-    bff0:	20001088 	.word	0x20001088
-    bff4:	20001a59 	.word	0x20001a59
+    bff0:	200010bc 	.word	0x200010bc
+    bff4:	20001a91 	.word	0x20001a91
     bff8:	0000ec09 	.word	0x0000ec09
-    bffc:	20001b74 	.word	0x20001b74
+    bffc:	20001bac 	.word	0x20001bac
 
 0000c000 <ConfigureRadioRx>:
     c000:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -32634,7 +32634,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c0ca:	4b05      	ldr	r3, [pc, #20]	; (c0e0 <LorawanReceiveWindow1Callback+0x74>)
     c0cc:	4798      	blx	r3
     c0ce:	bd37      	pop	{r0, r1, r2, r4, r5, pc}
-    c0d0:	20001a34 	.word	0x20001a34
+    c0d0:	20001a6c 	.word	0x20001a6c
     c0d4:	0000edd1 	.word	0x0000edd1
     c0d8:	0000c001 	.word	0x0000c001
     c0dc:	00007d05 	.word	0x00007d05
@@ -32687,8 +32687,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c13a:	bdf0      	pop	{r4, r5, r6, r7, pc}
     c13c:	0000b625 	.word	0x0000b625
     c140:	0000f4b1 	.word	0x0000f4b1
-    c144:	20001a34 	.word	0x20001a34
-    c148:	20001b55 	.word	0x20001b55
+    c144:	20001a6c 	.word	0x20001a6c
+    c148:	20001b8d 	.word	0x20001b8d
     c14c:	0000f3c5 	.word	0x0000f3c5
 
 0000c150 <LorawanGetChAndInitiateRadioTransmit>:
@@ -32836,17 +32836,17 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c26a:	4798      	blx	r3
     c26c:	e7b5      	b.n	c1da <LorawanGetChAndInitiateRadioTransmit+0x8a>
     c26e:	46c0      	nop			; (mov r8, r8)
-    c270:	20001a34 	.word	0x20001a34
+    c270:	20001a6c 	.word	0x20001a6c
     c274:	00007d05 	.word	0x00007d05
     c278:	000107e1 	.word	0x000107e1
     c27c:	0000c0e5 	.word	0x0000c0e5
-    c280:	20001b71 	.word	0x20001b71
+    c280:	20001ba9 	.word	0x20001ba9
     c284:	0000fe01 	.word	0x0000fe01
     c288:	fffffc18 	.word	0xfffffc18
     c28c:	001e8480 	.word	0x001e8480
     c290:	0000c2a5 	.word	0x0000c2a5
     c294:	00008ebd 	.word	0x00008ebd
-    c298:	20001ae7 	.word	0x20001ae7
+    c298:	20001b1f 	.word	0x20001b1f
     c29c:	0000c359 	.word	0x0000c359
     c2a0:	0000badd 	.word	0x0000badd
 
@@ -32921,11 +32921,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c32a:	47a0      	blx	r4
     c32c:	b00b      	add	sp, #44	; 0x2c
     c32e:	bd30      	pop	{r4, r5, pc}
-    c330:	20001a34 	.word	0x20001a34
+    c330:	20001a6c 	.word	0x20001a6c
     c334:	00007d05 	.word	0x00007d05
     c338:	000107e1 	.word	0x000107e1
     c33c:	0000c0e5 	.word	0x0000c0e5
-    c340:	20001b71 	.word	0x20001b71
+    c340:	20001ba9 	.word	0x20001ba9
     c344:	0000fe01 	.word	0x0000fe01
     c348:	fffffc18 	.word	0xfffffc18
     c34c:	001e8480 	.word	0x001e8480
@@ -33047,8 +33047,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c436:	d0e8      	beq.n	c40a <UnconfirmedTransmissionCallback+0xb2>
     c438:	3301      	adds	r3, #1
     c43a:	e7e5      	b.n	c408 <UnconfirmedTransmissionCallback+0xb0>
-    c43c:	20001a34 	.word	0x20001a34
-    c440:	20001b71 	.word	0x20001b71
+    c43c:	20001a6c 	.word	0x20001a6c
+    c440:	20001ba9 	.word	0x20001ba9
     c444:	00007d05 	.word	0x00007d05
     c448:	000107e1 	.word	0x000107e1
     c44c:	0000c0e5 	.word	0x0000c0e5
@@ -33084,7 +33084,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c492:	4b02      	ldr	r3, [pc, #8]	; (c49c <UpdateJoinInProgress+0x34>)
     c494:	4798      	blx	r3
     c496:	bd70      	pop	{r4, r5, r6, pc}
-    c498:	20001a34 	.word	0x20001a34
+    c498:	20001a6c 	.word	0x20001a6c
     c49c:	00007ff9 	.word	0x00007ff9
 
 0000c4a0 <LORAWAN_Join>:
@@ -33178,7 +33178,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c54e:	4c08      	ldr	r4, [pc, #32]	; (c570 <LORAWAN_Join+0xd0>)
     c550:	47a0      	blx	r4
     c552:	e7e5      	b.n	c520 <LORAWAN_Join+0x80>
-    c554:	20001a34 	.word	0x20001a34
+    c554:	20001a6c 	.word	0x20001a6c
     c558:	00007ff9 	.word	0x00007ff9
     c55c:	0000f341 	.word	0x0000f341
     c560:	0000ed99 	.word	0x0000ed99
@@ -33275,7 +33275,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c61c:	e7b7      	b.n	c58e <EncryptFRMPayload+0x1a>
     c61e:	46c0      	nop			; (mov r8, r8)
     c620:	0000b5e5 	.word	0x0000b5e5
-    c624:	20001088 	.word	0x20001088
+    c624:	200010bc 	.word	0x200010bc
     c628:	0000ebc9 	.word	0x0000ebc9
 
 0000c62c <AssemblePacket>:
@@ -33620,21 +33620,21 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c8d0:	e735      	b.n	c73e <AssemblePacket+0x112>
     c8d2:	46c0      	nop			; (mov r8, r8)
     c8d4:	00014079 	.word	0x00014079
-    c8d8:	20001b61 	.word	0x20001b61
-    c8dc:	20001088 	.word	0x20001088
-    c8e0:	20001a34 	.word	0x20001a34
+    c8d8:	20001b99 	.word	0x20001b99
+    c8dc:	200010bc 	.word	0x200010bc
+    c8e0:	20001a6c 	.word	0x20001a6c
     c8e4:	00013ff5 	.word	0x00013ff5
-    c8e8:	20001af2 	.word	0x20001af2
-    c8ec:	20001a88 	.word	0x20001a88
+    c8e8:	20001b2a 	.word	0x20001b2a
+    c8ec:	20001ac0 	.word	0x20001ac0
     c8f0:	0000b349 	.word	0x0000b349
-    c8f4:	20001a49 	.word	0x20001a49
+    c8f4:	20001a81 	.word	0x20001a81
     c8f8:	0000c575 	.word	0x0000c575
     c8fc:	0000b5e5 	.word	0x0000b5e5
-    c900:	20001a39 	.word	0x20001a39
+    c900:	20001a71 	.word	0x20001a71
     c904:	0000ec09 	.word	0x0000ec09
     c908:	00007d21 	.word	0x00007d21
     c90c:	0000b245 	.word	0x0000b245
-    c910:	20001c7c 	.word	0x20001c7c
+    c910:	20001cb4 	.word	0x20001cb4
 
 0000c914 <UpdateTransactionCompleteCbParams>:
     c914:	2390      	movs	r3, #144	; 0x90
@@ -33683,8 +33683,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c96a:	34d0      	adds	r4, #208	; 0xd0
     c96c:	6023      	str	r3, [r4, #0]
     c96e:	bd70      	pop	{r4, r5, r6, pc}
-    c970:	20001c74 	.word	0x20001c74
-    c974:	20001a34 	.word	0x20001a34
+    c970:	20001cac 	.word	0x20001cac
+    c974:	20001a6c 	.word	0x20001a6c
 
 0000c978 <UpdateRxDataAvailableCbParams>:
     c978:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
@@ -33727,8 +33727,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     c9c2:	6820      	ldr	r0, [r4, #0]
     c9c4:	47a8      	blx	r5
     c9c6:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
-    c9c8:	20001c74 	.word	0x20001c74
-    c9cc:	20001a34 	.word	0x20001a34
+    c9c8:	20001cac 	.word	0x20001cac
+    c9cc:	20001a6c 	.word	0x20001a6c
 
 0000c9d0 <LorawanNotifyAppOnRxdone>:
     c9d0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
@@ -33807,8 +33807,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ca62:	4d06      	ldr	r5, [pc, #24]	; (ca7c <LorawanNotifyAppOnRxdone+0xac>)
     ca64:	47a8      	blx	r5
     ca66:	e7eb      	b.n	ca40 <LorawanNotifyAppOnRxdone+0x70>
-    ca68:	20001a34 	.word	0x20001a34
-    ca6c:	20001c74 	.word	0x20001c74
+    ca68:	20001a6c 	.word	0x20001a6c
+    ca6c:	20001cac 	.word	0x20001cac
     ca70:	0000ef01 	.word	0x0000ef01
     ca74:	0000c915 	.word	0x0000c915
     ca78:	000091c1 	.word	0x000091c1
@@ -33872,7 +33872,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     caea:	430b      	orrs	r3, r1
     caec:	6003      	str	r3, [r0, #0]
     caee:	4770      	bx	lr
-    caf0:	20001a34 	.word	0x20001a34
+    caf0:	20001a6c 	.word	0x20001a6c
 
 0000caf4 <LORAWAN_GetAttr>:
     caf4:	b530      	push	{r4, r5, lr}
@@ -34141,15 +34141,15 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     cd3a:	1b40      	subs	r0, r0, r5
     cd3c:	7020      	strb	r0, [r4, #0]
     cd3e:	e720      	b.n	cb82 <LORAWAN_GetAttr+0x8e>
-    cd40:	20001a34 	.word	0x20001a34
+    cd40:	20001a6c 	.word	0x20001a6c
     cd44:	00013ff5 	.word	0x00013ff5
     cd48:	0000f3c5 	.word	0x0000f3c5
     cd4c:	00007d05 	.word	0x00007d05
     cd50:	0000cad5 	.word	0x0000cad5
     cd54:	00010e4d 	.word	0x00010e4d
-    cd58:	20001b2c 	.word	0x20001b2c
+    cd58:	20001b64 	.word	0x20001b64
     cd5c:	00007e69 	.word	0x00007e69
-    cd60:	20001ae7 	.word	0x20001ae7
+    cd60:	20001b1f 	.word	0x20001b1f
     cd64:	0000b245 	.word	0x0000b245
     cd68:	0000b2ed 	.word	0x0000b2ed
 
@@ -34585,9 +34585,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d0c4:	3301      	adds	r3, #1
     d0c6:	e7f8      	b.n	d0ba <LORAWAN_TxDone+0x34e>
     d0c8:	0000caf5 	.word	0x0000caf5
-    d0cc:	20001a34 	.word	0x20001a34
-    d0d0:	20001b60 	.word	0x20001b60
-    d0d4:	20001b55 	.word	0x20001b55
+    d0cc:	20001a6c 	.word	0x20001a6c
+    d0d0:	20001b98 	.word	0x20001b98
+    d0d4:	20001b8d 	.word	0x20001b8d
     d0d8:	0000f4b1 	.word	0x0000f4b1
     d0dc:	00007ff9 	.word	0x00007ff9
     d0e0:	0000bba5 	.word	0x0000bba5
@@ -34595,13 +34595,13 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d0e8:	00007d05 	.word	0x00007d05
     d0ec:	000107e1 	.word	0x000107e1
     d0f0:	0000c0e5 	.word	0x0000c0e5
-    d0f4:	20001b71 	.word	0x20001b71
+    d0f4:	20001ba9 	.word	0x20001ba9
     d0f8:	0000fe01 	.word	0x0000fe01
     d0fc:	0000c915 	.word	0x0000c915
     d100:	0000b201 	.word	0x0000b201
     d104:	0000bb51 	.word	0x0000bb51
     d108:	0000bb81 	.word	0x0000bb81
-    d10c:	20001a84 	.word	0x20001a84
+    d10c:	20001abc 	.word	0x20001abc
     d110:	00008ebd 	.word	0x00008ebd
     d114:	0000c06d 	.word	0x0000c06d
     d118:	0000d525 	.word	0x0000d525
@@ -34698,13 +34698,13 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d1d2:	6820      	ldr	r0, [r4, #0]
     d1d4:	4798      	blx	r3
     d1d6:	e604      	b.n	cde2 <LORAWAN_TxDone+0x76>
-    d1d8:	20001a82 	.word	0x20001a82
+    d1d8:	20001aba 	.word	0x20001aba
     d1dc:	0000c06d 	.word	0x0000c06d
     d1e0:	00008ebd 	.word	0x00008ebd
     d1e4:	0000ee51 	.word	0x0000ee51
     d1e8:	0000d525 	.word	0x0000d525
-    d1ec:	20001c74 	.word	0x20001c74
-    d1f0:	20001b60 	.word	0x20001b60
+    d1ec:	20001cac 	.word	0x20001cac
+    d1f0:	20001b98 	.word	0x20001b98
 
 0000d1f4 <radioCallback>:
     d1f4:	4b10      	ldr	r3, [pc, #64]	; (d238 <radioCallback+0x44>)
@@ -34741,11 +34741,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d232:	4798      	blx	r3
     d234:	6020      	str	r0, [r4, #0]
     d236:	e7ef      	b.n	d218 <radioCallback+0x24>
-    d238:	20001b60 	.word	0x20001b60
+    d238:	20001b98 	.word	0x20001b98
     d23c:	00008081 	.word	0x00008081
     d240:	0000cd6d 	.word	0x0000cd6d
     d244:	0000f341 	.word	0x0000f341
-    d248:	20001c70 	.word	0x20001c70
+    d248:	20001ca8 	.word	0x20001ca8
 
 0000d24c <LorawanCheckAndDoRetryOnTimeout>:
     d24c:	b513      	push	{r0, r1, r4, lr}
@@ -34854,7 +34854,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d31a:	2008      	movs	r0, #8
     d31c:	e7dc      	b.n	d2d8 <LorawanCheckAndDoRetryOnTimeout+0x8c>
     d31e:	46c0      	nop			; (mov r8, r8)
-    d320:	20001a34 	.word	0x20001a34
+    d320:	20001a6c 	.word	0x20001a6c
     d324:	0000d349 	.word	0x0000d349
     d328:	00008ebd 	.word	0x00008ebd
     d32c:	0000b2ed 	.word	0x0000b2ed
@@ -34924,7 +34924,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d3b6:	4798      	blx	r3
     d3b8:	4b05      	ldr	r3, [pc, #20]	; (d3d0 <AckRetransmissionCallback+0x88>)
     d3ba:	e7d2      	b.n	d362 <AckRetransmissionCallback+0x1a>
-    d3bc:	20001a34 	.word	0x20001a34
+    d3bc:	20001a6c 	.word	0x20001a6c
     d3c0:	0000d24d 	.word	0x0000d24d
     d3c4:	0000b2ed 	.word	0x0000b2ed
     d3c8:	0000c151 	.word	0x0000c151
@@ -35003,11 +35003,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d45e:	4790      	blx	r2
     d460:	e7cb      	b.n	d3fa <LORAWAN_RxTimeout+0x22>
     d462:	46c0      	nop			; (mov r8, r8)
-    d464:	20001a34 	.word	0x20001a34
+    d464:	20001a6c 	.word	0x20001a6c
     d468:	0000eed5 	.word	0x0000eed5
     d46c:	0000bba5 	.word	0x0000bba5
     d470:	0000d24d 	.word	0x0000d24d
-    d474:	20001c74 	.word	0x20001c74
+    d474:	20001cac 	.word	0x20001cac
 
 0000d478 <LorawanConfigureRadioForRX2>:
     d478:	b5f7      	push	{r0, r1, r2, r4, r5, r6, r7, lr}
@@ -35080,7 +35080,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d4fe:	4798      	blx	r3
     d500:	e7e2      	b.n	d4c8 <LorawanConfigureRadioForRX2+0x50>
     d502:	46c0      	nop			; (mov r8, r8)
-    d504:	20001a34 	.word	0x20001a34
+    d504:	20001a6c 	.word	0x20001a6c
     d508:	00007d05 	.word	0x00007d05
     d50c:	0000c001 	.word	0x0000c001
     d510:	000107e1 	.word	0x000107e1
@@ -35136,7 +35136,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d57a:	4798      	blx	r3
     d57c:	e7e6      	b.n	d54c <LorawanReceiveWindow2Callback+0x28>
     d57e:	46c0      	nop			; (mov r8, r8)
-    d580:	20001a34 	.word	0x20001a34
+    d580:	20001a6c 	.word	0x20001a6c
     d584:	0000fde5 	.word	0x0000fde5
     d588:	0000d479 	.word	0x0000d479
     d58c:	00007ff9 	.word	0x00007ff9
@@ -35199,7 +35199,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d602:	4798      	blx	r3
     d604:	e7f5      	b.n	d5f2 <SetReceptionNotOkState+0x56>
     d606:	46c0      	nop			; (mov r8, r8)
-    d608:	20001a34 	.word	0x20001a34
+    d608:	20001a6c 	.word	0x20001a6c
     d60c:	0000d479 	.word	0x0000d479
 
 0000d610 <UpdateCurrentDataRateAfterDataRangeChanges>:
@@ -35223,7 +35223,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d632:	701a      	strb	r2, [r3, #0]
     d634:	4770      	bx	lr
     d636:	46c0      	nop			; (mov r8, r8)
-    d638:	20001a34 	.word	0x20001a34
+    d638:	20001a6c 	.word	0x20001a6c
 
 0000d63c <ExecuteNewChannel>:
     d63c:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -35406,7 +35406,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d79e:	e7da      	b.n	d756 <ExecuteNewChannel+0x11a>
     d7a0:	00013ff5 	.word	0x00013ff5
     d7a4:	00007d21 	.word	0x00007d21
-    d7a8:	20001a34 	.word	0x20001a34
+    d7a8:	20001a6c 	.word	0x20001a6c
     d7ac:	00007d3d 	.word	0x00007d3d
     d7b0:	00007d05 	.word	0x00007d05
     d7b4:	0000d611 	.word	0x0000d611
@@ -35633,7 +35633,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     d972:	7023      	strb	r3, [r4, #0]
     d974:	e7ee      	b.n	d954 <MacExecuteCommands+0x198>
     d976:	46c0      	nop			; (mov r8, r8)
-    d978:	20001a34 	.word	0x20001a34
+    d978:	20001a6c 	.word	0x20001a6c
     d97c:	0000be31 	.word	0x0000be31
     d980:	0000bcf5 	.word	0x0000bcf5
     d984:	0000bbf9 	.word	0x0000bbf9
@@ -35698,7 +35698,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     da0c:	00007d21 	.word	0x00007d21
     da10:	00007d3d 	.word	0x00007d3d
     da14:	00007d05 	.word	0x00007d05
-    da18:	20001a34 	.word	0x20001a34
+    da18:	20001a6c 	.word	0x20001a6c
     da1c:	0000d611 	.word	0x0000d611
 
 0000da20 <LorawanSetChannelIdStatus>:
@@ -35736,7 +35736,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     da5e:	46c0      	nop			; (mov r8, r8)
     da60:	00007d3d 	.word	0x00007d3d
     da64:	00007d05 	.word	0x00007d05
-    da68:	20001a34 	.word	0x20001a34
+    da68:	20001a6c 	.word	0x20001a6c
     da6c:	0000d611 	.word	0x0000d611
 
 0000da70 <LORAWAN_RxDone>:
@@ -36179,9 +36179,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ddde:	9206      	str	r2, [sp, #24]
     dde0:	9104      	str	r1, [sp, #16]
     dde2:	e7b7      	b.n	dd54 <LORAWAN_RxDone+0x2e4>
-    dde4:	20001a34 	.word	0x20001a34
-    dde8:	20001a59 	.word	0x20001a59
-    ddec:	20001088 	.word	0x20001088
+    dde4:	20001a6c 	.word	0x20001a6c
+    dde8:	20001a91 	.word	0x20001a91
+    ddec:	200010bc 	.word	0x200010bc
     ddf0:	0000ec09 	.word	0x0000ec09
     ddf4:	00013ff5 	.word	0x00013ff5
     ddf8:	0000bba5 	.word	0x0000bba5
@@ -36192,21 +36192,21 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     de0c:	0000b30d 	.word	0x0000b30d
     de10:	0000ba71 	.word	0x0000ba71
     de14:	00007d05 	.word	0x00007d05
-    de18:	20001ae7 	.word	0x20001ae7
+    de18:	20001b1f 	.word	0x20001b1f
     de1c:	00007d21 	.word	0x00007d21
     de20:	00007d3d 	.word	0x00007d3d
     de24:	0000d611 	.word	0x0000d611
     de28:	0000da21 	.word	0x0000da21
-    de2c:	20001a49 	.word	0x20001a49
+    de2c:	20001a81 	.word	0x20001a81
     de30:	0000b5a9 	.word	0x0000b5a9
-    de34:	20001a39 	.word	0x20001a39
+    de34:	20001a71 	.word	0x20001a71
     de38:	0000b509 	.word	0x0000b509
     de3c:	0000eff5 	.word	0x0000eff5
-    de40:	20001b30 	.word	0x20001b30
+    de40:	20001b68 	.word	0x20001b68
     de44:	0000b5e5 	.word	0x0000b5e5
-    de48:	20001c7c 	.word	0x20001c7c
-    de4c:	20001c8c 	.word	0x20001c8c
-    de50:	20001c74 	.word	0x20001c74
+    de48:	20001cb4 	.word	0x20001cb4
+    de4c:	20001cc4 	.word	0x20001cc4
+    de50:	20001cac 	.word	0x20001cac
     de54:	0000c915 	.word	0x0000c915
     de58:	9b06      	ldr	r3, [sp, #24]
     de5a:	2b00      	cmp	r3, #0
@@ -36641,25 +36641,25 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     e1b4:	e760      	b.n	e078 <LORAWAN_RxDone+0x608>
     e1b6:	46c0      	nop			; (mov r8, r8)
     e1b8:	0000f049 	.word	0x0000f049
-    e1bc:	20001a34 	.word	0x20001a34
+    e1bc:	20001a6c 	.word	0x20001a6c
     e1c0:	00007ff9 	.word	0x00007ff9
     e1c4:	00009055 	.word	0x00009055
     e1c8:	000091c1 	.word	0x000091c1
-    e1cc:	20001c74 	.word	0x20001c74
+    e1cc:	20001cac 	.word	0x20001cac
     e1d0:	0000c915 	.word	0x0000c915
     e1d4:	0000d59d 	.word	0x0000d59d
     e1d8:	0000ffff 	.word	0x0000ffff
     e1dc:	0000d7bd 	.word	0x0000d7bd
-    e1e0:	20001a49 	.word	0x20001a49
-    e1e4:	20001c7c 	.word	0x20001c7c
+    e1e0:	20001a81 	.word	0x20001a81
+    e1e4:	20001cb4 	.word	0x20001cb4
     e1e8:	0000c575 	.word	0x0000c575
     e1ec:	0000bb51 	.word	0x0000bb51
     e1f0:	0000c9d1 	.word	0x0000c9d1
-    e1f4:	20001a84 	.word	0x20001a84
-    e1f8:	20001a94 	.word	0x20001a94
+    e1f4:	20001abc 	.word	0x20001abc
+    e1f8:	20001acc 	.word	0x20001acc
     e1fc:	00007d05 	.word	0x00007d05
     e200:	0000b885 	.word	0x0000b885
-    e204:	20001a39 	.word	0x20001a39
+    e204:	20001a71 	.word	0x20001a71
     e208:	2120      	movs	r1, #32
     e20a:	7832      	ldrb	r2, [r6, #0]
     e20c:	438a      	bics	r2, r1
@@ -36897,7 +36897,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     e3de:	0022      	movs	r2, r4
     e3e0:	0018      	movs	r0, r3
     e3e2:	e7f8      	b.n	e3d6 <LORAWAN_RxDone+0x966>
-    e3e4:	20001a34 	.word	0x20001a34
+    e3e4:	20001a6c 	.word	0x20001a6c
     e3e8:	0000c915 	.word	0x0000c915
     e3ec:	000091c1 	.word	0x000091c1
     e3f0:	0000bb51 	.word	0x0000bb51
@@ -36905,12 +36905,12 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     e3f8:	0000c9d1 	.word	0x0000c9d1
     e3fc:	0000b979 	.word	0x0000b979
     e400:	00008ebd 	.word	0x00008ebd
-    e404:	20001a84 	.word	0x20001a84
+    e404:	20001abc 	.word	0x20001abc
     e408:	0000c359 	.word	0x0000c359
     e40c:	0000ede5 	.word	0x0000ede5
     e410:	0000d59d 	.word	0x0000d59d
-    e414:	20001c74 	.word	0x20001c74
-    e418:	20001b60 	.word	0x20001b60
+    e414:	20001cac 	.word	0x20001cac
+    e418:	20001b98 	.word	0x20001b98
     e41c:	0000c979 	.word	0x0000c979
 
 0000e420 <LorawanSetEdClass>:
@@ -36968,7 +36968,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     e486:	4b04      	ldr	r3, [pc, #16]	; (e498 <LorawanSetEdClass+0x78>)
     e488:	4798      	blx	r3
     e48a:	e7e5      	b.n	e458 <LorawanSetEdClass+0x38>
-    e48c:	20001a34 	.word	0x20001a34
+    e48c:	20001a6c 	.word	0x20001a6c
     e490:	00007ff9 	.word	0x00007ff9
     e494:	000107e1 	.word	0x000107e1
     e498:	000091c1 	.word	0x000091c1
@@ -37343,7 +37343,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     e7a6:	8023      	strh	r3, [r4, #0]
     e7a8:	210e      	movs	r1, #14
     e7aa:	e7ca      	b.n	e742 <LORAWAN_SetAttr+0x2a6>
-    e7ac:	20001a34 	.word	0x20001a34
+    e7ac:	20001a6c 	.word	0x20001a6c
     e7b0:	00013ff5 	.word	0x00013ff5
     e7b4:	00007ff9 	.word	0x00007ff9
     e7b8:	0000f4b1 	.word	0x0000f4b1
@@ -37518,11 +37518,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     e914:	0000ca81 	.word	0x0000ca81
     e918:	0000e421 	.word	0x0000e421
     e91c:	0000b9bd 	.word	0x0000b9bd
-    e920:	20001c70 	.word	0x20001c70
+    e920:	20001ca8 	.word	0x20001ca8
     e924:	0000efa1 	.word	0x0000efa1
     e928:	00013ff5 	.word	0x00013ff5
     e92c:	00007ff9 	.word	0x00007ff9
-    e930:	20001b18 	.word	0x20001b18
+    e930:	20001b50 	.word	0x20001b50
     e934:	00007d05 	.word	0x00007d05
 
 0000e938 <LORAWAN_Reset>:
@@ -37782,28 +37782,28 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     eb32:	bdf0      	pop	{r4, r5, r6, r7, pc}
     eb34:	270a      	movs	r7, #10
     eb36:	e7fa      	b.n	eb2e <LORAWAN_Reset+0x1f6>
-    eb38:	20001a34 	.word	0x20001a34
+    eb38:	20001a6c 	.word	0x20001a6c
     eb3c:	0000b285 	.word	0x0000b285
     eb40:	0000caf5 	.word	0x0000caf5
     eb44:	00007e75 	.word	0x00007e75
     eb48:	0000f4b1 	.word	0x0000f4b1
     eb4c:	00014079 	.word	0x00014079
-    eb50:	20001b08 	.word	0x20001b08
-    eb54:	20001b57 	.word	0x20001b57
+    eb50:	20001b40 	.word	0x20001b40
+    eb54:	20001b8f 	.word	0x20001b8f
     eb58:	00007d95 	.word	0x00007d95
     eb5c:	00007d05 	.word	0x00007d05
-    eb60:	20001a7d 	.word	0x20001a7d
-    eb64:	20001b18 	.word	0x20001b18
-    eb68:	20001af4 	.word	0x20001af4
+    eb60:	20001ab5 	.word	0x20001ab5
+    eb64:	20001b50 	.word	0x20001b50
+    eb68:	20001b2c 	.word	0x20001b2c
     eb6c:	0000f6cd 	.word	0x0000f6cd
     eb70:	00007ff9 	.word	0x00007ff9
     eb74:	0000f3c5 	.word	0x0000f3c5
-    eb78:	20001b5f 	.word	0x20001b5f
+    eb78:	20001b97 	.word	0x20001b97
     eb7c:	0000e49d 	.word	0x0000e49d
-    eb80:	20001a82 	.word	0x20001a82
-    eb84:	20001a7e 	.word	0x20001a7e
-    eb88:	20001ae9 	.word	0x20001ae9
-    eb8c:	20001ae7 	.word	0x20001ae7
+    eb80:	20001aba 	.word	0x20001aba
+    eb84:	20001ab6 	.word	0x20001ab6
+    eb88:	20001b21 	.word	0x20001b21
+    eb8c:	20001b1f 	.word	0x20001b1f
     eb90:	00001388 	.word	0x00001388
     eb94:	00001770 	.word	0x00001770
     eb98:	0000b9bd 	.word	0x0000b9bd
@@ -37828,7 +37828,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ebbe:	b2c0      	uxtb	r0, r0
     ebc0:	4770      	bx	lr
     ebc2:	46c0      	nop			; (mov r8, r8)
-    ebc4:	20001a34 	.word	0x20001a34
+    ebc4:	20001a6c 	.word	0x20001a6c
 
 0000ebc8 <AESEncodeLoRa>:
     ebc8:	b51f      	push	{r0, r1, r2, r3, r4, lr}
@@ -38061,7 +38061,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ed8e:	701a      	strb	r2, [r3, #0]
     ed90:	4770      	bx	lr
     ed92:	46c0      	nop			; (mov r8, r8)
-    ed94:	20001a34 	.word	0x20001a34
+    ed94:	20001a6c 	.word	0x20001a6c
 
 0000ed98 <LorawanClasscValidateSend>:
     ed98:	2390      	movs	r3, #144	; 0x90
@@ -38088,7 +38088,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     edc2:	2800      	cmp	r0, #0
     edc4:	d1ef      	bne.n	eda6 <LorawanClasscValidateSend+0xe>
     edc6:	e7f5      	b.n	edb4 <LorawanClasscValidateSend+0x1c>
-    edc8:	20001a34 	.word	0x20001a34
+    edc8:	20001a6c 	.word	0x20001a6c
     edcc:	00009055 	.word	0x00009055
 
 0000edd0 <LorawanClasscReceiveWindow1Callback>:
@@ -38145,7 +38145,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ee32:	4d06      	ldr	r5, [pc, #24]	; (ee4c <LorawanClasscRxDone+0x68>)
     ee34:	47a8      	blx	r5
     ee36:	e7e9      	b.n	ee0c <LorawanClasscRxDone+0x28>
-    ee38:	20001a34 	.word	0x20001a34
+    ee38:	20001a6c 	.word	0x20001a6c
     ee3c:	00009055 	.word	0x00009055
     ee40:	0000d479 	.word	0x0000d479
     ee44:	0000ed85 	.word	0x0000ed85
@@ -38209,7 +38209,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     eeba:	3301      	adds	r3, #1
     eebc:	e7d8      	b.n	ee70 <LorawanClasscTxDone+0x20>
     eebe:	46c0      	nop			; (mov r8, r8)
-    eec0:	20001a34 	.word	0x20001a34
+    eec0:	20001a6c 	.word	0x20001a6c
     eec4:	000091c1 	.word	0x000091c1
     eec8:	00008ebd 	.word	0x00008ebd
     eecc:	0000d349 	.word	0x0000d349
@@ -38234,7 +38234,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     eef2:	4798      	blx	r3
     eef4:	bd10      	pop	{r4, pc}
     eef6:	46c0      	nop			; (mov r8, r8)
-    eef8:	20001a34 	.word	0x20001a34
+    eef8:	20001a6c 	.word	0x20001a6c
     eefc:	0000d479 	.word	0x0000d479
 
 0000ef00 <LorawanClasscNotifyAppOnReceive>:
@@ -38258,7 +38258,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ef22:	47a0      	blx	r4
     ef24:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
     ef26:	46c0      	nop			; (mov r8, r8)
-    ef28:	20001a34 	.word	0x20001a34
+    ef28:	20001a6c 	.word	0x20001a6c
     ef2c:	00009055 	.word	0x00009055
     ef30:	0000c979 	.word	0x0000c979
 
@@ -38307,10 +38307,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ef86:	4798      	blx	r3
     ef88:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
     ef8a:	46c0      	nop			; (mov r8, r8)
-    ef8c:	20001a34 	.word	0x20001a34
+    ef8c:	20001a6c 	.word	0x20001a6c
     ef90:	00014079 	.word	0x00014079
-    ef94:	20001b40 	.word	0x20001b40
-    ef98:	20001b30 	.word	0x20001b30
+    ef94:	20001b78 	.word	0x20001b78
+    ef98:	20001b68 	.word	0x20001b68
     ef9c:	00007ff9 	.word	0x00007ff9
 
 0000efa0 <LorawanMcastEnable>:
@@ -38352,7 +38352,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     efe6:	709a      	strb	r2, [r3, #2]
     efe8:	3109      	adds	r1, #9
     efea:	e7f3      	b.n	efd4 <LorawanMcastEnable+0x34>
-    efec:	20001a34 	.word	0x20001a34
+    efec:	20001a6c 	.word	0x20001a6c
     eff0:	00007ff9 	.word	0x00007ff9
 
 0000eff4 <LorawanMcastValidateHdr>:
@@ -38396,7 +38396,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f03e:	3802      	subs	r0, #2
     f040:	bd70      	pop	{r4, r5, r6, pc}
     f042:	46c0      	nop			; (mov r8, r8)
-    f044:	20001a34 	.word	0x20001a34
+    f044:	20001a6c 	.word	0x20001a6c
 
 0000f048 <LorawanMcastProcessPkt>:
     f048:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -38501,12 +38501,12 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f10e:	b007      	add	sp, #28
     f110:	bdf0      	pop	{r4, r5, r6, r7, pc}
     f112:	46c0      	nop			; (mov r8, r8)
-    f114:	20001a34 	.word	0x20001a34
+    f114:	20001a6c 	.word	0x20001a6c
     f118:	00007ff9 	.word	0x00007ff9
-    f11c:	20001c7c 	.word	0x20001c7c
-    f120:	20001b40 	.word	0x20001b40
+    f11c:	20001cb4 	.word	0x20001cb4
+    f120:	20001b78 	.word	0x20001b78
     f124:	0000c575 	.word	0x0000c575
-    f128:	20001c74 	.word	0x20001c74
+    f128:	20001cac 	.word	0x20001cac
     f12c:	0000c979 	.word	0x0000c979
     f130:	0000d479 	.word	0x0000d479
 
@@ -38521,7 +38521,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f142:	3201      	adds	r2, #1
     f144:	655a      	str	r2, [r3, #84]	; 0x54
     f146:	4770      	bx	lr
-    f148:	20001a34 	.word	0x20001a34
+    f148:	20001a6c 	.word	0x20001a6c
 
 0000f14c <Lorawan_Pds_fid2_CB>:
     f14c:	2171      	movs	r1, #113	; 0x71
@@ -38538,7 +38538,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f162:	438a      	bics	r2, r1
     f164:	705a      	strb	r2, [r3, #1]
     f166:	4770      	bx	lr
-    f168:	20001a34 	.word	0x20001a34
+    f168:	20001a6c 	.word	0x20001a6c
 
 0000f16c <LORAWAN_TxHandler>:
     f16c:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -38643,13 +38643,13 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f232:	4798      	blx	r3
     f234:	e7ea      	b.n	f20c <LORAWAN_TxHandler+0xa0>
     f236:	46c0      	nop			; (mov r8, r8)
-    f238:	20001a34 	.word	0x20001a34
+    f238:	20001a6c 	.word	0x20001a6c
     f23c:	00007d05 	.word	0x00007d05
     f240:	0000c915 	.word	0x0000c915
     f244:	000107e1 	.word	0x000107e1
     f248:	0000c0e5 	.word	0x0000c0e5
     f24c:	0000c62d 	.word	0x0000c62d
-    f250:	20001b71 	.word	0x20001b71
+    f250:	20001ba9 	.word	0x20001ba9
     f254:	0000fe01 	.word	0x0000fe01
 
 0000f258 <LORAWAN_JoinReqHandler>:
@@ -38719,13 +38719,13 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f2d6:	7023      	strb	r3, [r4, #0]
     f2d8:	e7d5      	b.n	f286 <LORAWAN_JoinReqHandler+0x2e>
     f2da:	46c0      	nop			; (mov r8, r8)
-    f2dc:	20001a34 	.word	0x20001a34
+    f2dc:	20001a6c 	.word	0x20001a6c
     f2e0:	00007d05 	.word	0x00007d05
     f2e4:	0000bba5 	.word	0x0000bba5
     f2e8:	0000c0e5 	.word	0x0000c0e5
     f2ec:	000107e1 	.word	0x000107e1
     f2f0:	0000bf5d 	.word	0x0000bf5d
-    f2f4:	20001b61 	.word	0x20001b61
+    f2f4:	20001b99 	.word	0x20001b99
     f2f8:	0000fe01 	.word	0x0000fe01
 
 0000f2fc <LORAWAN_RxHandler>:
@@ -38755,7 +38755,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f32a:	4b04      	ldr	r3, [pc, #16]	; (f33c <LORAWAN_RxHandler+0x40>)
     f32c:	4798      	blx	r3
     f32e:	e7fa      	b.n	f326 <LORAWAN_RxHandler+0x2a>
-    f330:	20001b60 	.word	0x20001b60
+    f330:	20001b98 	.word	0x20001b98
     f334:	0000ffd5 	.word	0x0000ffd5
     f338:	0000da71 	.word	0x0000da71
     f33c:	0000d3d9 	.word	0x0000d3d9
@@ -38780,7 +38780,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f360:	bd10      	pop	{r4, pc}
     f362:	46c0      	nop			; (mov r8, r8)
     f364:	000033ed 	.word	0x000033ed
-    f368:	20001098 	.word	0x20001098
+    f368:	200010cc 	.word	0x200010cc
     f36c:	000033f9 	.word	0x000033f9
     f370:	000094e1 	.word	0x000094e1
 
@@ -38817,10 +38817,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f3ae:	d1e5      	bne.n	f37c <LORAWAN_TaskHandler+0x8>
     f3b0:	bd70      	pop	{r4, r5, r6, pc}
     f3b2:	46c0      	nop			; (mov r8, r8)
-    f3b4:	20001098 	.word	0x20001098
+    f3b4:	200010cc 	.word	0x200010cc
     f3b8:	000033ed 	.word	0x000033ed
     f3bc:	000033f9 	.word	0x000033f9
-    f3c0:	0001c06c 	.word	0x0001c06c
+    f3c0:	0001c080 	.word	0x0001c080
 
 0000f3c4 <RADIO_GetAttr>:
     f3c4:	b510      	push	{r4, lr}
@@ -38927,8 +38927,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f49e:	2005      	movs	r0, #5
     f4a0:	e7af      	b.n	f402 <RADIO_GetAttr+0x3e>
     f4a2:	46c0      	nop			; (mov r8, r8)
-    f4a4:	20001860 	.word	0x20001860
-    f4a8:	20001879 	.word	0x20001879
+    f4a4:	20001898 	.word	0x20001898
+    f4a8:	200018b1 	.word	0x200018b1
     f4ac:	00013ff5 	.word	0x00013ff5
 
 0000f4b0 <RADIO_SetAttr>:
@@ -39165,7 +39165,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f68c:	e734      	b.n	f4f8 <RADIO_SetAttr+0x48>
     f68e:	46c0      	nop			; (mov r8, r8)
     f690:	0000fde5 	.word	0x0000fde5
-    f694:	20001860 	.word	0x20001860
+    f694:	20001898 	.word	0x20001898
     f698:	00010f61 	.word	0x00010f61
     f69c:	000120ed 	.word	0x000120ed
     f6a0:	43fa0000 	.word	0x43fa0000
@@ -39177,7 +39177,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     f6b8:	06dac2c0 	.word	0x06dac2c0
     f6bc:	cc9eec80 	.word	0xcc9eec80
     f6c0:	096ae380 	.word	0x096ae380
-    f6c4:	20001879 	.word	0x20001879
+    f6c4:	200018b1 	.word	0x200018b1
     f6c8:	00013ff5 	.word	0x00013ff5
 
 0000f6cc <RADIO_Init>:
@@ -39606,17 +39606,17 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fa2a:	47a8      	blx	r5
     fa2c:	211d      	movs	r1, #29
     fa2e:	e79f      	b.n	f970 <Radio_WriteConfiguration+0x204>
-    fa30:	20001860 	.word	0x20001860
+    fa30:	20001898 	.word	0x20001898
     fa34:	00009519 	.word	0x00009519
     fa38:	0000f725 	.word	0x0000f725
     fa3c:	000031b5 	.word	0x000031b5
     fa40:	0000318d 	.word	0x0000318d
-    fa44:	20001896 	.word	0x20001896
+    fa44:	200018ce 	.word	0x200018ce
     fa48:	00ffff00 	.word	0x00ffff00
     fa4c:	00070b00 	.word	0x00070b00
     fa50:	cc9eec80 	.word	0xcc9eec80
     fa54:	096ae380 	.word	0x096ae380
-    fa58:	0001c078 	.word	0x0001c078
+    fa58:	0001c08c 	.word	0x0001c08c
     fa5c:	e78fe580 	.word	0xe78fe580
     fa60:	06dac2c0 	.word	0x06dac2c0
     fa64:	6863      	ldr	r3, [r4, #4]
@@ -39980,7 +39980,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fd44:	4798      	blx	r3
     fd46:	bd10      	pop	{r4, pc}
     fd48:	000033ed 	.word	0x000033ed
-    fd4c:	2000109a 	.word	0x2000109a
+    fd4c:	200010ce 	.word	0x200010ce
     fd50:	000033f9 	.word	0x000033f9
     fd54:	000094e1 	.word	0x000094e1
 
@@ -39998,7 +39998,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fd6c:	bd10      	pop	{r4, pc}
     fd6e:	46c0      	nop			; (mov r8, r8)
     fd70:	000033ed 	.word	0x000033ed
-    fd74:	2000109a 	.word	0x2000109a
+    fd74:	200010ce 	.word	0x200010ce
     fd78:	000033f9 	.word	0x000033f9
 
 0000fd7c <RADIO_TaskHandler>:
@@ -40038,10 +40038,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fdbe:	d1e4      	bne.n	fd8a <RADIO_TaskHandler+0xe>
     fdc0:	e7f9      	b.n	fdb6 <RADIO_TaskHandler+0x3a>
     fdc2:	46c0      	nop			; (mov r8, r8)
-    fdc4:	2000109a 	.word	0x2000109a
+    fdc4:	200010ce 	.word	0x200010ce
     fdc8:	000033ed 	.word	0x000033ed
     fdcc:	000033f9 	.word	0x000033f9
-    fdd0:	0001c07c 	.word	0x0001c07c
+    fdd0:	0001c090 	.word	0x0001c090
     fdd4:	000094e1 	.word	0x000094e1
 
 0000fdd8 <RadioSetState>:
@@ -40049,14 +40049,14 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fdda:	7018      	strb	r0, [r3, #0]
     fddc:	4770      	bx	lr
     fdde:	46c0      	nop			; (mov r8, r8)
-    fde0:	20001d8f 	.word	0x20001d8f
+    fde0:	20001dc7 	.word	0x20001dc7
 
 0000fde4 <RADIO_GetState>:
     fde4:	4b01      	ldr	r3, [pc, #4]	; (fdec <RADIO_GetState+0x8>)
     fde6:	7818      	ldrb	r0, [r3, #0]
     fde8:	b2c0      	uxtb	r0, r0
     fdea:	4770      	bx	lr
-    fdec:	20001d8f 	.word	0x20001d8f
+    fdec:	20001dc7 	.word	0x20001dc7
 
 0000fdf0 <RADIO_SetCallbackBitmask>:
     fdf0:	4a02      	ldr	r2, [pc, #8]	; (fdfc <RADIO_SetCallbackBitmask+0xc>)
@@ -40065,7 +40065,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fdf6:	7010      	strb	r0, [r2, #0]
     fdf8:	4770      	bx	lr
     fdfa:	46c0      	nop			; (mov r8, r8)
-    fdfc:	20001d8e 	.word	0x20001d8e
+    fdfc:	20001dc6 	.word	0x20001dc6
 
 0000fe00 <RADIO_Transmit>:
     fe00:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
@@ -40106,11 +40106,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fe46:	4798      	blx	r3
     fe48:	e7f7      	b.n	fe3a <RADIO_Transmit+0x3a>
     fe4a:	46c0      	nop			; (mov r8, r8)
-    fe4c:	20001d8f 	.word	0x20001d8f
-    fe50:	20001860 	.word	0x20001860
+    fe4c:	20001dc7 	.word	0x20001dc7
+    fe50:	20001898 	.word	0x20001898
     fe54:	000091c1 	.word	0x000091c1
-    fe58:	200010ac 	.word	0x200010ac
-    fe5c:	200010a8 	.word	0x200010a8
+    fe58:	200010e4 	.word	0x200010e4
+    fe5c:	200010e0 	.word	0x200010e0
     fe60:	0000fd2d 	.word	0x0000fd2d
 
 0000fe64 <Radio_FSKTxPayloadHandler>:
@@ -40173,8 +40173,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     fed4:	e7e1      	b.n	fe9a <Radio_FSKTxPayloadHandler+0x36>
     fed6:	46c0      	nop			; (mov r8, r8)
     fed8:	000001ad 	.word	0x000001ad
-    fedc:	20001860 	.word	0x20001860
-    fee0:	200010a8 	.word	0x200010a8
+    fedc:	20001898 	.word	0x20001898
+    fee0:	200010e0 	.word	0x200010e0
     fee4:	000031e1 	.word	0x000031e1
     fee8:	000001ed 	.word	0x000001ed
 
@@ -40198,7 +40198,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ff0c:	bd10      	pop	{r4, pc}
     ff0e:	46c0      	nop			; (mov r8, r8)
     ff10:	000001ad 	.word	0x000001ad
-    ff14:	20001860 	.word	0x20001860
+    ff14:	20001898 	.word	0x20001898
     ff18:	000001ed 	.word	0x000001ed
 
 0000ff1c <RADIO_FSKFifoLevel>:
@@ -40273,7 +40273,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ffa4:	e7ea      	b.n	ff7c <RADIO_FSKFifoLevel+0x60>
     ffa6:	46c0      	nop			; (mov r8, r8)
     ffa8:	000001ad 	.word	0x000001ad
-    ffac:	20001860 	.word	0x20001860
+    ffac:	20001898 	.word	0x20001898
     ffb0:	00003221 	.word	0x00003221
     ffb4:	000001ed 	.word	0x000001ed
 
@@ -40286,8 +40286,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ffc2:	4b03      	ldr	r3, [pc, #12]	; (ffd0 <RADIO_FSKFifoEmpty+0x18>)
     ffc4:	4798      	blx	r3
     ffc6:	bd10      	pop	{r4, pc}
-    ffc8:	200010ac 	.word	0x200010ac
-    ffcc:	200010a8 	.word	0x200010a8
+    ffc8:	200010e4 	.word	0x200010e4
+    ffcc:	200010e0 	.word	0x200010e0
     ffd0:	0000fe65 	.word	0x0000fe65
 
 0000ffd4 <RADIO_GetData>:
@@ -40299,7 +40299,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
     ffde:	2000      	movs	r0, #0
     ffe0:	800b      	strh	r3, [r1, #0]
     ffe2:	4770      	bx	lr
-    ffe4:	20001860 	.word	0x20001860
+    ffe4:	20001898 	.word	0x20001898
 
 0000ffe8 <Radio_EnableRfControl>:
     ffe8:	b510      	push	{r4, lr}
@@ -40320,7 +40320,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10006:	4b04      	ldr	r3, [pc, #16]	; (10018 <Radio_EnableRfControl+0x30>)
    10008:	4798      	blx	r3
    1000a:	bd10      	pop	{r4, pc}
-   1000c:	20001860 	.word	0x20001860
+   1000c:	20001898 	.word	0x20001898
    10010:	cc9eec80 	.word	0xcc9eec80
    10014:	096ae380 	.word	0x096ae380
    10018:	0000328d 	.word	0x0000328d
@@ -40431,9 +40431,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    100e8:	47a8      	blx	r5
    100ea:	e7ba      	b.n	10062 <RADIO_RxHandler+0x46>
    100ec:	0000ffe9 	.word	0x0000ffe9
-   100f0:	2000109c 	.word	0x2000109c
+   100f0:	200010d0 	.word	0x200010d0
    100f4:	0000f76d 	.word	0x0000f76d
-   100f8:	20001860 	.word	0x20001860
+   100f8:	20001898 	.word	0x20001898
    100fc:	0000318d 	.word	0x0000318d
    10100:	00009519 	.word	0x00009519
    10104:	00010145 	.word	0x00010145
@@ -40459,7 +40459,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1012e:	4b04      	ldr	r3, [pc, #16]	; (10140 <Radio_DisableRfControl+0x30>)
    10130:	4798      	blx	r3
    10132:	bd10      	pop	{r4, pc}
-   10134:	20001860 	.word	0x20001860
+   10134:	20001898 	.word	0x20001898
    10138:	cc9eec80 	.word	0xcc9eec80
    1013c:	096ae380 	.word	0x096ae380
    10140:	000032a1 	.word	0x000032a1
@@ -40495,8 +40495,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1017a:	4798      	blx	r3
    1017c:	2001      	movs	r0, #1
    1017e:	e7ef      	b.n	10160 <Radio_WatchdogTimeout+0x1c>
-   10180:	20001d8f 	.word	0x20001d8f
-   10184:	20001d8c 	.word	0x20001d8c
+   10180:	20001dc7 	.word	0x20001dc7
+   10184:	20001dc4 	.word	0x20001dc4
    10188:	00010111 	.word	0x00010111
    1018c:	0000fd2d 	.word	0x0000fd2d
 
@@ -40523,11 +40523,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    101b6:	4b06      	ldr	r3, [pc, #24]	; (101d0 <RADIO_RxTimeout+0x40>)
    101b8:	4798      	blx	r3
    101ba:	bd10      	pop	{r4, pc}
-   101bc:	20001860 	.word	0x20001860
+   101bc:	20001898 	.word	0x20001898
    101c0:	000091c1 	.word	0x000091c1
    101c4:	00010111 	.word	0x00010111
    101c8:	0000318d 	.word	0x0000318d
-   101cc:	20001d8c 	.word	0x20001d8c
+   101cc:	20001dc4 	.word	0x20001dc4
    101d0:	0000fd2d 	.word	0x0000fd2d
 
 000101d4 <Radio_RxFSKTimeout>:
@@ -40549,10 +40549,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    101f2:	4b05      	ldr	r3, [pc, #20]	; (10208 <Radio_RxFSKTimeout+0x34>)
    101f4:	4798      	blx	r3
    101f6:	bd10      	pop	{r4, pc}
-   101f8:	20001860 	.word	0x20001860
+   101f8:	20001898 	.word	0x20001898
    101fc:	000091c1 	.word	0x000091c1
    10200:	00010111 	.word	0x00010111
-   10204:	20001d8c 	.word	0x20001d8c
+   10204:	20001dc4 	.word	0x20001dc4
    10208:	0000fd2d 	.word	0x0000fd2d
 
 0001020c <RADIO_TxDone>:
@@ -40598,15 +40598,15 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1025a:	6020      	str	r0, [r4, #0]
    1025c:	6061      	str	r1, [r4, #4]
    1025e:	bd70      	pop	{r4, r5, r6, pc}
-   10260:	20001860 	.word	0x20001860
+   10260:	20001898 	.word	0x20001898
    10264:	000091c1 	.word	0x000091c1
    10268:	00010111 	.word	0x00010111
    1026c:	0000318d 	.word	0x0000318d
-   10270:	20001d8f 	.word	0x20001d8f
-   10274:	20001d8c 	.word	0x20001d8c
+   10270:	20001dc7 	.word	0x20001dc7
+   10274:	20001dc4 	.word	0x20001dc4
    10278:	0000fd2d 	.word	0x0000fd2d
    1027c:	00008e65 	.word	0x00008e65
-   10280:	200010a0 	.word	0x200010a0
+   10280:	200010d8 	.word	0x200010d8
    10284:	000111ad 	.word	0x000111ad
 
 00010288 <RADIO_FSKPacketSent>:
@@ -40651,13 +40651,13 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    102d4:	bd70      	pop	{r4, r5, r6, pc}
    102d6:	46c0      	nop			; (mov r8, r8)
    102d8:	000031b5 	.word	0x000031b5
-   102dc:	20001860 	.word	0x20001860
+   102dc:	20001898 	.word	0x20001898
    102e0:	000091c1 	.word	0x000091c1
    102e4:	00010111 	.word	0x00010111
-   102e8:	20001d8f 	.word	0x20001d8f
-   102ec:	20001d8c 	.word	0x20001d8c
+   102e8:	20001dc7 	.word	0x20001dc7
+   102ec:	20001dc4 	.word	0x20001dc4
    102f0:	00008e65 	.word	0x00008e65
-   102f4:	200010a0 	.word	0x200010a0
+   102f4:	200010d8 	.word	0x200010d8
    102f8:	0000fd2d 	.word	0x0000fd2d
 
 000102fc <RADIO_RxDone>:
@@ -40711,10 +40711,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1035a:	46c0      	nop			; (mov r8, r8)
    1035c:	000031b5 	.word	0x000031b5
    10360:	0000318d 	.word	0x0000318d
-   10364:	20001860 	.word	0x20001860
+   10364:	20001898 	.word	0x20001898
    10368:	000091c1 	.word	0x000091c1
    1036c:	00010111 	.word	0x00010111
-   10370:	20001d8c 	.word	0x20001d8c
+   10370:	20001dc4 	.word	0x20001dc4
    10374:	0000fd2d 	.word	0x0000fd2d
 
 00010378 <RADIO_FSKPayloadReady>:
@@ -40837,15 +40837,15 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10460:	47b8      	blx	r7
    10462:	e7cc      	b.n	103fe <RADIO_FSKPayloadReady+0x86>
    10464:	000031b5 	.word	0x000031b5
-   10468:	20001860 	.word	0x20001860
-   1046c:	20001d8c 	.word	0x20001d8c
+   10468:	20001898 	.word	0x20001898
+   1046c:	20001dc4 	.word	0x20001dc4
    10470:	000091c1 	.word	0x000091c1
    10474:	000001ad 	.word	0x000001ad
    10478:	00003221 	.word	0x00003221
    1047c:	000001ed 	.word	0x000001ed
    10480:	00010111 	.word	0x00010111
    10484:	0000fd2d 	.word	0x0000fd2d
-   10488:	2000188c 	.word	0x2000188c
+   10488:	200018c4 	.word	0x200018c4
 
 0001048c <Radio_SetClockInput>:
    1048c:	b510      	push	{r4, lr}
@@ -40866,7 +40866,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    104aa:	4b04      	ldr	r3, [pc, #16]	; (104bc <Radio_SetClockInput+0x30>)
    104ac:	4798      	blx	r3
    104ae:	bd10      	pop	{r4, pc}
-   104b0:	20001860 	.word	0x20001860
+   104b0:	20001898 	.word	0x20001898
    104b4:	000031b5 	.word	0x000031b5
    104b8:	0000318d 	.word	0x0000318d
    104bc:	000032bd 	.word	0x000032bd
@@ -40976,18 +40976,18 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1058a:	46c0      	nop			; (mov r8, r8)
    1058c:	0001048d 	.word	0x0001048d
    10590:	0000ffe9 	.word	0x0000ffe9
-   10594:	20001860 	.word	0x20001860
+   10594:	20001898 	.word	0x20001898
    10598:	000091c1 	.word	0x000091c1
    1059c:	0000f76d 	.word	0x0000f76d
-   105a0:	20001894 	.word	0x20001894
-   105a4:	200010ac 	.word	0x200010ac
+   105a0:	200018cc 	.word	0x200018cc
+   105a4:	200010e4 	.word	0x200010e4
    105a8:	0000318d 	.word	0x0000318d
    105ac:	000031b5 	.word	0x000031b5
    105b0:	00009519 	.word	0x00009519
-   105b4:	200010a8 	.word	0x200010a8
+   105b4:	200010e0 	.word	0x200010e0
    105b8:	000031e1 	.word	0x000031e1
    105bc:	00008e65 	.word	0x00008e65
-   105c0:	200010a0 	.word	0x200010a0
+   105c0:	200010d8 	.word	0x200010d8
    105c4:	00010145 	.word	0x00010145
    105c8:	00008ebd 	.word	0x00008ebd
    105cc:	0000fe65 	.word	0x0000fe65
@@ -41003,7 +41003,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    105de:	4798      	blx	r3
    105e0:	bd10      	pop	{r4, pc}
    105e2:	46c0      	nop			; (mov r8, r8)
-   105e4:	20001860 	.word	0x20001860
+   105e4:	20001898 	.word	0x20001898
    105e8:	000032d9 	.word	0x000032d9
 
 000105ec <RADIO_InitDefaultAttributes>:
@@ -41211,18 +41211,18 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1077e:	7818      	ldrb	r0, [r3, #0]
    10780:	47a8      	blx	r5
    10782:	e7ad      	b.n	106e0 <RADIO_InitDefaultAttributes+0xf4>
-   10784:	20001d8f 	.word	0x20001d8f
-   10788:	20001860 	.word	0x20001860
+   10784:	20001dc7 	.word	0x20001dc7
+   10788:	20001898 	.word	0x20001898
    1078c:	33be27a0 	.word	0x33be27a0
    10790:	000061a8 	.word	0x000061a8
    10794:	0000c350 	.word	0x0000c350
    10798:	00003a98 	.word	0x00003a98
-   1079c:	20001c8c 	.word	0x20001c8c
-   107a0:	2000188d 	.word	0x2000188d
+   1079c:	20001cc4 	.word	0x20001cc4
+   107a0:	200018c5 	.word	0x200018c5
    107a4:	00008e89 	.word	0x00008e89
-   107a8:	2000188e 	.word	0x2000188e
-   107ac:	2000188f 	.word	0x2000188f
-   107b0:	200018b0 	.word	0x200018b0
+   107a8:	200018c6 	.word	0x200018c6
+   107ac:	200018c7 	.word	0x200018c7
+   107b0:	200018e8 	.word	0x200018e8
    107b4:	0000314d 	.word	0x0000314d
    107b8:	000032b9 	.word	0x000032b9
    107bc:	000032b5 	.word	0x000032b5
@@ -41312,10 +41312,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10872:	47a0      	blx	r4
    10874:	e7d6      	b.n	10824 <RADIO_Receive+0x44>
    10876:	46c0      	nop			; (mov r8, r8)
-   10878:	20001d8f 	.word	0x20001d8f
-   1087c:	20001860 	.word	0x20001860
+   10878:	20001dc7 	.word	0x20001dc7
+   1087c:	20001898 	.word	0x20001898
    10880:	000091c1 	.word	0x000091c1
-   10884:	2000109c 	.word	0x2000109c
+   10884:	200010d0 	.word	0x200010d0
    10888:	0000fd2d 	.word	0x0000fd2d
    1088c:	0001048d 	.word	0x0001048d
    10890:	00009519 	.word	0x00009519
@@ -41431,14 +41431,14 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1096e:	4798      	blx	r3
    10970:	e7c9      	b.n	10906 <RADIO_TxDoneHandler+0x6a>
    10972:	46c0      	nop			; (mov r8, r8)
-   10974:	20001d8c 	.word	0x20001d8c
-   10978:	20001860 	.word	0x20001860
+   10974:	20001dc4 	.word	0x20001dc4
+   10978:	20001898 	.word	0x20001898
    1097c:	00009519 	.word	0x00009519
-   10980:	20001d8f 	.word	0x20001d8f
-   10984:	20001d8e 	.word	0x20001d8e
+   10980:	20001dc7 	.word	0x20001dc7
+   10984:	20001dc6 	.word	0x20001dc6
    10988:	0000314d 	.word	0x0000314d
    1098c:	000105ed 	.word	0x000105ed
-   10990:	200010a0 	.word	0x200010a0
+   10990:	200010d8 	.word	0x200010d8
    10994:	000105d1 	.word	0x000105d1
    10998:	00010d5d 	.word	0x00010d5d
 
@@ -41743,12 +41743,12 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10bee:	e703      	b.n	109f8 <RADIO_RxDoneHandler+0x5c>
    10bf0:	2010      	movs	r0, #16
    10bf2:	e786      	b.n	10b02 <RADIO_RxDoneHandler+0x166>
-   10bf4:	20001d8c 	.word	0x20001d8c
-   10bf8:	20001860 	.word	0x20001860
+   10bf4:	20001dc4 	.word	0x20001dc4
+   10bf8:	20001898 	.word	0x20001898
    10bfc:	00009519 	.word	0x00009519
    10c00:	000105d1 	.word	0x000105d1
-   10c04:	20001d8f 	.word	0x20001d8f
-   10c08:	20001d8e 	.word	0x20001d8e
+   10c04:	20001dc7 	.word	0x20001dc7
+   10c08:	20001dc6 	.word	0x20001dc6
    10c0c:	000031b5 	.word	0x000031b5
    10c10:	0000318d 	.word	0x0000318d
    10c14:	00003221 	.word	0x00003221
@@ -41817,11 +41817,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10c9a:	4b07      	ldr	r3, [pc, #28]	; (10cb8 <Radio_LBTScanTimeout+0x8c>)
    10c9c:	4798      	blx	r3
    10c9e:	e7e7      	b.n	10c70 <Radio_LBTScanTimeout+0x44>
-   10ca0:	20001860 	.word	0x20001860
+   10ca0:	20001898 	.word	0x20001898
    10ca4:	000096dd 	.word	0x000096dd
    10ca8:	00010c2d 	.word	0x00010c2d
    10cac:	00008ebd 	.word	0x00008ebd
-   10cb0:	20001d8c 	.word	0x20001d8c
+   10cb0:	20001dc4 	.word	0x20001dc4
    10cb4:	00010f61 	.word	0x00010f61
    10cb8:	0000fd2d 	.word	0x0000fd2d
 
@@ -41891,7 +41891,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10d38:	0001048d 	.word	0x0001048d
    10d3c:	0000ffe9 	.word	0x0000ffe9
    10d40:	0000f76d 	.word	0x0000f76d
-   10d44:	20001860 	.word	0x20001860
+   10d44:	20001898 	.word	0x20001898
    10d48:	00009519 	.word	0x00009519
    10d4c:	000031b5 	.word	0x000031b5
    10d50:	0000318d 	.word	0x0000318d
@@ -41969,16 +41969,16 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    10de2:	4798      	blx	r3
    10de4:	e7e6      	b.n	10db4 <radioScanDoneHandler+0x58>
    10de6:	46c0      	nop			; (mov r8, r8)
-   10de8:	20001d8c 	.word	0x20001d8c
+   10de8:	20001dc4 	.word	0x20001dc4
    10dec:	fffffdff 	.word	0xfffffdff
-   10df0:	20001860 	.word	0x20001860
+   10df0:	20001898 	.word	0x20001898
    10df4:	0000318d 	.word	0x0000318d
    10df8:	00009519 	.word	0x00009519
    10dfc:	00010111 	.word	0x00010111
    10e00:	000105d1 	.word	0x000105d1
    10e04:	0000fdd9 	.word	0x0000fdd9
    10e08:	000104c1 	.word	0x000104c1
-   10e0c:	20001d8e 	.word	0x20001d8e
+   10e0c:	20001dc6 	.word	0x20001dc6
 
 00010e10 <__gnu_thumb1_case_sqi>:
    10e10:	b402      	push	{r1}
@@ -43501,8 +43501,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    119d2:	4653      	mov	r3, sl
    119d4:	21ff      	movs	r1, #255	; 0xff
    119d6:	e759      	b.n	1188c <__aeabi_fdiv+0x138>
-   119d8:	0001c090 	.word	0x0001c090
-   119dc:	0001c0d0 	.word	0x0001c0d0
+   119d8:	0001c0a4 	.word	0x0001c0a4
+   119dc:	0001c0e4 	.word	0x0001c0e4
    119e0:	f7ffffff 	.word	0xf7ffffff
 
 000119e4 <__eqsf2>:
@@ -43962,7 +43962,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    11d66:	22ff      	movs	r2, #255	; 0xff
    11d68:	e72e      	b.n	11bc8 <__aeabi_fmul+0x94>
    11d6a:	46c0      	nop			; (mov r8, r8)
-   11d6c:	0001c110 	.word	0x0001c110
+   11d6c:	0001c124 	.word	0x0001c124
    11d70:	f7ffffff 	.word	0xf7ffffff
 
 00011d74 <__aeabi_fsub>:
@@ -45581,7 +45581,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    12a1a:	e7db      	b.n	129d4 <__aeabi_ddiv+0x19c>
    12a1c:	000007ff 	.word	0x000007ff
    12a20:	fffffc01 	.word	0xfffffc01
-   12a24:	0001c150 	.word	0x0001c150
+   12a24:	0001c164 	.word	0x0001c164
    12a28:	fffffc0d 	.word	0xfffffc0d
    12a2c:	800fffff 	.word	0x800fffff
    12a30:	45d9      	cmp	r9, fp
@@ -46378,7 +46378,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1307a:	46c0      	nop			; (mov r8, r8)
    1307c:	000007ff 	.word	0x000007ff
    13080:	fffffc01 	.word	0xfffffc01
-   13084:	0001c190 	.word	0x0001c190
+   13084:	0001c1a4 	.word	0x0001c1a4
    13088:	800fffff 	.word	0x800fffff
    1308c:	fffffc0d 	.word	0xfffffc0d
    13090:	464a      	mov	r2, r9
@@ -48287,7 +48287,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    13f88:	4798      	blx	r3
    13f8a:	42a5      	cmp	r5, r4
    13f8c:	d1f9      	bne.n	13f82 <__libc_init_array+0xe>
-   13f8e:	f008 fbeb 	bl	1c768 <_init>
+   13f8e:	f008 fbf3 	bl	1c778 <_init>
    13f92:	4e08      	ldr	r6, [pc, #32]	; (13fb4 <__libc_init_array+0x40>)
    13f94:	4d08      	ldr	r5, [pc, #32]	; (13fb8 <__libc_init_array+0x44>)
    13f96:	2400      	movs	r4, #0
@@ -48301,10 +48301,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    13fa6:	42a5      	cmp	r5, r4
    13fa8:	d1f9      	bne.n	13f9e <__libc_init_array+0x2a>
    13faa:	bd70      	pop	{r4, r5, r6, pc}
-   13fac:	0001c774 	.word	0x0001c774
-   13fb0:	0001c774 	.word	0x0001c774
-   13fb4:	0001c774 	.word	0x0001c774
-   13fb8:	0001c77c 	.word	0x0001c77c
+   13fac:	0001c784 	.word	0x0001c784
+   13fb0:	0001c784 	.word	0x0001c784
+   13fb4:	0001c784 	.word	0x0001c784
+   13fb8:	0001c78c 	.word	0x0001c78c
 
 00013fbc <__itoa>:
    13fbc:	1e93      	subs	r3, r2, #2
@@ -49626,10 +49626,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    14a52:	4666      	mov	r6, ip
    14a54:	930e      	str	r3, [sp, #56]	; 0x38
    14a56:	e6f5      	b.n	14844 <_svfprintf_r+0x220>
-   14a58:	0001c1d4 	.word	0x0001c1d4
-   14a5c:	0001c378 	.word	0x0001c378
+   14a58:	0001c1e8 	.word	0x0001c1e8
+   14a5c:	0001c38c 	.word	0x0001c38c
    14a60:	7fefffff 	.word	0x7fefffff
-   14a64:	0001c338 	.word	0x0001c338
+   14a64:	0001c34c 	.word	0x0001c34c
    14a68:	9312      	str	r3, [sp, #72]	; 0x48
    14a6a:	2310      	movs	r3, #16
    14a6c:	431c      	orrs	r4, r3
@@ -50016,9 +50016,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    14d86:	002e      	movs	r6, r5
    14d88:	464d      	mov	r5, r9
    14d8a:	e009      	b.n	14da0 <_svfprintf_r+0x77c>
-   14d8c:	0001c348 	.word	0x0001c348
-   14d90:	0001c35c 	.word	0x0001c35c
-   14d94:	0001c388 	.word	0x0001c388
+   14d8c:	0001c35c 	.word	0x0001c35c
+   14d90:	0001c370 	.word	0x0001c370
+   14d94:	0001c39c 	.word	0x0001c39c
    14d98:	3e10      	subs	r6, #16
    14d9a:	3208      	adds	r2, #8
    14d9c:	2e10      	cmp	r6, #16
@@ -50460,9 +50460,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1512c:	1b1b      	subs	r3, r3, r4
    1512e:	930e      	str	r3, [sp, #56]	; 0x38
    15130:	f7ff fb88 	bl	14844 <_svfprintf_r+0x220>
-   15134:	0001c378 	.word	0x0001c378
+   15134:	0001c38c 	.word	0x0001c38c
    15138:	0001bb40 	.word	0x0001bb40
-   1513c:	0001c388 	.word	0x0001c388
+   1513c:	0001c39c 	.word	0x0001c39c
    15140:	981f      	ldr	r0, [sp, #124]	; 0x7c
    15142:	2800      	cmp	r0, #0
    15144:	dc00      	bgt.n	15148 <_svfprintf_r+0xb24>
@@ -50896,7 +50896,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    154ce:	4698      	mov	r8, r3
    154d0:	ae32      	add	r6, sp, #200	; 0xc8
    154d2:	e513      	b.n	14efc <_svfprintf_r+0x8d8>
-   154d4:	0001c388 	.word	0x0001c388
+   154d4:	0001c39c 	.word	0x0001c39c
    154d8:	2307      	movs	r3, #7
    154da:	3207      	adds	r2, #7
    154dc:	439a      	bics	r2, r3
@@ -51508,8 +51508,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    159ec:	e624      	b.n	15638 <_svfprintf_r+0x1014>
    159ee:	46c0      	nop			; (mov r8, r8)
    159f0:	0001bb40 	.word	0x0001bb40
-   159f4:	0001c33c 	.word	0x0001c33c
-   159f8:	0001c370 	.word	0x0001c370
+   159f4:	0001c350 	.word	0x0001c350
+   159f8:	0001c384 	.word	0x0001c384
    159fc:	9b1f      	ldr	r3, [sp, #124]	; 0x7c
    159fe:	9313      	str	r3, [sp, #76]	; 0x4c
    15a00:	2b00      	cmp	r3, #0
@@ -51767,9 +51767,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    15c1a:	469a      	mov	sl, r3
    15c1c:	e7c4      	b.n	15ba8 <_svfprintf_r+0x1584>
    15c1e:	46c0      	nop			; (mov r8, r8)
-   15c20:	0001c388 	.word	0x0001c388
-   15c24:	0001c340 	.word	0x0001c340
-   15c28:	0001c344 	.word	0x0001c344
+   15c20:	0001c39c 	.word	0x0001c39c
+   15c24:	0001c354 	.word	0x0001c354
+   15c28:	0001c358 	.word	0x0001c358
 
 00015c2c <__utoa>:
    15c2c:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -51838,7 +51838,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    15cae:	2000      	movs	r0, #0
    15cb0:	e7f6      	b.n	15ca0 <__utoa+0x74>
    15cb2:	46c0      	nop			; (mov r8, r8)
-   15cb4:	0001c398 	.word	0x0001c398
+   15cb4:	0001c3ac 	.word	0x0001c3ac
 
 00015cb8 <_vfprintf_r>:
    15cb8:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -52273,9 +52273,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    16044:	e1ca      	b.n	163dc <_vfprintf_r+0x724>
    16046:	46c0      	nop			; (mov r8, r8)
    16048:	ffffdfff 	.word	0xffffdfff
-   1604c:	0001c3c0 	.word	0x0001c3c0
-   16050:	0001c35c 	.word	0x0001c35c
-   16054:	0001c524 	.word	0x0001c524
+   1604c:	0001c3d4 	.word	0x0001c3d4
+   16050:	0001c370 	.word	0x0001c370
+   16054:	0001c538 	.word	0x0001c538
    16058:	2200      	movs	r2, #0
    1605a:	9d07      	ldr	r5, [sp, #28]
    1605c:	3b30      	subs	r3, #48	; 0x30
@@ -52831,12 +52831,12 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    164de:	465c      	mov	r4, fp
    164e0:	e010      	b.n	16504 <_vfprintf_r+0x84c>
    164e2:	46c0      	nop			; (mov r8, r8)
-   164e4:	0001c35c 	.word	0x0001c35c
-   164e8:	0001c348 	.word	0x0001c348
+   164e4:	0001c370 	.word	0x0001c370
+   164e8:	0001c35c 	.word	0x0001c35c
    164ec:	7fefffff 	.word	0x7fefffff
-   164f0:	0001c338 	.word	0x0001c338
-   164f4:	0001c534 	.word	0x0001c534
-   164f8:	0001c524 	.word	0x0001c524
+   164f0:	0001c34c 	.word	0x0001c34c
+   164f4:	0001c548 	.word	0x0001c548
+   164f8:	0001c538 	.word	0x0001c538
    164fc:	3d10      	subs	r5, #16
    164fe:	3608      	adds	r6, #8
    16500:	2d10      	cmp	r5, #16
@@ -53243,9 +53243,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    16846:	46b2      	mov	sl, r6
    16848:	e007      	b.n	1685a <_vfprintf_r+0xba2>
    1684a:	46c0      	nop			; (mov r8, r8)
-   1684c:	0001c524 	.word	0x0001c524
+   1684c:	0001c538 	.word	0x0001c538
    16850:	0001bb40 	.word	0x0001bb40
-   16854:	0001c534 	.word	0x0001c534
+   16854:	0001c548 	.word	0x0001c548
    16858:	46a1      	mov	r9, r4
    1685a:	074a      	lsls	r2, r1, #29
    1685c:	4694      	mov	ip, r2
@@ -53741,7 +53741,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    16c60:	ae32      	add	r6, sp, #200	; 0xc8
    16c62:	f7ff fbe2 	bl	1642a <_vfprintf_r+0x772>
    16c66:	46c0      	nop			; (mov r8, r8)
-   16c68:	0001c534 	.word	0x0001c534
+   16c68:	0001c548 	.word	0x0001c548
    16c6c:	980c      	ldr	r0, [sp, #48]	; 0x30
    16c6e:	990d      	ldr	r1, [sp, #52]	; 0x34
    16c70:	2300      	movs	r3, #0
@@ -54374,9 +54374,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    171a8:	e00c      	b.n	171c4 <_vfprintf_r+0x150c>
    171aa:	46c0      	nop			; (mov r8, r8)
    171ac:	0001bb40 	.word	0x0001bb40
-   171b0:	0001c33c 	.word	0x0001c33c
-   171b4:	0001c370 	.word	0x0001c370
-   171b8:	0001c534 	.word	0x0001c534
+   171b0:	0001c350 	.word	0x0001c350
+   171b4:	0001c384 	.word	0x0001c384
+   171b8:	0001c548 	.word	0x0001c548
    171bc:	3208      	adds	r2, #8
    171be:	3c10      	subs	r4, #16
    171c0:	2c10      	cmp	r4, #16
@@ -54588,9 +54588,9 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1737e:	4694      	mov	ip, r2
    17380:	4463      	add	r3, ip
    17382:	e61a      	b.n	16fba <_vfprintf_r+0x1302>
-   17384:	0001c340 	.word	0x0001c340
-   17388:	0001c534 	.word	0x0001c534
-   1738c:	0001c344 	.word	0x0001c344
+   17384:	0001c354 	.word	0x0001c354
+   17388:	0001c548 	.word	0x0001c548
+   1738c:	0001c358 	.word	0x0001c358
 
 00017390 <__sbprintf>:
    17390:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -55373,8 +55373,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    17a00:	7ff00000 	.word	0x7ff00000
    17a04:	0001bb41 	.word	0x0001bb41
    17a08:	0000270f 	.word	0x0000270f
-   17a0c:	0001c544 	.word	0x0001c544
-   17a10:	0001c550 	.word	0x0001c550
+   17a0c:	0001c558 	.word	0x0001c558
+   17a10:	0001c564 	.word	0x0001c564
    17a14:	3ff00000 	.word	0x3ff00000
    17a18:	fffffc01 	.word	0xfffffc01
    17a1c:	3ff80000 	.word	0x3ff80000
@@ -55384,8 +55384,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    17a2c:	3fc68a28 	.word	0x3fc68a28
    17a30:	509f79fb 	.word	0x509f79fb
    17a34:	3fd34413 	.word	0x3fd34413
-   17a38:	0001c590 	.word	0x0001c590
-   17a3c:	0001c568 	.word	0x0001c568
+   17a38:	0001c5a0 	.word	0x0001c5a0
+   17a3c:	0001c578 	.word	0x0001c578
    17a40:	401c0000 	.word	0x401c0000
    17a44:	fcc00000 	.word	0xfcc00000
    17a48:	3fe00000 	.word	0x3fe00000
@@ -55736,7 +55736,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    17d44:	00000412 	.word	0x00000412
    17d48:	fe100000 	.word	0xfe100000
    17d4c:	0001bb40 	.word	0x0001bb40
-   17d50:	0001c590 	.word	0x0001c590
+   17d50:	0001c5a0 	.word	0x0001c5a0
    17d54:	9b06      	ldr	r3, [sp, #24]
    17d56:	464c      	mov	r4, r9
    17d58:	9308      	str	r3, [sp, #32]
@@ -56477,8 +56477,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    18388:	00000433 	.word	0x00000433
    1838c:	401c0000 	.word	0x401c0000
    18390:	fcc00000 	.word	0xfcc00000
-   18394:	0001c590 	.word	0x0001c590
-   18398:	0001c568 	.word	0x0001c568
+   18394:	0001c5a0 	.word	0x0001c5a0
+   18398:	0001c578 	.word	0x0001c578
    1839c:	9b12      	ldr	r3, [sp, #72]	; 0x48
    1839e:	498f      	ldr	r1, [pc, #572]	; (185dc <_dtoa_r+0xf74>)
    183a0:	3b01      	subs	r3, #1
@@ -56742,7 +56742,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    185d6:	1a18      	subs	r0, r3, r0
    185d8:	e4d7      	b.n	17f8a <_dtoa_r+0x922>
    185da:	46c0      	nop			; (mov r8, r8)
-   185dc:	0001c590 	.word	0x0001c590
+   185dc:	0001c5a0 	.word	0x0001c5a0
    185e0:	40240000 	.word	0x40240000
    185e4:	3fe00000 	.word	0x3fe00000
    185e8:	401c0000 	.word	0x401c0000
@@ -57039,7 +57039,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    18844:	f000 fb2e 	bl	18ea4 <__retarget_lock_release_recursive>
    18848:	bd70      	pop	{r4, r5, r6, pc}
    1884a:	46c0      	nop			; (mov r8, r8)
-   1884c:	20001d9c 	.word	0x20001d9c
+   1884c:	20001dd4 	.word	0x20001dd4
    18850:	00018795 	.word	0x00018795
 
 00018854 <__sfp_lock_acquire>:
@@ -57048,7 +57048,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    18858:	f000 fb22 	bl	18ea0 <__retarget_lock_acquire_recursive>
    1885c:	bd10      	pop	{r4, pc}
    1885e:	46c0      	nop			; (mov r8, r8)
-   18860:	20001db0 	.word	0x20001db0
+   18860:	20001de8 	.word	0x20001de8
 
 00018864 <__sfp_lock_release>:
    18864:	b510      	push	{r4, lr}
@@ -57056,7 +57056,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    18868:	f000 fb1c 	bl	18ea4 <__retarget_lock_release_recursive>
    1886c:	bd10      	pop	{r4, pc}
    1886e:	46c0      	nop			; (mov r8, r8)
-   18870:	20001db0 	.word	0x20001db0
+   18870:	20001de8 	.word	0x20001de8
 
 00018874 <__libc_fini_array>:
    18874:	b570      	push	{r4, r5, r6, lr}
@@ -57075,11 +57075,11 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1888e:	3d04      	subs	r5, #4
    18890:	2c00      	cmp	r4, #0
    18892:	d1f9      	bne.n	18888 <__libc_fini_array+0x14>
-   18894:	f003 ff72 	bl	1c77c <_fini>
+   18894:	f003 ff7a 	bl	1c78c <_fini>
    18898:	bd70      	pop	{r4, r5, r6, pc}
    1889a:	46c0      	nop			; (mov r8, r8)
-   1889c:	0001c788 	.word	0x0001c788
-   188a0:	0001c78c 	.word	0x0001c78c
+   1889c:	0001c798 	.word	0x0001c798
+   188a0:	0001c79c 	.word	0x0001c79c
    188a4:	3fffffff 	.word	0x3fffffff
 
 000188a8 <_malloc_trim_r>:
@@ -57150,7 +57150,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    18934:	20000668 	.word	0x20000668
    18938:	00000fef 	.word	0x00000fef
    1893c:	00000fff 	.word	0x00000fff
-   18940:	200010b0 	.word	0x200010b0
+   18940:	200010e8 	.word	0x200010e8
    18944:	20000a70 	.word	0x20000a70
 
 00018948 <_free_r>:
@@ -57365,7 +57365,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    18af0:	000001ff 	.word	0x000001ff
    18af4:	20000670 	.word	0x20000670
    18af8:	20000a74 	.word	0x20000a74
-   18afc:	200010e0 	.word	0x200010e0
+   18afc:	20001118 	.word	0x20001118
    18b00:	00000554 	.word	0x00000554
 
 00018b04 <__sfvwrite_r>:
@@ -58415,12 +58415,12 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    19344:	20000668 	.word	0x20000668
    19348:	000001ff 	.word	0x000001ff
    1934c:	20000a70 	.word	0x20000a70
-   19350:	200010e0 	.word	0x200010e0
+   19350:	20001118 	.word	0x20001118
    19354:	0000100f 	.word	0x0000100f
-   19358:	200010b0 	.word	0x200010b0
+   19358:	200010e8 	.word	0x200010e8
    1935c:	00001008 	.word	0x00001008
-   19360:	200010d8 	.word	0x200010d8
-   19364:	200010dc 	.word	0x200010dc
+   19360:	20001110 	.word	0x20001110
+   19364:	20001114 	.word	0x20001114
    19368:	6873      	ldr	r3, [r6, #4]
    1936a:	e68e      	b.n	1908a <_malloc_r+0xde>
    1936c:	2308      	movs	r3, #8
@@ -58628,7 +58628,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    19506:	3308      	adds	r3, #8
    19508:	e605      	b.n	19116 <_malloc_r+0x16a>
    1950a:	46c0      	nop			; (mov r8, r8)
-   1950c:	200010b0 	.word	0x200010b0
+   1950c:	200010e8 	.word	0x200010e8
    19510:	00000554 	.word	0x00000554
 
 00019514 <__ascii_mbtowc>:
@@ -58807,7 +58807,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    19664:	f7ff fc1c 	bl	18ea0 <__retarget_lock_acquire_recursive>
    19668:	bd10      	pop	{r4, pc}
    1966a:	46c0      	nop			; (mov r8, r8)
-   1966c:	20001da0 	.word	0x20001da0
+   1966c:	20001dd8 	.word	0x20001dd8
 
 00019670 <__malloc_unlock>:
    19670:	b510      	push	{r4, lr}
@@ -58815,7 +58815,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    19674:	f7ff fc16 	bl	18ea4 <__retarget_lock_release_recursive>
    19678:	bd10      	pop	{r4, pc}
    1967a:	46c0      	nop			; (mov r8, r8)
-   1967c:	20001da0 	.word	0x20001da0
+   1967c:	20001dd8 	.word	0x20001dd8
 
 00019680 <_Balloc>:
    19680:	b570      	push	{r4, r5, r6, lr}
@@ -59286,7 +59286,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    19a1a:	2300      	movs	r3, #0
    19a1c:	6003      	str	r3, [r0, #0]
    19a1e:	e7b5      	b.n	1998c <__pow5mult+0x24>
-   19a20:	0001c658 	.word	0x0001c658
+   19a20:	0001c668 	.word	0x0001c668
    19a24:	00000271 	.word	0x00000271
 
 00019a28 <__lshift>:
@@ -60110,7 +60110,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a0a6:	d0fb      	beq.n	1a0a0 <_sbrk_r+0x14>
    1a0a8:	602b      	str	r3, [r5, #0]
    1a0aa:	e7f9      	b.n	1a0a0 <_sbrk_r+0x14>
-   1a0ac:	20001db4 	.word	0x20001db4
+   1a0ac:	20001dec 	.word	0x20001dec
 
 0001a0b0 <__sread>:
    1a0b0:	b570      	push	{r4, r5, r6, lr}
@@ -60441,7 +60441,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a33e:	d0fb      	beq.n	1a338 <_write_r+0x18>
    1a340:	602b      	str	r3, [r5, #0]
    1a342:	e7f9      	b.n	1a338 <_write_r+0x18>
-   1a344:	20001db4 	.word	0x20001db4
+   1a344:	20001dec 	.word	0x20001dec
 
 0001a348 <__register_exitproc>:
    1a348:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -60557,7 +60557,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a42c:	4240      	negs	r0, r0
    1a42e:	e7b1      	b.n	1a394 <__register_exitproc+0x4c>
    1a430:	200004f8 	.word	0x200004f8
-   1a434:	0001c1d0 	.word	0x0001c1d0
+   1a434:	0001c1e4 	.word	0x0001c1e4
    1a438:	00018f99 	.word	0x00018f99
 
 0001a43c <_calloc_r>:
@@ -60620,7 +60620,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a4ae:	d0fb      	beq.n	1a4a8 <_close_r+0x14>
    1a4b0:	602b      	str	r3, [r5, #0]
    1a4b2:	e7f9      	b.n	1a4a8 <_close_r+0x14>
-   1a4b4:	20001db4 	.word	0x20001db4
+   1a4b4:	20001dec 	.word	0x20001dec
 
 0001a4b8 <_fclose_r>:
    1a4b8:	b570      	push	{r4, r5, r6, lr}
@@ -60853,7 +60853,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a696:	602b      	str	r3, [r5, #0]
    1a698:	e7f9      	b.n	1a68e <_fstat_r+0x16>
    1a69a:	46c0      	nop			; (mov r8, r8)
-   1a69c:	20001db4 	.word	0x20001db4
+   1a69c:	20001dec 	.word	0x20001dec
 
 0001a6a0 <_isatty_r>:
    1a6a0:	2300      	movs	r3, #0
@@ -60871,7 +60871,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a6ba:	d0fb      	beq.n	1a6b4 <_isatty_r+0x14>
    1a6bc:	602b      	str	r3, [r5, #0]
    1a6be:	e7f9      	b.n	1a6b4 <_isatty_r+0x14>
-   1a6c0:	20001db4 	.word	0x20001db4
+   1a6c0:	20001dec 	.word	0x20001dec
 
 0001a6c4 <_lseek_r>:
    1a6c4:	b570      	push	{r4, r5, r6, lr}
@@ -60891,7 +60891,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a6e2:	d0fb      	beq.n	1a6dc <_lseek_r+0x18>
    1a6e4:	602b      	str	r3, [r5, #0]
    1a6e6:	e7f9      	b.n	1a6dc <_lseek_r+0x18>
-   1a6e8:	20001db4 	.word	0x20001db4
+   1a6e8:	20001dec 	.word	0x20001dec
 
 0001a6ec <_read_r>:
    1a6ec:	b570      	push	{r4, r5, r6, lr}
@@ -60911,7 +60911,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1a70a:	d0fb      	beq.n	1a704 <_read_r+0x18>
    1a70c:	602b      	str	r3, [r5, #0]
    1a70e:	e7f9      	b.n	1a704 <_read_r+0x18>
-   1a710:	20001db4 	.word	0x20001db4
+   1a710:	20001dec 	.word	0x20001dec
 
 0001a714 <__swbuf_r>:
    1a714:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
@@ -61290,8 +61290,8 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1ab48:	35c36d80 37502800 00000000              .m.5.(P7....
 
 0001ab54 <pds_reg_as_item_list>:
-   1ab54:	20001434 00200004 20001454 25c00104     4.. .. .T.. ...%
-   1ab64:	200013ee ea010204                       ... ....
+   1ab54:	2000146c 00200004 2000148c 25c00104     l.. .. .... ...%
+   1ab64:	20001426 ea010204                       &.. ....
 
 0001ab6c <DefaultChannels915AU>:
    1ab6c:	50015001 50015001 50015001 50015001     .P.P.P.P.P.P.P.P
@@ -61314,7 +61314,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1ac5c:	00f20016 010908fc 00f2002a 010907fc     ........*.......
 
 0001ac6c <pds_reg_au_item_list>:
-   1ac6c:	20001507 00010008 20001464 06900108     ... ....d.. ....
+   1ac6c:	2000153f 00010008 2000149c 06900108     ?.. ....... ....
 
 0001ac7c <AdvChannels433>:
    1ac7c:	19d1b9d8 19d1b9d8 ff0c0101 19d4c718     ................
@@ -61352,10 +61352,10 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1ad6c:	33db2580 00000000                       .%.3....
 
 0001ad74 <pds_reg_eu868_fid1_item_list>:
-   1ad74:	20001434 00200003                       4.. .. .
+   1ad74:	2000146c 00200003                       l.. .. .
 
 0001ad7c <pds_reg_eu868_fid2_item_list>:
-   1ad7c:	20001454 00c0000b                       T.. ....
+   1ad7c:	2000148c 00c0000b                       ... ....
 
 0001ad84 <AdvChannels865>:
    1ad84:	338fce64 338fce64 ff1e0100 3394fe84     d..3d..3.......3
@@ -61372,7 +61372,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1ade0:	00000000 010a0000 00f20008 000a00fe     ................
 
 0001adf0 <pds_reg_ind_item_list>:
-   1adf0:	20001434 00200006 20001454 25c00106     4.. .. .T.. ...%
+   1adf0:	2000146c 00200006 2000148c 25c00106     l.. .. .... ...%
 
 0001ae00 <AdvChannels923JP>:
    1ae00:	3706ea00 3706ea00 ff100100 3709f740     ...7...7....@..7
@@ -61394,7 +61394,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1ae60:	36d61600 37502800 00000000              ...6.(P7....
 
 0001ae6c <pds_reg_jpn_fid1_item_list>:
-   1ae6c:	20001434 00200007 20001454 25c00107     4.. .. .T.. ...%
+   1ae6c:	2000146c 00200007 2000148c 25c00107     l.. .. .... ...%
 
 0001ae7c <AdvChannels920KR>:
    1ae7c:	36f62120 36f62120 ff0e0100 36f92e60      !.6 !.6....`..6
@@ -61410,7 +61410,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1aec8:	00f20031 010708be 00f20053 010707bc     1.......S.......
 
 0001aed8 <pds_reg_kr_fid1_item_list>:
-   1aed8:	20001434 00200005 20001454 25c00105     4.. .. .T.. ...%
+   1aed8:	2000146c 00200005 2000148c 25c00105     l.. .. .... ...%
 
 0001aee8 <DefaultChannels915>:
    1aee8:	30013001 30013001 30013001 30013001     .0.0.0.0.0.0.0.0
@@ -61433,7 +61433,7 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1afd8:	00f20016 010908fc 00f2002a 010907fc     ........*.......
 
 0001afe8 <pds_reg_na_item_list>:
-   1afe8:	20001507 00010002 20001464 06900102     ... ....d.. ....
+   1afe8:	2000153f 00010002 2000149c 06900102     ?.. ....... ....
    1aff8:	00005290 00005290 00005290 00005290     .R...R...R...R..
    1b008:	000052f6 0000535c 0000530e 000052f6     .R..\S...S...R..
 
@@ -61687,195 +61687,195 @@ static inline enum system_reset_cause system_get_reset_cause(void)
    1bed8:	0d746573 00000000 776f7242 754f206e     set.....Brown Ou
    1bee8:	32312074 74654420 6f746365 65522072     t 12 Detector Re
    1bef8:	0d746573 00000000 65776f50 6e4f2d72     set.....Power-On
-   1bf08:	73655220 000d7465 44434241 00000045      Reset..ABCDE...
-   1bf18:	6c796150 3a64616f 20732520 74655220     Payload: %s  Ret
-   1bf28:	0d64253d 94c1000a                                =%d...
+   1bf08:	73655220 000d7465 6d616554 494c4120      Reset..Team ALI
+   1bf18:	7327414e 526f4c20 61702061 74656b63     NA's LoRa packet
+   1bf28:	00002320 6c796150 3a64616f 20732520      #..Payload: %s 
+   1bf38:	74655220 0d64253d 94c1000a                        Ret=%d...
 
-0001bf2e <FskSyncWordBuff>:
-   1bf2e:	01c194c1                                         ...
+0001bf42 <FskSyncWordBuff>:
+   1bf42:	01c194c1                                         ...
 
-0001bf31 <macEndDevCmdReplyLen>:
-   1bf31:	02010201 01010203 0c0a0802                       .........
+0001bf45 <macEndDevCmdReplyLen>:
+   1bf45:	02010201 01010203 0c0a0802                       .........
 
-0001bf3a <maxEIRPTable>:
-   1bf3a:	0d0c0a08 1412100e 1b1a1815 24211e1d     ..............!$
+0001bf4e <maxEIRPTable>:
+   1bf4e:	0d0c0a08 1412100e 1b1a1815 24211e1d     ..............!$
 	...
 
-0001bf4c <pds_mac_fid1_item_list>:
-   1bf4c:	20001afe 00010000 20001afc 06010100     ... ....... ....
-   1bf5c:	20001a90 0c040200 20001aff 15010300     ... ....... ....
-   1bf6c:	20001b00 1b040400 20001b50 24040500     ... ....P.. ...$
-   1bf7c:	20001b2c 2d040600 20001b40 36100700     ,.. ...-@.. ...6
-   1bf8c:	20001b30 4b100800 20001b1a 60040900     0.. ...K... ...`
-   1bf9c:	20001ae9 69010b00 20001a98 6f010a00     ... ...i... ...o
-   1bfac:	20001ad0 75020c00 20001ad2 7c020d00     ... ...u... ...|
-   1bfbc:	20001ad4 83020e00 20001ad6 8a020f00     ... ....... ....
-   1bfcc:	20001ad8 91021000 20001ada 98021100     ... ....... ....
-   1bfdc:	20001adc 9f011200 20001add a5011300     ... ....... ....
-   1bfec:	20001ae2 b1011500 20001ae1 ab011400     ... ....... ....
-   1bffc:	20001a88 b7041600                       ... ....
+0001bf60 <pds_mac_fid1_item_list>:
+   1bf60:	20001b36 00010000 20001b34 06010100     6.. ....4.. ....
+   1bf70:	20001ac8 0c040200 20001b37 15010300     ... ....7.. ....
+   1bf80:	20001b38 1b040400 20001b88 24040500     8.. ....... ...$
+   1bf90:	20001b64 2d040600 20001b78 36100700     d.. ...-x.. ...6
+   1bfa0:	20001b68 4b100800 20001b52 60040900     h.. ...KR.. ...`
+   1bfb0:	20001b21 69010b00 20001ad0 6f010a00     !.. ...i... ...o
+   1bfc0:	20001b08 75020c00 20001b0a 7c020d00     ... ...u... ...|
+   1bfd0:	20001b0c 83020e00 20001b0e 8a020f00     ... ....... ....
+   1bfe0:	20001b10 91021000 20001b12 98021100     ... ....... ....
+   1bff0:	20001b14 9f011200 20001b15 a5011300     ... ....... ....
+   1c000:	20001b1a b1011500 20001b19 ab011400     ... ....... ....
+   1c010:	20001ac0 b7041600                       ... ....
 
-0001c004 <pds_mac_fid2_item_list>:
-   1c004:	20001a7e 00050001 20001af6 0a010101     ~.. ....... ....
-   1c014:	20001a34 10010201 20001a35 16040301     4.. ....5.. ....
-   1c024:	20001a39 1f100401 20001a49 34100501     9.. ....I.. ...4
-   1c034:	20001a59 49100601 20001a69 5e080701     Y.. ...Ii.. ...^
-   1c044:	20001a71 6b080801 20001ade 78020901     q.. ...k... ...x
-   1c054:	20001a8c 7f040a01 20001a84 88040b01     ... ....... ....
-   1c064:	20001ae7 91010c01                       ... ....
+0001c018 <pds_mac_fid2_item_list>:
+   1c018:	20001ab6 00050001 20001b2e 0a010101     ... ....... ....
+   1c028:	20001a6c 10010201 20001a6d 16040301     l.. ....m.. ....
+   1c038:	20001a71 1f100401 20001a81 34100501     q.. ....... ...4
+   1c048:	20001a91 49100601 20001aa1 5e080701     ... ...I... ...^
+   1c058:	20001aa9 6b080801 20001b16 78020901     ... ...k... ...x
+   1c068:	20001ac4 7f040a01 20001abc 88040b01     ... ....... ....
+   1c078:	20001b1f 91010c01                       ... ....
 
-0001c06c <lorawanHandlers>:
-   1c06c:	0000f259 0000f16d 0000f2fd 000000fd     Y...m...........
+0001c080 <lorawanHandlers>:
+   1c080:	0000f259 0000f16d 0000f2fd 000000fd     Y...m...........
 
-0001c07c <radioTaskHandlers>:
-   1c07c:	0001089d 0001099d 000104c1 0001001d     ................
-   1c08c:	00010cbd 000118e0 000118b0 000118c2     ................
-   1c09c:	00011804 000118c2 000118a6 000118c2     ................
-   1c0ac:	00011804 000118b0 000118b0 000118a6     ................
-   1c0bc:	00011804 0001180c 0001180c 0001180c     ................
-   1c0cc:	000118c8 000118b0 000118b0 00011884     ................
-   1c0dc:	00011968 00011884 000118a6 00011884     h...............
-   1c0ec:	00011968 000118b0 000118b0 000118a6     h...............
-   1c0fc:	00011968 0001180c 0001180c 0001180c     h...............
-   1c10c:	00011972 00011c60 00011bb0 00011bb0     r...`...........
-   1c11c:	00011bae 00011c52 00011c52 00011c48     ....R...R...H...
-   1c12c:	00011bae 00011c52 00011c48 00011c52     ....R...H...R...
-   1c13c:	00011bae 00011c58 00011c58 00011c58     ....X...X...X...
-   1c14c:	00011ce8 00012a30 00012a12 000129cc     ....0*...*...)..
-   1c15c:	000128ea 000129cc 00012a04 000129cc     .(...)...*...)..
-   1c16c:	000128ea 00012a12 00012a12 00012a04     .(...*...*...*..
-   1c17c:	000128ea 000128e2 000128e2 000128e2     .(...(...(...(..
-   1c18c:	00012c48 00013090 00012f50 00012f50     H,...0..P/..P/..
-   1c19c:	00012f4c 00013068 00013068 0001305a     L/..h0..h0..Z0..
-   1c1ac:	00012f4c 00013068 0001305a 00013068     L/..h0..Z0..h0..
-   1c1bc:	00012f4c 00013070 00013070 00013070     L/..p0..p0..p0..
-   1c1cc:	00013274                                t2..
+0001c090 <radioTaskHandlers>:
+   1c090:	0001089d 0001099d 000104c1 0001001d     ................
+   1c0a0:	00010cbd 000118e0 000118b0 000118c2     ................
+   1c0b0:	00011804 000118c2 000118a6 000118c2     ................
+   1c0c0:	00011804 000118b0 000118b0 000118a6     ................
+   1c0d0:	00011804 0001180c 0001180c 0001180c     ................
+   1c0e0:	000118c8 000118b0 000118b0 00011884     ................
+   1c0f0:	00011968 00011884 000118a6 00011884     h...............
+   1c100:	00011968 000118b0 000118b0 000118a6     h...............
+   1c110:	00011968 0001180c 0001180c 0001180c     h...............
+   1c120:	00011972 00011c60 00011bb0 00011bb0     r...`...........
+   1c130:	00011bae 00011c52 00011c52 00011c48     ....R...R...H...
+   1c140:	00011bae 00011c52 00011c48 00011c52     ....R...H...R...
+   1c150:	00011bae 00011c58 00011c58 00011c58     ....X...X...X...
+   1c160:	00011ce8 00012a30 00012a12 000129cc     ....0*...*...)..
+   1c170:	000128ea 000129cc 00012a04 000129cc     .(...)...*...)..
+   1c180:	000128ea 00012a12 00012a12 00012a04     .(...*...*...*..
+   1c190:	000128ea 000128e2 000128e2 000128e2     .(...(...(...(..
+   1c1a0:	00012c48 00013090 00012f50 00012f50     H,...0..P/..P/..
+   1c1b0:	00012f4c 00013068 00013068 0001305a     L/..h0..h0..Z0..
+   1c1c0:	00012f4c 00013068 0001305a 00013068     L/..h0..Z0..h0..
+   1c1d0:	00012f4c 00013070 00013070 00013070     L/..p0..p0..p0..
+   1c1e0:	00013274                                t2..
 
-0001c1d0 <_global_impure_ptr>:
-   1c1d0:	200000d0 00014c80 00014cf4 00014cf4     ... .L...L...L..
-   1c1e0:	00014c64 00014cf4 00014cf4 00014cf4     dL...L...L...L..
-   1c1f0:	00014cf4 00014cf4 00014cf4 00014c6c     .L...L...L..lL..
-   1c200:	0001474e 00014cf4 00014708 00014758     NG...L...G..XG..
-   1c210:	00014cf4 000147a4 0001498e 0001498e     .L...G...I...I..
-   1c220:	0001498e 0001498e 0001498e 0001498e     .I...I...I...I..
-   1c230:	0001498e 0001498e 0001498e 00014cf4     .I...I...I...L..
-   1c240:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
-   1c250:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
-   1c260:	00014cf4 000147ac 000148f4 00014cf4     .L...G...H...L..
-   1c270:	000148f4 00014cf4 00014cf4 00014cf4     .H...L...L...L..
-   1c280:	00014cf4 000149be 00014cf4 00014cf4     .L...I...L...L..
-   1c290:	000149c6 00014cf4 00014cf4 00014cf4     .I...L...L...L..
-   1c2a0:	00014cf4 00014cf4 00014a68 00014cf4     .L...L..hJ...L..
-   1c2b0:	00014cf4 00014a9a 00014cf4 00014cf4     .L...J...L...L..
-   1c2c0:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
-   1c2d0:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
-   1c2e0:	00014b94 00014bc8 000148f4 000148f4     .K...K...H...H..
-   1c2f0:	000148f4 00014bda 00014bc8 00014cf4     .H...K...K...L..
-   1c300:	00014cf4 00014be2 00014cf4 00014afc     .L...K...L...J..
-   1c310:	00014cc2 00014c38 00014b32 00014cf4     .L..8L..2K...L..
-   1c320:	00014b3a 00014cf4 00014c90 00014cf4     :K...L...L...L..
-   1c330:	00014cf4 00014bf2 00464e49 00666e69     .L...K..INF.inf.
-   1c340:	004e414e 006e616e 33323130 37363534     NAN.nan.01234567
-   1c350:	42413938 46454443 00000000 33323130     89ABCDEF....0123
-   1c360:	37363534 62613938 66656463 00000000     456789abcdef....
-   1c370:	6c756e28 0000296c                       (null)..
+0001c1e4 <_global_impure_ptr>:
+   1c1e4:	200000d0 00014c80 00014cf4 00014cf4     ... .L...L...L..
+   1c1f4:	00014c64 00014cf4 00014cf4 00014cf4     dL...L...L...L..
+   1c204:	00014cf4 00014cf4 00014cf4 00014c6c     .L...L...L..lL..
+   1c214:	0001474e 00014cf4 00014708 00014758     NG...L...G..XG..
+   1c224:	00014cf4 000147a4 0001498e 0001498e     .L...G...I...I..
+   1c234:	0001498e 0001498e 0001498e 0001498e     .I...I...I...I..
+   1c244:	0001498e 0001498e 0001498e 00014cf4     .I...I...I...L..
+   1c254:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
+   1c264:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
+   1c274:	00014cf4 000147ac 000148f4 00014cf4     .L...G...H...L..
+   1c284:	000148f4 00014cf4 00014cf4 00014cf4     .H...L...L...L..
+   1c294:	00014cf4 000149be 00014cf4 00014cf4     .L...I...L...L..
+   1c2a4:	000149c6 00014cf4 00014cf4 00014cf4     .I...L...L...L..
+   1c2b4:	00014cf4 00014cf4 00014a68 00014cf4     .L...L..hJ...L..
+   1c2c4:	00014cf4 00014a9a 00014cf4 00014cf4     .L...J...L...L..
+   1c2d4:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
+   1c2e4:	00014cf4 00014cf4 00014cf4 00014cf4     .L...L...L...L..
+   1c2f4:	00014b94 00014bc8 000148f4 000148f4     .K...K...H...H..
+   1c304:	000148f4 00014bda 00014bc8 00014cf4     .H...K...K...L..
+   1c314:	00014cf4 00014be2 00014cf4 00014afc     .L...K...L...J..
+   1c324:	00014cc2 00014c38 00014b32 00014cf4     .L..8L..2K...L..
+   1c334:	00014b3a 00014cf4 00014c90 00014cf4     :K...L...L...L..
+   1c344:	00014cf4 00014bf2 00464e49 00666e69     .L...K..INF.inf.
+   1c354:	004e414e 006e616e 33323130 37363534     NAN.nan.01234567
+   1c364:	42413938 46454443 00000000 33323130     89ABCDEF....0123
+   1c374:	37363534 62613938 66656463 00000000     456789abcdef....
+   1c384:	6c756e28 0000296c                       (null)..
 
-0001c378 <blanks.7223>:
-   1c378:	20202020 20202020 20202020 20202020                     
+0001c38c <blanks.7223>:
+   1c38c:	20202020 20202020 20202020 20202020                     
 
-0001c388 <zeroes.7224>:
-   1c388:	30303030 30303030 30303030 30303030     0000000000000000
-   1c398:	33323130 37363534 62613938 66656463     0123456789abcdef
-   1c3a8:	6a696867 6e6d6c6b 7271706f 76757473     ghijklmnopqrstuv
-   1c3b8:	7a797877 00000000 000162d6 000163aa     wxyz.....b...c..
-   1c3c8:	000163aa 000162c2 000163aa 000163aa     .c...b...c...c..
-   1c3d8:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
-   1c3e8:	0001637c 00015e8e 000163aa 00015e84     |c...^...c...^..
-   1c3f8:	00015e98 000163aa 000162cc 00016058     .^...c...b..X`..
-   1c408:	00016058 00016058 00016058 00016058     X`..X`..X`..X`..
-   1c418:	00016058 00016058 00016058 00016058     X`..X`..X`..X`..
-   1c428:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
-   1c438:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
-   1c448:	000163aa 000163aa 00016392 000162e6     .c...c...c...b..
-   1c458:	000163aa 000162e6 000163aa 000163aa     .c...b...c...c..
-   1c468:	000163aa 000163aa 0001624c 000163aa     .c...c..Lb...c..
-   1c478:	000163aa 00016256 000163aa 000163aa     .c..Vb...c...c..
-   1c488:	000163aa 000163aa 000163aa 00016284     .c...c...c...b..
-   1c498:	000163aa 000163aa 000162b2 000163aa     .c...c...b...c..
-   1c4a8:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
-   1c4b8:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
-   1c4c8:	000163aa 00016098 000160ce 000162e6     .c...`...`...b..
-   1c4d8:	000162e6 000162e6 00016176 000160ce     .b...b..va...`..
-   1c4e8:	000163aa 000163aa 00016180 000163aa     .c...c...a...c..
-   1c4f8:	00016192 000163a6 000161c0 000161ea     .a...c...a...a..
-   1c508:	000163aa 000161f4 000163aa 000163a2     .c...a...c...c..
-   1c518:	000163aa 000163aa 00015ee6              .c...c...^..
+0001c39c <zeroes.7224>:
+   1c39c:	30303030 30303030 30303030 30303030     0000000000000000
+   1c3ac:	33323130 37363534 62613938 66656463     0123456789abcdef
+   1c3bc:	6a696867 6e6d6c6b 7271706f 76757473     ghijklmnopqrstuv
+   1c3cc:	7a797877 00000000 000162d6 000163aa     wxyz.....b...c..
+   1c3dc:	000163aa 000162c2 000163aa 000163aa     .c...b...c...c..
+   1c3ec:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
+   1c3fc:	0001637c 00015e8e 000163aa 00015e84     |c...^...c...^..
+   1c40c:	00015e98 000163aa 000162cc 00016058     .^...c...b..X`..
+   1c41c:	00016058 00016058 00016058 00016058     X`..X`..X`..X`..
+   1c42c:	00016058 00016058 00016058 00016058     X`..X`..X`..X`..
+   1c43c:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
+   1c44c:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
+   1c45c:	000163aa 000163aa 00016392 000162e6     .c...c...c...b..
+   1c46c:	000163aa 000162e6 000163aa 000163aa     .c...b...c...c..
+   1c47c:	000163aa 000163aa 0001624c 000163aa     .c...c..Lb...c..
+   1c48c:	000163aa 00016256 000163aa 000163aa     .c..Vb...c...c..
+   1c49c:	000163aa 000163aa 000163aa 00016284     .c...c...c...b..
+   1c4ac:	000163aa 000163aa 000162b2 000163aa     .c...c...b...c..
+   1c4bc:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
+   1c4cc:	000163aa 000163aa 000163aa 000163aa     .c...c...c...c..
+   1c4dc:	000163aa 00016098 000160ce 000162e6     .c...`...`...b..
+   1c4ec:	000162e6 000162e6 00016176 000160ce     .b...b..va...`..
+   1c4fc:	000163aa 000163aa 00016180 000163aa     .c...c...a...c..
+   1c50c:	00016192 000163a6 000161c0 000161ea     .a...c...a...a..
+   1c51c:	000163aa 000161f4 000163aa 000163a2     .c...a...c...c..
+   1c52c:	000163aa 000163aa 00015ee6              .c...c...^..
 
-0001c524 <blanks.7238>:
-   1c524:	20202020 20202020 20202020 20202020                     
+0001c538 <blanks.7238>:
+   1c538:	20202020 20202020 20202020 20202020                     
 
-0001c534 <zeroes.7239>:
-   1c534:	30303030 30303030 30303030 30303030     0000000000000000
-   1c544:	69666e49 7974696e 00000000 004e614e     Infinity....NaN.
-   1c554:	00000043 49534f50 00000058 0000002e     C...POSIX.......
-   1c564:	00000000                                ....
+0001c548 <zeroes.7239>:
+   1c548:	30303030 30303030 30303030 30303030     0000000000000000
+   1c558:	69666e49 7974696e 00000000 004e614e     Infinity....NaN.
+   1c568:	00000043 49534f50 00000058 0000002e     C...POSIX.......
 
-0001c568 <__mprec_bigtens>:
-   1c568:	37e08000 4341c379 b5056e17 4693b8b5     ...7y.AC.n.....F
-   1c578:	e93ff9f5 4d384f03 f9301d32 5a827748     ..?..O8M2.0.Hw.Z
-   1c588:	7f73bf3c 75154fdd                       <.s..O.u
+0001c578 <__mprec_bigtens>:
+   1c578:	37e08000 4341c379 b5056e17 4693b8b5     ...7y.AC.n.....F
+   1c588:	e93ff9f5 4d384f03 f9301d32 5a827748     ..?..O8M2.0.Hw.Z
+   1c598:	7f73bf3c 75154fdd                       <.s..O.u
 
-0001c590 <__mprec_tens>:
-   1c590:	00000000 3ff00000 00000000 40240000     .......?......$@
-   1c5a0:	00000000 40590000 00000000 408f4000     ......Y@.....@.@
-   1c5b0:	00000000 40c38800 00000000 40f86a00     .......@.....j.@
-   1c5c0:	00000000 412e8480 00000000 416312d0     .......A......cA
-   1c5d0:	00000000 4197d784 00000000 41cdcd65     .......A....e..A
-   1c5e0:	20000000 4202a05f e8000000 42374876     ... _..B....vH7B
-   1c5f0:	a2000000 426d1a94 e5400000 42a2309c     ......mB..@..0.B
-   1c600:	1e900000 42d6bcc4 26340000 430c6bf5     .......B..4&.k.C
-   1c610:	37e08000 4341c379 85d8a000 43763457     ...7y.AC....W4vC
-   1c620:	674ec800 43abc16d 60913d00 43e158e4     ..Ngm..C.=.`.X.C
-   1c630:	78b58c40 4415af1d d6e2ef50 444b1ae4     @..x...DP.....KD
-   1c640:	064dd592 4480f0cf c7e14af6 44b52d02     ..M....D.J...-.D
-   1c650:	79d99db4 44ea7843                       ...yCx.D
+0001c5a0 <__mprec_tens>:
+   1c5a0:	00000000 3ff00000 00000000 40240000     .......?......$@
+   1c5b0:	00000000 40590000 00000000 408f4000     ......Y@.....@.@
+   1c5c0:	00000000 40c38800 00000000 40f86a00     .......@.....j.@
+   1c5d0:	00000000 412e8480 00000000 416312d0     .......A......cA
+   1c5e0:	00000000 4197d784 00000000 41cdcd65     .......A....e..A
+   1c5f0:	20000000 4202a05f e8000000 42374876     ... _..B....vH7B
+   1c600:	a2000000 426d1a94 e5400000 42a2309c     ......mB..@..0.B
+   1c610:	1e900000 42d6bcc4 26340000 430c6bf5     .......B..4&.k.C
+   1c620:	37e08000 4341c379 85d8a000 43763457     ...7y.AC....W4vC
+   1c630:	674ec800 43abc16d 60913d00 43e158e4     ..Ngm..C.=.`.X.C
+   1c640:	78b58c40 4415af1d d6e2ef50 444b1ae4     @..x...DP.....KD
+   1c650:	064dd592 4480f0cf c7e14af6 44b52d02     ..M....D.J...-.D
+   1c660:	79d99db4 44ea7843                       ...yCx.D
 
-0001c658 <p05.6055>:
-   1c658:	00000005 00000019 0000007d              ........}...
+0001c668 <p05.6055>:
+   1c668:	00000005 00000019 0000007d              ........}...
 
-0001c664 <_ctype_>:
-   1c664:	20202000 20202020 28282020 20282828     .         ((((( 
-   1c674:	20202020 20202020 20202020 20202020                     
-   1c684:	10108820 10101010 10101010 10101010      ...............
-   1c694:	04040410 04040404 10040404 10101010     ................
-   1c6a4:	41411010 41414141 01010101 01010101     ..AAAAAA........
-   1c6b4:	01010101 01010101 01010101 10101010     ................
-   1c6c4:	42421010 42424242 02020202 02020202     ..BBBBBB........
-   1c6d4:	02020202 02020202 02020202 10101010     ................
-   1c6e4:	00000020 00000000 00000000 00000000      ...............
+0001c674 <_ctype_>:
+   1c674:	20202000 20202020 28282020 20282828     .         ((((( 
+   1c684:	20202020 20202020 20202020 20202020                     
+   1c694:	10108820 10101010 10101010 10101010      ...............
+   1c6a4:	04040410 04040404 10040404 10101010     ................
+   1c6b4:	41411010 41414141 01010101 01010101     ..AAAAAA........
+   1c6c4:	01010101 01010101 01010101 10101010     ................
+   1c6d4:	42421010 42424242 02020202 02020202     ..BBBBBB........
+   1c6e4:	02020202 02020202 02020202 10101010     ................
+   1c6f4:	00000020 00000000 00000000 00000000      ...............
 	...
 
-0001c768 <_init>:
-   1c768:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
-   1c76a:	46c0      	nop			; (mov r8, r8)
-   1c76c:	bcf8      	pop	{r3, r4, r5, r6, r7}
-   1c76e:	bc08      	pop	{r3}
-   1c770:	469e      	mov	lr, r3
-   1c772:	4770      	bx	lr
+0001c778 <_init>:
+   1c778:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   1c77a:	46c0      	nop			; (mov r8, r8)
+   1c77c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+   1c77e:	bc08      	pop	{r3}
+   1c780:	469e      	mov	lr, r3
+   1c782:	4770      	bx	lr
 
-0001c774 <__init_array_start>:
-   1c774:	000174ed 	.word	0x000174ed
+0001c784 <__init_array_start>:
+   1c784:	000174ed 	.word	0x000174ed
 
-0001c778 <__frame_dummy_init_array_entry>:
-   1c778:	000000dd                                ....
+0001c788 <__frame_dummy_init_array_entry>:
+   1c788:	000000dd                                ....
 
-0001c77c <_fini>:
-   1c77c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
-   1c77e:	46c0      	nop			; (mov r8, r8)
-   1c780:	bcf8      	pop	{r3, r4, r5, r6, r7}
-   1c782:	bc08      	pop	{r3}
-   1c784:	469e      	mov	lr, r3
-   1c786:	4770      	bx	lr
+0001c78c <_fini>:
+   1c78c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+   1c78e:	46c0      	nop			; (mov r8, r8)
+   1c790:	bcf8      	pop	{r3, r4, r5, r6, r7}
+   1c792:	bc08      	pop	{r3}
+   1c794:	469e      	mov	lr, r3
+   1c796:	4770      	bx	lr
 
-0001c788 <__fini_array_start>:
-   1c788:	000000b5 	.word	0x000000b5
+0001c798 <__fini_array_start>:
+   1c798:	000000b5 	.word	0x000000b5

@@ -17012,7 +17012,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtn.o
                 0x00002000                STACK_SIZE = DEFINED (STACK_SIZE)?STACK_SIZE:DEFINED (__stack_size__)?__stack_size__:0x2000
 
-.text           0x00000000    0x1c78c
+.text           0x00000000    0x1c79c
                 0x00000000                . = ALIGN (0x4)
                 0x00000000                _sfixed = .
  *(.vectors .vectors.*)
@@ -18967,152 +18967,151 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin
  .rodata.main.str1.4
                 0x0001be74       0x9c src/main.o
  .rodata.radio_tx_callback.str1.4
-                0x0001bf10       0x1e src/main.o
+                0x0001bf10       0x32 src/main.o
  .rodata.FskSyncWordBuff
-                0x0001bf2e        0x3 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
+                0x0001bf42        0x3 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
  .rodata.macEndDevCmdReplyLen
-                0x0001bf31        0x9 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
+                0x0001bf45        0x9 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
  .rodata.maxEIRPTable
-                0x0001bf3a       0x10 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
- *fill*         0x0001bf4a        0x2 
+                0x0001bf4e       0x10 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
+ *fill*         0x0001bf5e        0x2 
  .rodata.pds_mac_fid1_item_list
-                0x0001bf4c       0xb8 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_pds.o)
-                0x0001bf4c                pds_mac_fid1_item_list
+                0x0001bf60       0xb8 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_pds.o)
+                0x0001bf60                pds_mac_fid1_item_list
  .rodata.pds_mac_fid2_item_list
-                0x0001c004       0x68 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_pds.o)
-                0x0001c004                pds_mac_fid2_item_list
+                0x0001c018       0x68 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_pds.o)
+                0x0001c018                pds_mac_fid2_item_list
  .rodata.lorawanHandlers
-                0x0001c06c        0xc ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_task_handler.o)
+                0x0001c080        0xc ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_task_handler.o)
  .rodata.Radio_WriteConfiguration.cst1
-                0x0001c078        0x1 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_get_set.o)
- *fill*         0x0001c079        0x3 
+                0x0001c08c        0x1 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_get_set.o)
+ *fill*         0x0001c08d        0x3 
  .rodata.radioTaskHandlers
-                0x0001c07c       0x14 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_task_manager.o)
- .rodata        0x0001c090       0x80 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(divsf3.o)
- .rodata        0x0001c110       0x40 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(mulsf3.o)
- .rodata        0x0001c150       0x40 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(divdf3.o)
- .rodata        0x0001c190       0x40 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(muldf3.o)
+                0x0001c090       0x14 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_task_manager.o)
+ .rodata        0x0001c0a4       0x80 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(divsf3.o)
+ .rodata        0x0001c124       0x40 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(mulsf3.o)
+ .rodata        0x0001c164       0x40 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(divdf3.o)
+ .rodata        0x0001c1a4       0x40 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(muldf3.o)
  .rodata._global_impure_ptr
-                0x0001c1d0        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-impure.o)
-                0x0001c1d0                _global_impure_ptr
+                0x0001c1e4        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-impure.o)
+                0x0001c1e4                _global_impure_ptr
  .rodata._puts_r.str1.4
-                0x0001c1d4       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-puts.o)
+                0x0001c1e8       0x32 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-puts.o)
                                   0x2 (size before relaxing)
  .rodata._svfprintf_r
-                0x0001c1d4      0x164 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
+                0x0001c1e8      0x164 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
  .rodata._svfprintf_r.str1.4
-                0x0001c338       0x3f c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
+                0x0001c34c       0x3f c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
                                  0x42 (size before relaxing)
- *fill*         0x0001c377        0x1 
+ *fill*         0x0001c38b        0x1 
  .rodata.blanks.7223
-                0x0001c378       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
+                0x0001c38c       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
  .rodata.zeroes.7224
-                0x0001c388       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
+                0x0001c39c       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-svfprintf.o)
  .rodata.__utoa.str1.4
-                0x0001c398       0x25 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-utoa.o)
- *fill*         0x0001c3bd        0x3 
+                0x0001c3ac       0x25 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-utoa.o)
+ *fill*         0x0001c3d1        0x3 
  .rodata._vfprintf_r
-                0x0001c3c0      0x164 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
+                0x0001c3d4      0x164 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
  .rodata._vfprintf_r.str1.4
-                0x0001c524       0x42 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
+                0x0001c538       0x42 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
  .rodata.blanks.7238
-                0x0001c524       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
+                0x0001c538       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
  .rodata.zeroes.7239
-                0x0001c534       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
+                0x0001c548       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-vfprintf.o)
  .rodata._dtoa_r.str1.4
-                0x0001c544       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-dtoa.o)
+                0x0001c558       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-dtoa.o)
                                  0x12 (size before relaxing)
  .rodata._setlocale_r.str1.4
-                0x0001c554        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-locale.o)
+                0x0001c568        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-locale.o)
                                   0xd (size before relaxing)
- *fill*         0x0001c55e        0x2 
+ *fill*         0x0001c572        0x2 
  .rodata.str1.4
-                0x0001c560        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-locale.o)
+                0x0001c574        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-locale.o)
                                   0x2 (size before relaxing)
- *fill*         0x0001c564        0x4 
  .rodata.__mprec_bigtens
-                0x0001c568       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mprec.o)
-                0x0001c568                __mprec_bigtens
+                0x0001c578       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mprec.o)
+                0x0001c578                __mprec_bigtens
  .rodata.__mprec_tens
-                0x0001c590       0xc8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mprec.o)
-                0x0001c590                __mprec_tens
+                0x0001c5a0       0xc8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mprec.o)
+                0x0001c5a0                __mprec_tens
  .rodata.p05.6055
-                0x0001c658        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mprec.o)
+                0x0001c668        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mprec.o)
  .rodata._ctype_
-                0x0001c664      0x101 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-ctype_.o)
-                0x0001c664                _ctype_
+                0x0001c674      0x101 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-ctype_.o)
+                0x0001c674                _ctype_
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0001c768                . = ALIGN (0x4)
- *fill*         0x0001c765        0x3 
+                0x0001c778                . = ALIGN (0x4)
+ *fill*         0x0001c775        0x3 
  *(.init)
- .init          0x0001c768        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crti.o
-                0x0001c768                _init
- .init          0x0001c76c        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtn.o
-                0x0001c774                . = ALIGN (0x4)
-                0x0001c774                __preinit_array_start = .
+ .init          0x0001c778        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crti.o
+                0x0001c778                _init
+ .init          0x0001c77c        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtn.o
+                0x0001c784                . = ALIGN (0x4)
+                0x0001c784                __preinit_array_start = .
  *(.preinit_array)
-                0x0001c774                __preinit_array_end = .
-                0x0001c774                . = ALIGN (0x4)
-                0x0001c774                __init_array_start = .
+                0x0001c784                __preinit_array_end = .
+                0x0001c784                . = ALIGN (0x4)
+                0x0001c784                __init_array_start = .
  *(SORT(.init_array.*))
  .init_array.00000
-                0x0001c774        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-__call_atexit.o)
+                0x0001c784        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-__call_atexit.o)
  *(.init_array)
- .init_array    0x0001c778        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
-                0x0001c77c                __init_array_end = .
-                0x0001c77c                . = ALIGN (0x4)
+ .init_array    0x0001c788        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+                0x0001c78c                __init_array_end = .
+                0x0001c78c                . = ALIGN (0x4)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *crtend.o(.ctors)
-                0x0001c77c                . = ALIGN (0x4)
+                0x0001c78c                . = ALIGN (0x4)
  *(.fini)
- .fini          0x0001c77c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crti.o
-                0x0001c77c                _fini
- .fini          0x0001c780        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtn.o
-                0x0001c788                . = ALIGN (0x4)
-                0x0001c788                __fini_array_start = .
+ .fini          0x0001c78c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crti.o
+                0x0001c78c                _fini
+ .fini          0x0001c790        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtn.o
+                0x0001c798                . = ALIGN (0x4)
+                0x0001c798                __fini_array_start = .
  *(.fini_array)
- .fini_array    0x0001c788        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+ .fini_array    0x0001c798        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
  *(SORT(.fini_array.*))
-                0x0001c78c                __fini_array_end = .
+                0x0001c79c                __fini_array_end = .
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *crtend.o(.dtors)
-                0x0001c78c                . = ALIGN (0x4)
-                0x0001c78c                _efixed = .
+                0x0001c79c                . = ALIGN (0x4)
+                0x0001c79c                _efixed = .
                 [!provide]                PROVIDE (__exidx_start, .)
 
-.vfp11_veneer   0x0001c78c        0x0
- .vfp11_veneer  0x0001c78c        0x0 linker stubs
+.vfp11_veneer   0x0001c79c        0x0
+ .vfp11_veneer  0x0001c79c        0x0 linker stubs
 
-.v4_bx          0x0001c78c        0x0
- .v4_bx         0x0001c78c        0x0 linker stubs
+.v4_bx          0x0001c79c        0x0
+ .v4_bx         0x0001c79c        0x0 linker stubs
 
-.iplt           0x0001c78c        0x0
- .iplt          0x0001c78c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+.iplt           0x0001c79c        0x0
+ .iplt          0x0001c79c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
 
-.ARM.exidx      0x0001c78c        0x8
+.ARM.exidx      0x0001c79c        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0001c78c        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(_udivmoddi4.o)
+ .ARM.exidx     0x0001c79c        0x8 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m\libgcc.a(_udivmoddi4.o)
                 [!provide]                PROVIDE (__exidx_end, .)
 
-.eh_frame       0x0001c794        0x0
- .eh_frame      0x0001c794        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+.eh_frame       0x0001c7a4        0x0
+ .eh_frame      0x0001c7a4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
 
-.rel.dyn        0x0001c794        0x0
- .rel.iplt      0x0001c794        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+.rel.dyn        0x0001c7a4        0x0
+ .rel.iplt      0x0001c7a4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
 
-.jcr            0x0001c794        0x0
- .jcr           0x0001c794        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+.jcr            0x0001c7a4        0x0
+ .jcr           0x0001c7a4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
 
-.igot.plt       0x0001c794        0x0
- .igot.plt      0x0001c794        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
-                0x0001c794                . = ALIGN (0x4)
-                0x0001c794                _etext = .
+.igot.plt       0x0001c7a4        0x0
+ .igot.plt      0x0001c7a4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/crtbegin.o
+                0x0001c7a4                . = ALIGN (0x4)
+                0x0001c7a4                _etext = .
 
-.relocate       0x20000000      0xa78 load address 0x0001c794
+.relocate       0x20000000      0xa78 load address 0x0001c7a4
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                _srelocate = .
  *(.ramfunc .ramfunc.*)
@@ -19194,7 +19193,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin
                 0x30000000                . = ALIGN (0x8)
                 0x30000000                _elpram = .
 
-.bss            0x20000a78     0x1340 load address 0x0001d210
+.bss            0x20000a78     0x1378 load address 0x0001d220
                 0x20000a78                . = ALIGN (0x4)
                 0x20000a78                _sbss = .
                 0x20000a78                _szero = .
@@ -19319,148 +19318,152 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin
  .bss.temp_sen_str
                 0x20001054       0x19 src/enddevice_demo.o
  *fill*         0x2000106d        0x3 
- .bss.call_counter.16534
+ .bss.call_counter.16535
                 0x20001070        0x4 src/main.o
- .bss           0x20001074       0x14 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
+ .bss.g_payload
+                0x20001074       0x32 src/main.o
+                0x20001074                g_payload
+ *fill*         0x200010a6        0x2 
+ .bss           0x200010a8       0x14 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
  .bss.aesBuffer
-                0x20001088       0x10 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
+                0x200010bc       0x10 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
  .bss.lorawanTaskBitMap
-                0x20001098        0x1 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_task_handler.o)
- *fill*         0x20001099        0x1 
+                0x200010cc        0x1 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_task_handler.o)
+ *fill*         0x200010cd        0x1 
  .bss.radioTaskFlags
-                0x2000109a        0x2 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_task_manager.o)
+                0x200010ce        0x2 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_task_manager.o)
  .bss.rxWindowSize
-                0x2000109c        0x2 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
- *fill*         0x2000109e        0x2 
+                0x200010d0        0x2 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
+ *fill*         0x200010d2        0x6 
  .bss.timeOnAir
-                0x200010a0        0x8 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
+                0x200010d8        0x8 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
  .bss.transmitBufferPtr
-                0x200010a8        0x4 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
+                0x200010e0        0x4 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
  .bss.txBufferLen
-                0x200010ac        0x1 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
- *fill*         0x200010ad        0x3 
+                0x200010e4        0x1 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
+ *fill*         0x200010e5        0x3 
  .bss.__malloc_current_mallinfo
-                0x200010b0       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
-                0x200010b0                __malloc_current_mallinfo
+                0x200010e8       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
+                0x200010e8                __malloc_current_mallinfo
  .bss.__malloc_max_sbrked_mem
-                0x200010d8        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
-                0x200010d8                __malloc_max_sbrked_mem
+                0x20001110        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
+                0x20001110                __malloc_max_sbrked_mem
  .bss.__malloc_max_total_mem
-                0x200010dc        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
-                0x200010dc                __malloc_max_total_mem
+                0x20001114        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
+                0x20001114                __malloc_max_total_mem
  .bss.__malloc_top_pad
-                0x200010e0        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
-                0x200010e0                __malloc_top_pad
+                0x20001118        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-mallocr.o)
+                0x20001118                __malloc_top_pad
  *(COMMON)
- COMMON         0x200010e4        0x4 src/ASF/sam0/drivers/adc/adc_sam_l_c/adc_callback.o
-                0x200010e4                _adc_instances
- COMMON         0x200010e8        0x1 src/ASF/sam0/drivers/extint/extint_callback.o
-                0x200010e8                _current_channel
- *fill*         0x200010e9        0x3 
- COMMON         0x200010ec       0x40 src/ASF/sam0/drivers/extint/extint_sam_l_c/extint.o
-                0x200010ec                _extint_dev
- COMMON         0x2000112c        0x4 src/ASF/sam0/drivers/rtc/rtc_sam_l_c/rtc_count.o
-                0x2000112c                _rtc_instance
- COMMON         0x20001130       0x18 src/ASF/sam0/drivers/sercom/sercom_interrupt.o
-                0x20001130                _sercom_instances
- COMMON         0x20001148       0x14 src/ASF/sam0/drivers/tc/tc_interrupt.o
-                0x20001148                _tc_instances
- COMMON         0x2000115c        0x4 src/ASF/sam0/utils/stdio/read.o
-                0x2000115c                ptr_get
- COMMON         0x20001160        0x8 src/ASF/sam0/utils/stdio/write.o
-                0x20001160                ptr_put
-                0x20001164                stdio_base
- COMMON         0x20001168        0x3 src/ASF/thirdparty/wireless/lorawan/hal/src/radio_driver_hal.o
-                0x20001168                slave
- *fill*         0x2000116b        0x1 
- COMMON         0x2000116c       0x38 src/ASF/thirdparty/wireless/lorawan/hal/src/sleep_timer/sam0/sleep_timer.o
-                0x2000116c                rtc
- COMMON         0x200011a4        0x3 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_as.o
-                0x200011a4                aRegAsPdsOps
- *fill*         0x200011a7        0x1 
- COMMON         0x200011a8        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_au.o
-                0x200011a8                aRegAuPdsOps
- *fill*         0x200011aa        0x2 
- COMMON         0x200011ac        0x5 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_eu.o
-                0x200011ac                aRegEu868Fid1PdsOps
-                0x200011b0                aRegEu868Fid2PdsOps
- *fill*         0x200011b1        0x3 
- COMMON         0x200011b4        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_in.o
-                0x200011b4                aRegIndPdsOps
- *fill*         0x200011b6        0x2 
- COMMON         0x200011b8        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_jp.o
-                0x200011b8                aRegJpnFid1PdsOps
- *fill*         0x200011ba        0x2 
- COMMON         0x200011bc        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_kr.o
-                0x200011bc                aRegKrFid1PdsOps
- *fill*         0x200011be        0x2 
- COMMON         0x200011c0      0x202 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_na.o
-                0x200011c0                aRegNaPdsOps
- *fill*         0x200013c2        0x2 
- COMMON         0x200013c4      0x201 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_multiband.o
-                0x200013c4                regTimerId
-                0x200013c8                RegParams
- *fill*         0x200015c5        0x3 
- COMMON         0x200015c8       0x14 src/ASF/thirdparty/wireless/lorawan/services/aes/src/hw/sam0/aes_engine.o
-                0x200015c8                g_aes_cfg
-                0x200015d4                aes_instance
- COMMON         0x200015dc       0xcc src/ASF/thirdparty/wireless/lorawan/services/pds/src/pds_interface.o
-                0x200015dc                isFileSet
-                0x200015e8                fileMarks
- COMMON         0x200016a8       0x20 src/ASF/thirdparty/wireless/lorawan/services/resources/src/temp_sensor.o
-                0x200016a8                adc_instance
- COMMON         0x200016c8      0x198 src/ASF/thirdparty/wireless/lorawan/services/sw_timer/src/sw_timer.o
-                0x200016c8                swTimers
-                0x20001858                sysTime
-                0x2000185a                isTimerTriggered
-                0x2000185c                sysTimeOvf
- COMMON         0x20001860       0x58 src/ASF/thirdparty/wireless/lorawan/tal/sx1276/src/radio_driver_SX1276.o
-                0x20001860                radioConfiguration
- COMMON         0x200018b8       0x54 src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.o
-                0x200018b8                timer_config
-                0x200018f0                module_inst
- COMMON         0x2000190c        0x1 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
-                0x2000190c                timer_multiplier
- *fill*         0x2000190d        0x3 
- COMMON         0x20001910      0x36c ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
-                0x20001910                aMacPdsOps_Fid2
-                0x20001a1d                aMacPdsOps_Fid1
-                0x20001a34                loRa
-                0x20001b60                callbackBackup
-                0x20001b61                macBuffer
-                0x20001c70                fhssCallback
-                0x20001c74                AppPayload
- COMMON         0x20001c7c      0x114 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
-                0x20001c7c                radioBuffer
-                0x20001d8c                radioEvents
-                0x20001d8e                radioCallbackMask
-                0x20001d8f                radioState
- COMMON         0x20001d90       0x21 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-lock.o)
-                0x20001d90                __lock___atexit_recursive_mutex
-                0x20001d94                __lock___arc4random_mutex
-                0x20001d98                __lock___env_recursive_mutex
-                0x20001d9c                __lock___sinit_recursive_mutex
-                0x20001da0                __lock___malloc_recursive_mutex
-                0x20001da4                __lock___at_quick_exit_mutex
-                0x20001da8                __lock___dd_hash_mutex
-                0x20001dac                __lock___tz_mutex
-                0x20001db0                __lock___sfp_recursive_mutex
- *fill*         0x20001db1        0x3 
- COMMON         0x20001db4        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-reent.o)
-                0x20001db4                errno
-                0x20001db8                . = ALIGN (0x4)
-                0x20001db8                _ebss = .
-                0x20001db8                _ezero = .
+ COMMON         0x2000111c        0x4 src/ASF/sam0/drivers/adc/adc_sam_l_c/adc_callback.o
+                0x2000111c                _adc_instances
+ COMMON         0x20001120        0x1 src/ASF/sam0/drivers/extint/extint_callback.o
+                0x20001120                _current_channel
+ *fill*         0x20001121        0x3 
+ COMMON         0x20001124       0x40 src/ASF/sam0/drivers/extint/extint_sam_l_c/extint.o
+                0x20001124                _extint_dev
+ COMMON         0x20001164        0x4 src/ASF/sam0/drivers/rtc/rtc_sam_l_c/rtc_count.o
+                0x20001164                _rtc_instance
+ COMMON         0x20001168       0x18 src/ASF/sam0/drivers/sercom/sercom_interrupt.o
+                0x20001168                _sercom_instances
+ COMMON         0x20001180       0x14 src/ASF/sam0/drivers/tc/tc_interrupt.o
+                0x20001180                _tc_instances
+ COMMON         0x20001194        0x4 src/ASF/sam0/utils/stdio/read.o
+                0x20001194                ptr_get
+ COMMON         0x20001198        0x8 src/ASF/sam0/utils/stdio/write.o
+                0x20001198                ptr_put
+                0x2000119c                stdio_base
+ COMMON         0x200011a0        0x3 src/ASF/thirdparty/wireless/lorawan/hal/src/radio_driver_hal.o
+                0x200011a0                slave
+ *fill*         0x200011a3        0x1 
+ COMMON         0x200011a4       0x38 src/ASF/thirdparty/wireless/lorawan/hal/src/sleep_timer/sam0/sleep_timer.o
+                0x200011a4                rtc
+ COMMON         0x200011dc        0x3 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_as.o
+                0x200011dc                aRegAsPdsOps
+ *fill*         0x200011df        0x1 
+ COMMON         0x200011e0        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_au.o
+                0x200011e0                aRegAuPdsOps
+ *fill*         0x200011e2        0x2 
+ COMMON         0x200011e4        0x5 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_eu.o
+                0x200011e4                aRegEu868Fid1PdsOps
+                0x200011e8                aRegEu868Fid2PdsOps
+ *fill*         0x200011e9        0x3 
+ COMMON         0x200011ec        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_in.o
+                0x200011ec                aRegIndPdsOps
+ *fill*         0x200011ee        0x2 
+ COMMON         0x200011f0        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_jp.o
+                0x200011f0                aRegJpnFid1PdsOps
+ *fill*         0x200011f2        0x2 
+ COMMON         0x200011f4        0x2 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_kr.o
+                0x200011f4                aRegKrFid1PdsOps
+ *fill*         0x200011f6        0x2 
+ COMMON         0x200011f8      0x202 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_mband_na.o
+                0x200011f8                aRegNaPdsOps
+ *fill*         0x200013fa        0x2 
+ COMMON         0x200013fc      0x201 src/ASF/thirdparty/wireless/lorawan/regparams/multiband/src/lorawan_multiband.o
+                0x200013fc                regTimerId
+                0x20001400                RegParams
+ *fill*         0x200015fd        0x3 
+ COMMON         0x20001600       0x14 src/ASF/thirdparty/wireless/lorawan/services/aes/src/hw/sam0/aes_engine.o
+                0x20001600                g_aes_cfg
+                0x2000160c                aes_instance
+ COMMON         0x20001614       0xcc src/ASF/thirdparty/wireless/lorawan/services/pds/src/pds_interface.o
+                0x20001614                isFileSet
+                0x20001620                fileMarks
+ COMMON         0x200016e0       0x20 src/ASF/thirdparty/wireless/lorawan/services/resources/src/temp_sensor.o
+                0x200016e0                adc_instance
+ COMMON         0x20001700      0x198 src/ASF/thirdparty/wireless/lorawan/services/sw_timer/src/sw_timer.o
+                0x20001700                swTimers
+                0x20001890                sysTime
+                0x20001892                isTimerTriggered
+                0x20001894                sysTimeOvf
+ COMMON         0x20001898       0x58 src/ASF/thirdparty/wireless/lorawan/tal/sx1276/src/radio_driver_SX1276.o
+                0x20001898                radioConfiguration
+ COMMON         0x200018f0       0x54 src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.o
+                0x200018f0                timer_config
+                0x20001928                module_inst
+ COMMON         0x20001944        0x1 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
+                0x20001944                timer_multiplier
+ *fill*         0x20001945        0x3 
+ COMMON         0x20001948      0x36c ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
+                0x20001948                aMacPdsOps_Fid2
+                0x20001a55                aMacPdsOps_Fid1
+                0x20001a6c                loRa
+                0x20001b98                callbackBackup
+                0x20001b99                macBuffer
+                0x20001ca8                fhssCallback
+                0x20001cac                AppPayload
+ COMMON         0x20001cb4      0x114 ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
+                0x20001cb4                radioBuffer
+                0x20001dc4                radioEvents
+                0x20001dc6                radioCallbackMask
+                0x20001dc7                radioState
+ COMMON         0x20001dc8       0x21 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-lock.o)
+                0x20001dc8                __lock___atexit_recursive_mutex
+                0x20001dcc                __lock___arc4random_mutex
+                0x20001dd0                __lock___env_recursive_mutex
+                0x20001dd4                __lock___sinit_recursive_mutex
+                0x20001dd8                __lock___malloc_recursive_mutex
+                0x20001ddc                __lock___at_quick_exit_mutex
+                0x20001de0                __lock___dd_hash_mutex
+                0x20001de4                __lock___tz_mutex
+                0x20001de8                __lock___sfp_recursive_mutex
+ *fill*         0x20001de9        0x3 
+ COMMON         0x20001dec        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/arm/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m\libc.a(lib_a-reent.o)
+                0x20001dec                errno
+                0x20001df0                . = ALIGN (0x4)
+                0x20001df0                _ebss = .
+                0x20001df0                _ezero = .
 
-.stack          0x20001db8     0x2000 load address 0x0001e550
-                0x20001db8                . = ALIGN (0x8)
-                0x20001db8                _sstack = .
-                0x20003db8                . = (. + STACK_SIZE)
- *fill*         0x20001db8     0x2000 
-                0x20003db8                . = ALIGN (0x8)
-                0x20003db8                _estack = .
-                0x20003db8                . = ALIGN (0x4)
-                0x20003db8                _end = .
+.stack          0x20001df0     0x2000 load address 0x0001e598
+                0x20001df0                . = ALIGN (0x8)
+                0x20001df0                _sstack = .
+                0x20003df0                . = (. + STACK_SIZE)
+ *fill*         0x20001df0     0x2000 
+                0x20003df0                . = ALIGN (0x8)
+                0x20003df0                _estack = .
+                0x20003df0                . = ALIGN (0x4)
+                0x20003df0                _end = .
 OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
 
 .ARM.attributes
@@ -19880,7 +19883,7 @@ OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
  .comment       0x0000008c       0x5a ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_transaction.o)
  .comment       0x0000008c       0x5a ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(radio_lbt.o)
 
-.debug_info     0x00000000    0x7cbc4
+.debug_info     0x00000000    0x7cb9f
  .debug_info    0x00000000      0xb8d src/ASF/common2/services/delay/sam0/systick_counter.o
  .debug_info    0x00000b8d      0xb07 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_info    0x00001694     0x14ac src/ASF/sam0/boards/samr34_xplained_pro/board_init.o
@@ -19937,10 +19940,10 @@ OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
  .debug_info    0x000713b5     0x15c7 src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.o
  .debug_info    0x0007297c     0x2ce5 src/enddevice_cert.o
  .debug_info    0x00075661     0x4869 src/enddevice_demo.o
- .debug_info    0x00079eca     0x29f2 src/main.o
- .debug_info    0x0007c8bc      0x308 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
+ .debug_info    0x00079eca     0x29cd src/main.o
+ .debug_info    0x0007c897      0x308 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
 
-.debug_abbrev   0x00000000     0xc15f
+.debug_abbrev   0x00000000     0xc151
  .debug_abbrev  0x00000000      0x24b src/ASF/common2/services/delay/sam0/systick_counter.o
  .debug_abbrev  0x0000024b      0x22c src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_abbrev  0x00000477      0x2dc src/ASF/sam0/boards/samr34_xplained_pro/board_init.o
@@ -19997,8 +20000,8 @@ OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
  .debug_abbrev  0x0000af4a      0x3cc src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.o
  .debug_abbrev  0x0000b316      0x418 src/enddevice_cert.o
  .debug_abbrev  0x0000b72e      0x4f7 src/enddevice_demo.o
- .debug_abbrev  0x0000bc25      0x40c src/main.o
- .debug_abbrev  0x0000c031      0x12e ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
+ .debug_abbrev  0x0000bc25      0x3fe src/main.o
+ .debug_abbrev  0x0000c023      0x12e ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
 
 .debug_loc      0x00000000    0x178d5
  .debug_loc     0x00000000       0xe4 src/ASF/common2/services/delay/sam0/systick_counter.o
@@ -20504,7 +20507,7 @@ OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
  .debug_macro   0x0002f2db      0x214 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
  .debug_macro   0x0002f4ef       0x10 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
 
-.debug_line     0x00000000    0x2f672
+.debug_line     0x00000000    0x2f671
  .debug_line    0x00000000      0xa26 src/ASF/common2/services/delay/sam0/systick_counter.o
  .debug_line    0x00000a26      0x93a src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
  .debug_line    0x00001360      0xa07 src/ASF/sam0/boards/samr34_xplained_pro/board_init.o
@@ -20561,10 +20564,10 @@ OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
  .debug_line    0x0002a9e5      0xafc src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.o
  .debug_line    0x0002b4e1     0x1368 src/enddevice_cert.o
  .debug_line    0x0002c849     0x1745 src/enddevice_demo.o
- .debug_line    0x0002df8e     0x1427 src/main.o
- .debug_line    0x0002f3b5      0x2bd ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
+ .debug_line    0x0002df8e     0x1426 src/main.o
+ .debug_line    0x0002f3b4      0x2bd ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
 
-.debug_str      0x00000000    0xb125f
+.debug_str      0x00000000    0xb1261
  .debug_str     0x00000000    0x91c57 src/ASF/common2/services/delay/sam0/systick_counter.o
                               0x9223e (size before relaxing)
  .debug_str     0x00091c57       0x94 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
@@ -20677,9 +20680,9 @@ OUTPUT(APPS_ENDDEVICE_DEMO4.elf elf32-littlearm)
                               0x99de8 (size before relaxing)
  .debug_str     0x000afb6a      0x669 src/enddevice_demo.o
                               0x9affe (size before relaxing)
- .debug_str     0x000b01d3      0x4b5 src/main.o
-                              0x9aa67 (size before relaxing)
- .debug_str     0x000b0688      0xbd7 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
+ .debug_str     0x000b01d3      0x4b7 src/main.o
+                              0x9aa62 (size before relaxing)
+ .debug_str     0x000b068a      0xbd7 ../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/lib\libsam0_lib_hw_timer.a(common_hw_timer.o)
                                0x2c21 (size before relaxing)
 
 .debug_frame    0x00000000     0x4bd4
@@ -22114,6 +22117,7 @@ g_interrupt_enabled                               src/ASF/common/utils/interrupt
                                                   src/ASF/thirdparty/wireless/lorawan/services/sw_timer/src/sw_timer.o
                                                   src/ASF/thirdparty/wireless/lorawan/hal/src/radio_driver_hal.o
                                                   src/ASF/thirdparty/wireless/addons/sio2host/uart/sio2host.o
+g_payload                                         src/main.o
 get_resource_data                                 src/ASF/thirdparty/wireless/lorawan/services/resources/src/resources.o
                                                   src/enddevice_demo.o
 get_temp_sensor_data                              src/ASF/thirdparty/wireless/lorawan/services/resources/src/temp_sensor.o
@@ -22211,7 +22215,6 @@ memset                                            c:/program files (x86)/atmel/s
                                                   ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_mcast.o)
                                                   ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan_aes_cmac.o)
                                                   ../src/ASF/thirdparty/wireless/lorawan/libgen/sam0/gcc\libLORAWAN_LIBGEN.a(lorawan.o)
-                                                  src/main.o
                                                   src/enddevice_demo.o
                                                   src/ASF/thirdparty/wireless/lorawan/services/pds/src/pds_wl.o
                                                   src/ASF/thirdparty/wireless/lorawan/services/pds/src/pds_task_handler.o

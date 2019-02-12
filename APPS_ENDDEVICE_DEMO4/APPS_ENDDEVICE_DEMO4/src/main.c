@@ -94,6 +94,9 @@ static void assertHandler(SystemAssertLevel_t level, uint16_t code);
 static void app_resources_uninit(void);
 #endif
 
+char g_payload[50] = {0};
+
+
 /****************************** FUNCTIONS **************************************/
 
 static void print_reset_causes(void)
@@ -147,18 +150,18 @@ void filler(void){
 
 void radio_tx_callback(void) {
 	static int call_counter = 0;
-	char payload[20] = {0};
-	strcpy(payload, "ABCDE");
-	itoa(++call_counter, payload+5,10);
+	//char payload[20] = {0};
+	strcpy(g_payload, "Team ALINA's LoRa packet #");
+	itoa(++call_counter, g_payload+26,10);
 	//strcpy(payload+10,itoa(++call_counter));
 	
 	RadioTransmitParam_t tx_packet;
 	//payload[13] = "\r\n";
-	tx_packet.bufferLen = 20;
-	tx_packet.bufferPtr = (uint8_t*)payload;
+	tx_packet.bufferLen = 30;
+	tx_packet.bufferPtr = (uint8_t*)g_payload;
 	
 	RadioError_t status = RADIO_Transmit(&tx_packet);
-	printf("Payload: %s  Ret=%d\r\n", payload, status);
+	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
 }
 
