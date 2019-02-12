@@ -267,9 +267,22 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata){
 				uint8_t *pData = appdata->param.rxData.pData ;
 				if((dataLength > 0U) && (NULL != pData))
 				{
-					printf ("\nPayload Received: ") ;
-					print_array(pData, dataLength) ;
-					printf("\r\n*************************\r\n");
+					printf ("\nPayload Received. Length: %d\r\n", dataLength) ;
+					for (int idx=0; idx<dataLength; idx++){
+						printf("%d ", pData[idx]);
+					}
+
+					// Enter Radio Receive mode
+					RadioReceiveParam_t radioReceiveParam ;
+					uint32_t rxTimeout = 0 ;	// forever
+					radioReceiveParam.action = RECEIVE_START ;
+					radioReceiveParam.rxWindowSize = rxTimeout;
+					if (RADIO_Receive(&radioReceiveParam) != 0)
+					{
+						printf("Radio failed to enter Receive mode\r\n") ;
+					}
+					//print_array(pData, dataLength) ;
+					//printf("\r\n*************************\r\n");
 				}
 			}
 			break ;
