@@ -162,6 +162,73 @@ void radio_tx_callback(void) {
 	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
 }
 
+void SetRadioSettings(void) {
+	// Configure Radio Parameters
+	// --------------------------
+	// Bandwidth = BW_125KHZ
+	// Channel frequency = FREQ_868100KHZ
+	// Channel frequency deviation = 25000
+	// CRC = enabled
+	// Error Coding Rate = 4/5
+	// IQ Inverted = disabled
+	// LoRa Sync Word = 0x34
+	// Modulation = LoRa
+	// PA Boost = disabled (disabled for EU , enabled for NA)
+	// Output Power = 1 (up to +14dBm for EU / up to +20dBm for NA)
+	// Spreading Factor = SF7
+	// Watchdog timeout = 60000
+
+	// Bandwidth
+	RadioLoRaBandWidth_t bw = BW_125KHZ ;
+	RADIO_SetAttr(BANDWIDTH, &bw) ;
+	printf("Configuring Radio Bandwidth: 125kHz\r\n") ;
+	// Channel Frequency
+	uint32_t freq = FREQ_868100KHZ ;
+	RADIO_SetAttr(CHANNEL_FREQUENCY, &freq) ;
+	printf("Configuring Channel Frequency %ld\r\n", freq) ;
+	// Channel Frequency Deviation
+	uint32_t fdev = 25000 ;
+	RADIO_SetAttr(CHANNEL_FREQUENCY_DEVIATION, &fdev) ;
+	printf("Configuring Channel Frequency Deviation %ld\r\n", fdev) ;
+	// CRC
+	uint8_t crc_state = 1 ;
+	RADIO_SetAttr(CRC, &crc_state) ;
+	printf("Configuring CRC state: %d\r\n", crc_state) ;
+	// Error Coding Rate
+	RadioErrorCodingRate_t cr = CR_4_5 ;
+	RADIO_SetAttr(ERROR_CODING_RATE, &cr) ;
+	printf("Configuring Error Coding Rate 4/5\r\n") ;
+	// IQ Inverted
+	uint8_t iqi = 0 ;
+	RADIO_SetAttr(IQINVERTED, &iqi) ;
+	printf("Configuring IQ Inverted: %d\r\n", iqi) ;
+	// LoRa Sync Word
+	uint8_t sync_word = 0x34 ;
+	RADIO_SetAttr(LORA_SYNC_WORD, &sync_word) ;
+	printf("Configuring LoRa sync word 0x%x\r\n", sync_word) ;
+	// Modulation
+	RadioModulation_t mod = MODULATION_LORA ;
+	RADIO_SetAttr(MODULATION, &mod) ;
+	printf("Configuring Modulation: LORA\r\n") ;
+	// PA Boost
+	uint8_t pa_boost = 0 ;
+	RADIO_SetAttr(PABOOST, &pa_boost) ;
+	printf("Configuring PA Boost: %d\r\n", pa_boost) ;
+	// Tx Output Power
+	int16_t outputPwr = 1 ;
+	RADIO_SetAttr(OUTPUT_POWER, (void *)&outputPwr) ;
+	printf("Configuring Radio Output Power %d\r\n", outputPwr) ;
+	// Spreading Factor
+	int16_t sf = SF_7 ;
+	RADIO_SetAttr(SPREADING_FACTOR, (void *)&sf) ;
+	printf("Configuring Radio SF %d\r\n", sf) ;
+	// Watchdog Timeout
+	uint32_t wdt = 60000 ;
+	RADIO_SetAttr(WATCHDOG_TIMEOUT, (void *)&wdt) ;
+	printf("Configuring Radio Watch Dog Timeout %ld\r\n", wdt) ;
+	//appTaskState = JOIN_SEND_STATE ;
+	//appPostTask(DISPLAY_TASK_HANDLER) ;
+}
 
 void PrintRadioSettings(void) {
     printf("********* RADIO Settings *********\r\n");
@@ -244,6 +311,9 @@ int main(void)
 	
 	SleepTimerInit();
     //mote_demo_init();
+	
+	SetRadioSettings();
+	
     PrintRadioSettings();
 
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
