@@ -166,19 +166,19 @@ void radio_tx_callback(void) {
 void PrintRadioSettings(void) {
     printf("********* RADIO Settings *********\r\n");
     uint32_t frequency = 0;
-    RadioMode_t ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency)
-    if (ret != ERR_NONE) {
+    RadioMode_t freq_ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency);
+    if (freq_ret != ERR_NONE) {
         printf("Failed to read CHANNEL_FREQUENCY\r\n");
-        return ret;
+        return freq_ret;
     } else {
         printf("%d\r\n", frequency);
     }
 
     RadioModulation_t modulation;
-    RadioMode_t ret = RADIO_GetAttr(MODULATION, &modulation);
-    if (ret != ERR_NONE) {
+    RadioMode_t mod_ret = RADIO_GetAttr(MODULATION, &modulation);
+    if (mod_ret != ERR_NONE) {
         printf("Failed to read MODULATION\r\n");
-        return ret;
+        return mod_ret;
     } else {
         if(modulation == MODULATION_FSK) {
             printf("MODULATION: MODULATION_FSK\r\n");
@@ -190,10 +190,10 @@ void PrintRadioSettings(void) {
     }
 
     RadioLoRaBandWidth_t bandwidth;
-    RadioMode_t ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
-    if (ret != ERR_NONE) {
+    RadioMode_t bw_ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
+    if (bw_ret != ERR_NONE) {
         printf("Failed to read BANDWIDTH\r\n");
-        return ret;
+        return bw_ret;
     } else {
         if(bandwidth == BW_125KHZ) {
             printf("BANDWIDTH: BW_125KHZ\r\n");
@@ -209,13 +209,6 @@ void PrintRadioSettings(void) {
     }
 }
 
-RadioError_t InitializeRadio(void) {
-    RadioError_t ret = Radio_WriteMode(MODE_TX, MODULATION_LORA, 1);
-    if (ret != ERR_NONE) {
-        return ret;
-    }
-
-}
 
 /**
  * \mainpage
