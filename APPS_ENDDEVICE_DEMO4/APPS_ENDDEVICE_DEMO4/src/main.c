@@ -148,8 +148,8 @@ void filler(void){
 void radio_tx_callback(void) {
 	static int call_counter = 0;
 	char payload[20] = {0};
-	strcpy(payload, "Transmit #");
-	itoa(++call_counter, payload+10,10);
+	strcpy(payload, "ABCDE");
+	itoa(++call_counter, payload+5,10);
 	//strcpy(payload+10,itoa(++call_counter));
 	
 	RadioTransmitParam_t tx_packet;
