@@ -169,7 +169,7 @@ void SetRadioSettings(void) {
 	// Configure Radio Parameters
 	// --------------------------
 	// Bandwidth = BW_125KHZ
-	// Channel frequency = FREQ_868100KHZ
+	// Channel frequency = FREQ_915200KHZ
 	// Channel frequency deviation = 25000
 	// CRC = enabled
 	// Error Coding Rate = 4/5
@@ -178,7 +178,7 @@ void SetRadioSettings(void) {
 	// Modulation = LoRa
 	// PA Boost = disabled (disabled for EU , enabled for NA)
 	// Output Power = 1 (up to +14dBm for EU / up to +20dBm for NA)
-	// Spreading Factor = SF7
+	// Spreading Factor = SF_12
 	// Watchdog timeout = 60000
 
 	// Bandwidth
@@ -186,7 +186,7 @@ void SetRadioSettings(void) {
 	RADIO_SetAttr(BANDWIDTH, &bw) ;
 	printf("Configuring Radio Bandwidth: 125kHz\r\n") ;
 	// Channel Frequency
-	uint32_t freq = FREQ_868100KHZ ;
+	uint32_t freq = FREQ_915200KHZ ;
 	RADIO_SetAttr(CHANNEL_FREQUENCY, &freq) ;
 	printf("Configuring Channel Frequency %ld\r\n", freq) ;
 	// Channel Frequency Deviation
@@ -222,7 +222,7 @@ void SetRadioSettings(void) {
 	RADIO_SetAttr(OUTPUT_POWER, (void *)&outputPwr) ;
 	printf("Configuring Radio Output Power %d\r\n", outputPwr) ;
 	// Spreading Factor
-	int16_t sf = SF_7 ;
+	int16_t sf = SF_12 ;
 	RADIO_SetAttr(SPREADING_FACTOR, (void *)&sf) ;
 	printf("Configuring Radio SF %d\r\n", sf) ;
 	// Watchdog Timeout
@@ -308,16 +308,27 @@ int main(void)
     Stack_Init();
 
     SwTimerCreate(&demoTimerId);
-    //SwTimerCreate(&lTimerId);
 	
-	RADIO_Init();
 	
 	SleepTimerInit();
-    //mote_demo_init();
 	
+    LORAWAN_Init(demo_appdata_callback, demo_joindata_callback);
+    printf("\n\n\r*******************************************************\n\r");
+    printf("\n\rMicrochip LoRaWAN Stack %s\r\n",STACK_VER);
+    printf("\r\nInit - Successful\r\n");
+	
+	StackRetStatus_t rst_ret = LORAWAN_Reset(ISM_NA915);
+	if (rst_ret != LORAWAN_RADIO_SUCCESS && rst_ret != LORAWAN_SUCCESS) {
+		printf("Failed to reset LORAWAN: %d\r\n", rst_ret);
+	}
+	
+	// Lets us mess with LoRa settings
+	LORAWAN_Pause();
+	
+	// Set LoRa Settings
 	SetRadioSettings();
-	
-    PrintRadioSettings();
+	PrintRadioSettings();
+
 
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
     while (1)
