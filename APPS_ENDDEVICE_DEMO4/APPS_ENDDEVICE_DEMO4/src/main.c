@@ -435,7 +435,7 @@ void SetRadioSettings(void) {
 	// Configure Radio Parameters
 	// --------------------------
 	// Bandwidth = BW_125KHZ
-	// Channel frequency = FREQ_868100KHZ
+	// Channel frequency = FREQ_915200KHZ
 	// Channel frequency deviation = 25000
 	// CRC = enabled
 	// Error Coding Rate = 4/5
@@ -444,7 +444,7 @@ void SetRadioSettings(void) {
 	// Modulation = LoRa
 	// PA Boost = disabled (disabled for EU , enabled for NA)
 	// Output Power = 1 (up to +14dBm for EU / up to +20dBm for NA)
-	// Spreading Factor = SF7
+	// Spreading Factor = SF_12
 	// Watchdog timeout = 60000
 
 	// Bandwidth
@@ -452,7 +452,7 @@ void SetRadioSettings(void) {
 	RADIO_SetAttr(BANDWIDTH, &bw) ;
 	printf("Configuring Radio Bandwidth: 125kHz\r\n") ;
 	// Channel Frequency
-	uint32_t freq = FREQ_868100KHZ ;
+	uint32_t freq = FREQ_915200KHZ ;
 	RADIO_SetAttr(CHANNEL_FREQUENCY, &freq) ;
 	printf("Configuring Channel Frequency %ld\r\n", freq) ;
 	// Channel Frequency Deviation
@@ -488,7 +488,7 @@ void SetRadioSettings(void) {
 	RADIO_SetAttr(OUTPUT_POWER, (void *)&outputPwr) ;
 	printf("Configuring Radio Output Power %d\r\n", outputPwr) ;
 	// Spreading Factor
-	int16_t sf = SF_7 ;
+	int16_t sf = SF_12 ;
 	RADIO_SetAttr(SPREADING_FACTOR, (void *)&sf) ;
 	printf("Configuring Radio SF %d\r\n", sf) ;
 	// Watchdog Timeout
