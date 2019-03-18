@@ -43,143 +43,153 @@
 /* === PROTOTYPES ========================================================== */
 
 /* === GLOBALS ========================================================== */
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-static struct usart_module host_uart_module;
-#else
-static usart_serial_options_t usart_serial_options = {
-	.baudrate     = USART_HOST_BAUDRATE,
-	.charlength   = USART_HOST_CHAR_LENGTH,
-	.paritytype   = USART_HOST_PARITY,
-	.stopbits     = USART_HOST_STOP_BITS
-};
-#endif
+static struct usart_module usb_uart_module;
+static struct usart_module gps_uart_module;
 
 /**
  * Receive buffer
  * The buffer size is defined in sio2host.h
  */
-static uint8_t serial_rx_buf[SERIAL_RX_BUF_SIZE_HOST];
+static uint8_t usb_serial_rx_buf[USB_SERIAL_RX_BUF_SIZE_HOST];
+static uint8_t gps_serial_rx_buf[GPS_SERIAL_RX_BUF_SIZE_HOST];
 
 /**
  * Receive buffer head
  */
-static uint8_t serial_rx_buf_head;
+static uint8_t usb_serial_rx_buf_head;
+static uint8_t gps_serial_rx_buf_head;
 
 /**
  * Receive buffer tail
  */
-static uint8_t serial_rx_buf_tail;
+static uint8_t usb_serial_rx_buf_tail;
+static uint8_t gps_serial_rx_buf_tail;
 
 /**
  * Number of bytes in receive buffer
  */
-static uint8_t serial_rx_count;
+static uint8_t usb_serial_rx_count;
+static uint8_t gps_serial_rx_count;
+
 
 /* === IMPLEMENTATION ====================================================== */
+void uart_init(void) {
+	uart_usb_init();
+	uart_gps_init();
+}
 
-void sio2host_init(void)
-{
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-	struct usart_config host_uart_config;
+void uart_usb_init(void) {
+	struct usart_config usb_uart_config;
 	/* Configure USART for unit test output */
-	usart_get_config_defaults(&host_uart_config);
-	host_uart_config.mux_setting = HOST_SERCOM_MUX_SETTING;
+	usart_get_config_defaults(&usb_uart_config);
+	host_uart_config.mux_setting = USB_UART_SERCOM_MUX_SETTING;
 
-	host_uart_config.pinmux_pad0 = HOST_SERCOM_PINMUX_PAD0;
-	host_uart_config.pinmux_pad1 = HOST_SERCOM_PINMUX_PAD1;
-	host_uart_config.pinmux_pad2 = HOST_SERCOM_PINMUX_PAD2;
-	host_uart_config.pinmux_pad3 = HOST_SERCOM_PINMUX_PAD3;
-	host_uart_config.baudrate    = USART_HOST_BAUDRATE;
-	stdio_serial_init(&host_uart_module, USART_HOST, &host_uart_config);
-	usart_enable(&host_uart_module);
+	host_uart_config.pinmux_pad0 = USB_UART_SERCOM_PINMUX_PAD0;
+	host_uart_config.pinmux_pad1 = USB_UART_SERCOM_PINMUX_PAD1;
+	host_uart_config.pinmux_pad2 = USB_UART_SERCOM_PINMUX_PAD2;
+	host_uart_config.pinmux_pad3 = USB_UART_SERCOM_PINMUX_PAD3;
+	host_uart_config.baudrate    = USB_UART_BAUDRATE;
+	stdio_serial_init(&usb_uart_module, USB_UART_SERCOM, &usb_uart_config);
+	usart_enable(&usb_uart_module);
 	/* Enable transceivers */
-	usart_enable_transceiver(&host_uart_module, USART_TRANSCEIVER_TX);
-	usart_enable_transceiver(&host_uart_module, USART_TRANSCEIVER_RX);
-#else
-	stdio_serial_init(USART_HOST, &usart_serial_options);
-#endif
-	USART_HOST_RX_ISR_ENABLE();
+	usart_enable_transceiver(&usb_uart_module, USART_TRANSCEIVER_TX);
+	usart_enable_transceiver(&usb_uart_module, USART_TRANSCEIVER_RX);
+	USB_UART_HOST_RX_ISR_ENABLE();
 }
-void sio2host_deinit(void)
-{
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35		
-		usart_disable(&host_uart_module);
-	
-		/* Disable transceivers */
-		usart_disable_transceiver(&host_uart_module, USART_TRANSCEIVER_TX);
-		usart_disable_transceiver(&host_uart_module, USART_TRANSCEIVER_RX);
-#endif	
-}
-uint8_t sio2host_tx(uint8_t *data, uint8_t length)
-{
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-	status_code_genare_t status;
-#else
-	status_code_t status;
-#endif /*SAMD || SAMR21 || SAML21 */
 
+void uart_gps_init(void) {
+	struct usart_config gps_uart_config;
+	/* Configure USART for unit test output */
+	usart_get_config_defaults(&gps_uart_config);
+	gps_uart_config.mux_setting = GPS_UART_SERCOM_MUX_SETTING;
+
+	gps_uart_config.pinmux_pad0 = GPS_UART_SERCOM_PINMUX_PAD0;
+	gps_uart_config.pinmux_pad1 = GPS_UART_SERCOM_PINMUX_PAD1;
+	gps_uart_config.pinmux_pad2 = GPS_UART_SERCOM_PINMUX_PAD2;
+	gps_uart_config.pinmux_pad3 = GPS_UART_SERCOM_PINMUX_PAD3;
+	gps_uart_config.baudrate    = GPS_UART_BAUDRATE;
+	stdio_serial_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config);
+	usart_enable(&gps_uart_module);
+	/* Enable transceivers */
+	usart_enable_transceiver(&gps_uart_module, USART_TRANSCEIVER_TX);
+	usart_enable_transceiver(&gps_uart_module, USART_TRANSCEIVER_RX);
+	GPS_UART_HOST_RX_ISR_ENABLE();
+}
+
+void uart_usb_deinit(void) { //sio2host_deinit
+	usart_disable(&usb_uart_module);
+
+	/* Disable transceivers */
+	usart_disable_transceiver(&usb_uart_module, USART_TRANSCEIVER_TX);
+	usart_disable_transceiver(&usb_uart_module, USART_TRANSCEIVER_RX);
+}
+
+void uart_gps_deinit(void) { //sio2host_deinit
+	usart_disable(&gps_uart_module);
+
+	/* Disable transceivers */
+	usart_disable_transceiver(&gps_uart_module, USART_TRANSCEIVER_TX);
+	usart_disable_transceiver(&gps_uart_module, USART_TRANSCEIVER_RX);
+}
+
+uint8_t usb_uart_tx(uint8_t *data, uint8_t length) {
+	status_code_genare_t status;
 	do {
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-		status
-			= usart_serial_write_packet(&host_uart_module,
+		status = usart_serial_write_packet(&usb_uart_module,
 				(const uint8_t *)data, length);
-#elif SAM4S || SAM4E
-        status = usart_serial_write_packet((Usart *)USART_HOST,
-				(const uint8_t *)data,
-				length);
-#else
-	    status = usart_serial_write_packet(USART_HOST,
-				(const uint8_t *)data,
-				length);
-#endif
 	} while (status != STATUS_OK);
 	return length;
 }
 
-uint8_t sio2host_rx(uint8_t *data, uint8_t max_length)
-{
+uint8_t gps_uart_tx(uint8_t *data, uint8_t length) {
+	status_code_genare_t status;
+	do {
+		status = usart_serial_write_packet(&gps_uart_module,
+				(const uint8_t *)data, length);
+	} while (status != STATUS_OK);
+	return length;
+}
+
+uint8_t usb_uart_rx(uint8_t *data, uint8_t max_length) {
 	uint8_t data_received = 0;
-	if(serial_rx_buf_tail >= serial_rx_buf_head)
-	{
-		serial_rx_count = serial_rx_buf_tail - serial_rx_buf_head;
-	}
-	else
-	{
-		serial_rx_count = serial_rx_buf_tail + (SERIAL_RX_BUF_SIZE_HOST - serial_rx_buf_head);
+	if(usb_serial_rx_buf_tail >= usb_serial_rx_buf_head) {
+		usb_serial_rx_count = usb_serial_rx_buf_tail - usb_serial_rx_buf_head;
+	} else {
+		usb_serial_rx_count = usb_serial_rx_buf_tail + (USB_SERIAL_RX_BUF_SIZE_HOST - usb_serial_rx_buf_head);
 	}
 	
-	if (0 == serial_rx_count) {
+	if (0 == usb_serial_rx_count) {
 		return 0;
 	}
 
-	if (SERIAL_RX_BUF_SIZE_HOST <= serial_rx_count) {
+	if (USB_SERIAL_RX_BUF_SIZE_HOST <= usb_serial_rx_count) {
 		/*
 		 * Bytes between head and tail are overwritten by new data.
 		 * The oldest data in buffer is the one to which the tail is
 		 * pointing. So reading operation should start from the tail.
 		 */
-		serial_rx_buf_head = serial_rx_buf_tail;
+		usb_serial_rx_buf_head = usb_serial_rx_buf_tail;
 
 		/*
 		 * This is a buffer overflow case. But still only the number of
 		 * bytes equivalent to
 		 * full buffer size are useful.
 		 */
-		serial_rx_count = SERIAL_RX_BUF_SIZE_HOST;
+		usb_serial_rx_count = USB_SERIAL_RX_BUF_SIZE_HOST;
 
 		/* Bytes received is more than or equal to buffer. */
-		if (SERIAL_RX_BUF_SIZE_HOST <= max_length) {
+		if (USB_SERIAL_RX_BUF_SIZE_HOST <= max_length) {
 			/*
 			 * Requested receive length (max_length) is more than
 			 * the
 			 * max size of receive buffer, but at max the full
 			 * buffer can be read.
 			 */
-			max_length = SERIAL_RX_BUF_SIZE_HOST;
+			max_length = USB_SERIAL_RX_BUF_SIZE_HOST;
 		}
 	} else {
 		/* Bytes received is less than receive buffer maximum length. */
-		if (max_length > serial_rx_count) {
+		if (max_length > usb_serial_rx_count) {
 			/*
 			 * Requested receive length (max_length) is more than
 			 * the data
@@ -187,44 +197,116 @@ uint8_t sio2host_rx(uint8_t *data, uint8_t max_length)
 			 * bytes
 			 * present in receive buffer are read.
 			 */
-			max_length = serial_rx_count;
+			max_length = usb_serial_rx_count;
 		}
 	}
 
 	data_received = max_length;
 	while (max_length > 0) {
 		/* Start to copy from head. */
-		*data = serial_rx_buf[serial_rx_buf_head];
+		*data = usb_serial_rx_buf[serial_rx_buf_head];
 		data++;
 		max_length--;
-		if ((SERIAL_RX_BUF_SIZE_HOST - 1) == serial_rx_buf_head) {
-			serial_rx_buf_head = 0;
-		}
-		else
-		{
-			serial_rx_buf_head++;
+		if ((USB_SERIAL_RX_BUF_SIZE_HOST - 1) == usb_serial_rx_buf_head) {
+			usb_serial_rx_buf_head = 0;
+		} else {
+			usb_serial_rx_buf_head++;
 		}
 	}
 	return data_received;
 }
 
-uint8_t sio2host_getchar(void)
-{
+uint8_t gps_uart_rx(uint8_t *data, uint8_t max_length) {
+	uint8_t data_received = 0;
+	if(gps_serial_rx_buf_tail >= gps_serial_rx_buf_head) {
+		gps_serial_rx_count = gps_serial_rx_buf_tail - gps_serial_rx_buf_head;
+	} else {
+		gps_serial_rx_count = gps_serial_rx_buf_tail + (GPS_SERIAL_RX_BUF_SIZE_HOST - gps_serial_rx_buf_head);
+	}
+	
+	if (0 == gps_serial_rx_count) {
+		return 0;
+	}
+
+	if (GPS_SERIAL_RX_BUF_SIZE_HOST <= gps_serial_rx_count) {
+		/*
+		 * Bytes between head and tail are overwritten by new data.
+		 * The oldest data in buffer is the one to which the tail is
+		 * pointing. So reading operation should start from the tail.
+		 */
+		gps_serial_rx_buf_head = gps_serial_rx_buf_tail;
+
+		/*
+		 * This is a buffer overflow case. But still only the number of
+		 * bytes equivalent to
+		 * full buffer size are useful.
+		 */
+		gps_serial_rx_count = gps_SERIAL_RX_BUF_SIZE_HOST;
+
+		/* Bytes received is more than or equal to buffer. */
+		if (GPS_SERIAL_RX_BUF_SIZE_HOST <= max_length) {
+			/*
+			 * Requested receive length (max_length) is more than
+			 * the
+			 * max size of receive buffer, but at max the full
+			 * buffer can be read.
+			 */
+			max_length = GPS_SERIAL_RX_BUF_SIZE_HOST;
+		}
+	} else {
+		/* Bytes received is less than receive buffer maximum length. */
+		if (max_length > gps_serial_rx_count) {
+			/*
+			 * Requested receive length (max_length) is more than
+			 * the data
+			 * present in receive buffer. Hence only the number of
+			 * bytes
+			 * present in receive buffer are read.
+			 */
+			max_length = gps_serial_rx_count;
+		}
+	}
+
+	data_received = max_length;
+	while (max_length > 0) {
+		/* Start to copy from head. */
+		*data = gps_serial_rx_buf[gps_serial_rx_buf_head];
+		data++;
+		max_length--;
+		if ((GPS_SERIAL_RX_BUF_SIZE_HOST - 1) == gps_serial_rx_buf_head) {
+			gps_serial_rx_buf_head = 0;
+		} else {
+			gps_serial_rx_buf_head++;
+		}
+	}
+	return data_received;
+}
+
+uint8_t usb_uart_getchar(void) {
 	uint8_t c;
-	while (0 == sio2host_rx(&c, 1)) {
+	while (0 == usb_uart_rx(&c, 1)) {
 	}
 	return c;
 }
 
-void sio2host_putchar(uint8_t ch)
-{
-	sio2host_tx(&ch, 1);
+uint8_t gps_uart_getchar(void) {
+	uint8_t c;
+	while (0 == gps_uart_rx(&c, 1)) {
+	}
+	return c;
 }
 
-int sio2host_getchar_nowait(void)
-{
+void usb_uart_putchar(uint8_t ch) {
+	usb_uart_tx(&ch, 1);
+}
+
+void gps_uart_putchar(uint8_t ch) {
+	gps_uart_tx(&ch, 1);
+}
+
+int usb_uart_getchar_nowait(void) {
 	uint8_t c;
-	int back = sio2host_rx(&c, 1);
+	int back = usb_uart_rx(&c, 1);
 	if (back >= 1) {
 		return c;
 	} else {
@@ -232,20 +314,19 @@ int sio2host_getchar_nowait(void)
 	}
 }
 
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-void USART_HOST_ISR_VECT(uint8_t instance)
-#else
-USART_HOST_ISR_VECT()
-#endif
-{
+int gps_uart_getchar_nowait(void) {
+	uint8_t c;
+	int back = gps_uart_rx(&c, 1);
+	if (back >= 1) {
+		return c;
+	} else {
+		return (-1);
+	}
+}
+
+void USB_USART_ISR(uint8_t instance) {
 	uint8_t temp;
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-	usart_serial_read_packet(&host_uart_module, &temp, 1);
-#elif SAM4E || SAM4S
-	usart_serial_read_packet((Usart *)USART_HOST, &temp, 1);
-#else
-    usart_serial_read_packet(USART_HOST, &temp, 1);
-#endif
+	usart_serial_read_packet(&usb_uart_module, &temp, 1);
 
 	/* Introducing critical section to avoid buffer corruption. */
 	cpu_irq_disable();
@@ -253,30 +334,55 @@ USART_HOST_ISR_VECT()
 	/* The number of data in the receive buffer is incremented and the
 	 * buffer is updated. */
 
-	serial_rx_buf[serial_rx_buf_tail] = temp;
+	usb_serial_rx_buf[usb_serial_rx_buf_tail] = temp;
 
-	if ((SERIAL_RX_BUF_SIZE_HOST - 1) == serial_rx_buf_tail) {
+	if ((USB_SERIAL_RX_BUF_SIZE_HOST - 1) == usb_serial_rx_buf_tail) {
 		/* Reached the end of buffer, revert back to beginning of
 		 * buffer. */
-		serial_rx_buf_tail = 0x00;
+		usb_serial_rx_buf_tail = 0x00;
 	} else {
-		serial_rx_buf_tail++;
+		usb_serial_rx_buf_tail++;
 	}
 
 	cpu_irq_enable();
 }
 
-void sio2host_disable(void)
-{
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-	usart_disable(&host_uart_module);
-#endif
+void GPS_USART_ISR(uint8_t instance) {  // Needs rewriting
+	uint8_t temp;
+	usart_serial_read_packet(&gps_uart_module, &temp, 1);
+
+	/* Introducing critical section to avoid buffer corruption. */
+	cpu_irq_disable();
+
+	/* The number of data in the receive buffer is incremented and the
+	 * buffer is updated. */
+
+	gps_serial_rx_buf[gps_serial_rx_buf_tail] = temp;
+
+	if ((GPS_SERIAL_RX_BUF_SIZE_HOST - 1) == gps_serial_rx_buf_tail) {
+		/* Reached the end of buffer, revert back to beginning of
+		 * buffer. */
+		gps_serial_rx_buf_tail = 0x00;
+	} else {
+		gps_serial_rx_buf_tail++;
+	}
+
+	cpu_irq_enable();
 }
 
-void sio2host_enable(void)
-{
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-	usart_enable(&host_uart_module);
-#endif
+void usb_uart_disable(void) {
+	usart_disable(&usb_uart_module); // was host_uart_module
+}
+
+void usb_uart_enable(void) {
+	usart_enable(&usb_uart_module);
+}
+
+void gps_uart_disable(void) {
+	usart_disable(&gps_uart_module); // was host_uart_module
+}
+
+void gps_uart_enable(void) {
+	usart_enable(&gps_uart_module);
 }
 /* EOF */

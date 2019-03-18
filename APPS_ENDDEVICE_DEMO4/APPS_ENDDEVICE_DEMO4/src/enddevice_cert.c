@@ -231,7 +231,7 @@ static bool cert_select_band(void)
 
     char rxChar;
     uint8_t choice;
-    rxChar = sio2host_getchar();
+    rxChar = usb_uart_getchar();
     const char *charPtr = &rxChar;
     choice = atoi(charPtr);
     if ( (choice >= sizeof(bandTable)) || (choice == 0) )

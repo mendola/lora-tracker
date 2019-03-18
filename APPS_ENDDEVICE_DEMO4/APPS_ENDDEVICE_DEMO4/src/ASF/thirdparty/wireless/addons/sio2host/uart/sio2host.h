@@ -52,11 +52,15 @@
  * \return STATUS_OK for successful initialization and FAILURE incase the IO is
  * not initialized
  */
-void sio2host_init(void);
+void uart_init(void);
+void uart_usb_init(void);
+void uart_gps_init(void);
+
 /**
  * \brief DeInitializes the Serial IO Module
  */
-void sio2host_deinit(void);
+void uart_usb_deinit(void);  //sio2host_deinit
+void uart_gps_deinit(void);  //sio2host_deinit
 
 /**
  * \brief Transmits data via UART
@@ -65,7 +69,8 @@ void sio2host_deinit(void);
  *
  * \return Number of bytes actually transmitted
  */
-uint8_t sio2host_tx(uint8_t *data, uint8_t length);
+uint8_t usb_uart_tx(uint8_t *data, uint8_t length);
+uint8_t gps_uart_tx(uint8_t *data, uint8_t length);
 
 /**
  * \brief Receives data from UART
@@ -75,43 +80,47 @@ uint8_t sio2host_tx(uint8_t *data, uint8_t length);
  *
  * \return actual number of bytes received
  */
-uint8_t sio2host_rx(uint8_t *data, uint8_t max_length);
+uint8_t usb_uart_rx(uint8_t *data, uint8_t max_length);
+uint8_t gps_uart_rx(uint8_t *data, uint8_t max_length);
 
 /**
  * \brief This function performs a blocking character receive functionality
  * \return returns the data which is received
  */
-uint8_t sio2host_getchar(void);
+uint8_t usb_uart_getchar(void);
+uint8_t gps_uart_getchar(void);
 
 /**
  * \brief This function prints the character to the host
  * \return void
  */
 
-void sio2host_putchar(uint8_t);
+void usb_uart_putchar(uint8_t);
+void gps_uart_putchar(uint8_t);
 
 /**
  * \brief This function performs a non-blocking character receive functionality
  * \return '-1' if no data is recieved or returns the data if a character is
  * received
  */
-int sio2host_getchar_nowait(void);
+int usb_uart_getchar_nowait(void);
+int gps_uart_getchar_nowait(void);
 
 /**
  * \brief Disables the Serial IO Module
  * \return void
  */
-void sio2host_disable(void);
+void usb_uart_disable(void);
+void gps_uart_disable(void);
 
 /**
  * \brief Enables the Serial IO Module
  * \return void
  */
-void sio2host_enable(void);
+void usb_uart_enable(void);
+void gps_uart_enable(void);
 
-#if SAMD || SAMR21 || SAML21 || SAMR30 || SAMR34 || SAMR35
-void USART_HOST_ISR_VECT(uint8_t instance);
-
-#endif
+void USB_USART_ISR(uint8_t instance);
+void GPS_USART_ISR(uint8_t instance);
 
 #endif /* SIO2HOST_H */

@@ -41,11 +41,11 @@
 * The EndDevice_Demo_application available in Atmel Studio, 
 * is used to send the temperature sensor data through the 
 * LoRaWAN network to the network server.
-* <P>• This example provides option to user to configure regional band in run time.</P>
-* <P>• Using this example application, LoRaWAN Functionalities such as Joining, Sending data
+* <P>ï¿½ This example provides option to user to configure regional band in run time.</P>
+* <P>ï¿½ Using this example application, LoRaWAN Functionalities such as Joining, Sending data
 * and changing end device class is demonstrated.</P>
-* <P>• This example showcases sleep functionality of LoRaWAN Stack and the Hardware.</P>
-* <P>• This example demonstrates storing stack parameters in NVM using PDS. </P>
+* <P>ï¿½ This example showcases sleep functionality of LoRaWAN Stack and the Hardware.</P>
+* <P>ï¿½ This example demonstrates storing stack parameters in NVM using PDS. </P>
 */
 
 /****************************** INCLUDES **************************************/
@@ -256,7 +256,7 @@ void serial_data_handler(void)
 	/* verify if there was any character received*/
 	if (startReceiving == true)
 	{
-		if((-1) != (rxChar = sio2host_getchar_nowait()))
+		if((-1) != (rxChar = usb_uart_getchar_nowait()))
 		{
 			serialData = (char)rxChar;
 			if((serialData != '\r') && (serialData != '\n') && (serialData != '\b'))
@@ -590,7 +590,7 @@ void mote_demo_init(void)
             }
         }
         memset(rxchar,0,sizeof(rxchar));
-        sio2host_rx(rxchar,10);
+        usb_uart_rx(rxchar,10);
         printf ("Last configured Regional band %s\r\n",bandStrings[prevChoice]);
         printf("Press any key to change band\r\n Continuing in %s in ", bandStrings[prevChoice]);
 
@@ -974,7 +974,7 @@ void demoTimerCb(void * cnt)
     printf("%d..",count);
     count--;
 	startReceiving = false;
-    sio2host_rx(rxchar,10);
+    usb_uart_rx(rxchar,10);
     for(i = 0;i<=10;i++)
     {
         if(rxchar[i] != 13 && rxchar[i] != 10)
@@ -1394,7 +1394,7 @@ void print_stack_status(StackRetStatus_t status)
 static float convert_celsius_to_fahrenheit(float celsius_val)
 {
     float fauren_val;
-    /* T(°F) = T(°C) × 9/5 + 32 */
+    /* T(ï¿½F) = T(ï¿½C) ï¿½ 9/5 + 32 */
     fauren_val = (((celsius_val * 9)/5) + 32);
 
     return fauren_val;

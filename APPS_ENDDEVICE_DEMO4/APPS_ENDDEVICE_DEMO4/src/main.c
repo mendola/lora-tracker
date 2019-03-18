@@ -298,13 +298,13 @@ int main(void)
     /* Initialize Hardware and Software Modules */
     driver_init();
     /* Initialize the Serial Interface */
-    sio2host_init();
+    uart_init();
 
     print_reset_causes();
 #if (_DEBUG_ == 1)
     SYSTEM_AssertSubscribe(assertHandler);
 #endif
-    /* Initialize demo application */
+    /* Initialize demo application (start APP_TASK_ID task) */
     Stack_Init();
 
     SwTimerCreate(&demoTimerId);
@@ -328,6 +328,8 @@ int main(void)
 	// Set LoRa Settings
 	SetRadioSettings();
 	PrintRadioSettings();
+
+    StartGpsTask();
 
 
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
