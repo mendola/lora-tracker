@@ -329,12 +329,15 @@ int main(void)
 	SetRadioSettings();
 	PrintRadioSettings();
 
-    StartGpsTask();
+    GpsInit();
 
 
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
     while (1)
     {
+        usb_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer
+        gps_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer
+
 		SYSTEM_RunTasks();
 		//printf("Main looped");
 	}

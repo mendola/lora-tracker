@@ -241,7 +241,7 @@ uint8_t gps_uart_rx(uint8_t *data, uint8_t max_length) {
 		 * bytes equivalent to
 		 * full buffer size are useful.
 		 */
-		gps_serial_rx_count = gps_SERIAL_RX_BUF_SIZE_HOST;
+		gps_serial_rx_count = GPS_SERIAL_RX_BUF_SIZE_HOST;
 
 		/* Bytes received is more than or equal to buffer. */
 		if (GPS_SERIAL_RX_BUF_SIZE_HOST <= max_length) {

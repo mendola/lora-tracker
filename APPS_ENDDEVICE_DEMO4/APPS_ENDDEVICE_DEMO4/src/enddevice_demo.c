@@ -216,12 +216,18 @@ static void demo_handle_evt_rx_data(void *appHandle, appCbParams_t *appdata);
 static SYSTEM_TaskStatus_t (*appTaskHandlers[APP_TASKS_COUNT])(void) = {
     /* In the order of descending priority */
     displayTask,
-    processTask
+    processTask,
+    gpsTask
 };
 
 /*********************************************************************//**
 \brief    Calls appropriate functions based on state variables
 *************************************************************************/
+static SYSTEM_TaskStatus_t gpsTask(void) {
+    runGpsTask();
+	return SYSTEM_TASK_SUCCESS;
+}
+
 static SYSTEM_TaskStatus_t displayTask(void)
 {
 	switch(appTaskState)
@@ -249,7 +255,7 @@ static SYSTEM_TaskStatus_t displayTask(void)
 /*********************************************************************//**
 \brief    Pulls the data from UART when activated
 *************************************************************************/
-void serial_data_handler(void)
+void usb_serial_data_handler(void)
 {
 	int rxChar;
 	char serialData;

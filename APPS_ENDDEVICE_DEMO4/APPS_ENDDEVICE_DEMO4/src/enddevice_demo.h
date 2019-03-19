@@ -48,6 +48,7 @@ typedef enum _AppTaskIds_t
 {
 	DISPLAY_TASK_HANDLER,
 	PROCESS_TASK_HANDLER,
+	GPS_TASK_HANDLER,
 	APP_TASKS_COUNT
 }AppTaskIds_t;
 
@@ -58,6 +59,7 @@ typedef enum _AppTaskState_t
 	DEMO_APP_STATE,
 	JOIN_SEND_STATE
 }AppTaskState_t;
+
 
 /*********************************************************************//**
  \brief      Function to Initialize the Demo application
@@ -136,7 +138,7 @@ void check_stack_status(void);
 /*********************************************************************//**
 \brief    Pulls the data from UART when activated
 *************************************************************************/
-void serial_data_handler(void);
+void usb_serial_data_handler(void);
 
 #endif /* DEMO_APP_H_ */
 
