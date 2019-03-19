@@ -1777,6 +1777,12 @@
     <Compile Include="src\enddevice_demo.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\gps.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\gps.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>

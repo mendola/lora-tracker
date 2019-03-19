@@ -82,13 +82,13 @@ void uart_usb_init(void) {
 	struct usart_config usb_uart_config;
 	/* Configure USART for unit test output */
 	usart_get_config_defaults(&usb_uart_config);
-	host_uart_config.mux_setting = USB_UART_SERCOM_MUX_SETTING;
+	usb_uart_config.mux_setting = USB_UART_SERCOM_MUX_SETTING;
 
-	host_uart_config.pinmux_pad0 = USB_UART_SERCOM_PINMUX_PAD0;
-	host_uart_config.pinmux_pad1 = USB_UART_SERCOM_PINMUX_PAD1;
-	host_uart_config.pinmux_pad2 = USB_UART_SERCOM_PINMUX_PAD2;
-	host_uart_config.pinmux_pad3 = USB_UART_SERCOM_PINMUX_PAD3;
-	host_uart_config.baudrate    = USB_UART_BAUDRATE;
+	usb_uart_config.pinmux_pad0 = USB_UART_SERCOM_PINMUX_PAD0;
+	usb_uart_config.pinmux_pad1 = USB_UART_SERCOM_PINMUX_PAD1;
+	usb_uart_config.pinmux_pad2 = USB_UART_SERCOM_PINMUX_PAD2;
+	usb_uart_config.pinmux_pad3 = USB_UART_SERCOM_PINMUX_PAD3;
+	usb_uart_config.baudrate    = USB_UART_BAUDRATE;
 	stdio_serial_init(&usb_uart_module, USB_UART_SERCOM, &usb_uart_config);
 	usart_enable(&usb_uart_module);
 	/* Enable transceivers */
@@ -204,7 +204,7 @@ uint8_t usb_uart_rx(uint8_t *data, uint8_t max_length) {
 	data_received = max_length;
 	while (max_length > 0) {
 		/* Start to copy from head. */
-		*data = usb_serial_rx_buf[serial_rx_buf_head];
+		*data = usb_serial_rx_buf[usb_serial_rx_buf_head];
 		data++;
 		max_length--;
 		if ((USB_SERIAL_RX_BUF_SIZE_HOST - 1) == usb_serial_rx_buf_head) {

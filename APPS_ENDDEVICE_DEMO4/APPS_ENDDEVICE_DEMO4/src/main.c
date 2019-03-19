@@ -127,7 +127,7 @@ static void print_reset_causes(void)
 static void appWakeup(uint32_t sleptDuration)
 {
     HAL_Radio_resources_init();
-    sio2host_init();
+    uart_init();
     printf("\r\nsleep_ok %ld ms\r\n", sleptDuration);
 
 }
@@ -329,14 +329,10 @@ int main(void)
 	SetRadioSettings();
 	PrintRadioSettings();
 
-    GpsInit();
-
-
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
     while (1)
     {
         usb_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer
-        gps_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer
 
 		SYSTEM_RunTasks();
 		//printf("Main looped");
@@ -372,7 +368,7 @@ static void app_resources_uninit(void)
     port_pin_set_config(HOST_SERCOM_PAD0_PIN, &pin_conf);
     port_pin_set_config(HOST_SERCOM_PAD1_PIN, &pin_conf);
     /* Disable UART module */
-    sio2host_deinit();
+    uart_usb_deinit();
     /* Disable Transceiver SPI Module */
     HAL_RadioDeInit();
 }

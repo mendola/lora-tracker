@@ -130,5 +130,7 @@ src\enddevice_cert.c
 
 src\enddevice_demo.c
 
+src\gps.c
+
 src\main.c
 

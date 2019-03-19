@@ -238,6 +238,7 @@ C_SRCS +=  \
 ../src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.c \
 ../src/enddevice_cert.c \
 ../src/enddevice_demo.c \
+../src/gps.c \
 ../src/main.c
 
 
@@ -312,6 +313,7 @@ src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.o \
 src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.o \
 src/enddevice_cert.o \
 src/enddevice_demo.o \
+src/gps.o \
 src/main.o
 
 OBJS_AS_ARGS +=  \
@@ -379,6 +381,7 @@ src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.o \
 src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.o \
 src/enddevice_cert.o \
 src/enddevice_demo.o \
+src/gps.o \
 src/main.o
 
 C_DEPS +=  \
@@ -446,6 +449,7 @@ src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.d \
 src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.d \
 src/enddevice_cert.d \
 src/enddevice_demo.d \
+src/gps.d \
 src/main.d
 
 C_DEPS_AS_ARGS +=  \
@@ -513,6 +517,7 @@ src/ASF/thirdparty/wireless/services/common_hw_timer/sam0/hw_timer.d \
 src/ASF/thirdparty/wireless/services/nvm/sam0/sam_nvm.d \
 src/enddevice_cert.d \
 src/enddevice_demo.d \
+src/gps.d \
 src/main.d
 
 OUTPUT_FILE_PATH +=APPS_ENDDEVICE_DEMO4.elf
@@ -972,6 +977,13 @@ src/enddevice_cert.o: ../src/enddevice_cert.c
 	
 
 src/enddevice_demo.o: ../src/enddevice_demo.c
+	@echo Building file: $<
+	@echo Invoking: ARM/GNU C Compiler : 6.3.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAMR34J18B__ -DDEBUG -DRTC_COUNT_ASYNC=true -DEU_BAND=1 -DSYSTICK_MODE -DADC_CALLBACK_MODE=true -DNA_BAND=1 -DENABLE_PDS=1 -DTC_ASYNC=true -D_DEBUG_=0 -DAU_BAND=1 -DJPN_BAND=1 -DAS_BAND=1 -D__SAMR34J18B__ -DCERT_APP=1 -DCONF_PMM_ENABLE -DI2C_MASTER_CALLBACK_MODE=true -DSPI_CALLBACK_MODE=false -DKR_BAND=1 -DEDBG_EUI_READ=1 -DARM_MATH_CM0PLUS=true -DBOARD=SAMR34_XPLAINED_PRO -DEXTINT_CALLBACK_MODE=true -DIND_BAND=1 -DUSART_CALLBACK_MODE=true  -I"../src/ASF/sam0/boards/samr34_xplained_pro" -I"../src/ASF/sam0/boards" -I"../src/ASF/sam0/utils/cmsis/samr34/source" -I"../src/ASF/sam0/utils" -I"../src/ASF/sam0/utils/header_files" -I"../src/ASF/sam0/utils/preprocessor" -I"../src/ASF/thirdparty/CMSIS/Include" -I"../src/ASF/thirdparty/CMSIS/Lib/GCC" -I"../src/ASF/common/utils" -I"../src/ASF/sam0/utils/cmsis/samr34/include" -I"../src/ASF/common/boards" -I"../src/ASF/sam0/drivers/port" -I"../src/ASF/sam0/drivers/system/pinmux" -I"../src" -I"../src/ASF/thirdparty/wireless/addons/sio2host/uart" -I"../src/ASF/sam0/utils/stdio/stdio_serial" -I"../src/ASF/common/services/serial" -I"../src/ASF/sam0/drivers/sercom/usart" -I"../src/ASF/sam0/drivers/sercom" -I"../src/ASF/sam0/drivers/system" -I"../src/ASF/sam0/drivers/system/clock/clock_samr34" -I"../src/ASF/sam0/drivers/system/clock" -I"../src/ASF/sam0/drivers/system/interrupt" -I"../src/ASF/sam0/drivers/system/interrupt/system_interrupt_samr34" -I"../src/ASF/sam0/drivers/system/power/power_sam_l" -I"../src/ASF/sam0/drivers/system/power" -I"../src/ASF/sam0/drivers/system/reset/reset_sam_l" -I"../src/ASF/sam0/drivers/system/reset" -I"../src/ASF/thirdparty/wireless/lorawan/inc" -I"../src/ASF/thirdparty/wireless/lorawan/hal/inc" -I"../src/ASF/common2/services/delay" -I"../src/ASF/common2/services/delay/sam0" -I"../src/ASF/sam0/drivers/sercom/spi" -I"../src/ASF/sam0/drivers/extint" -I"../src/ASF/sam0/drivers/tc" -I"../src/ASF/thirdparty/wireless/lorawan/sys/inc" -I"../src/ASF/thirdparty/wireless/lorawan/regparams/inc" -I"../src/ASF/thirdparty/wireless/lorawan/regparams/multiband/inc" -I"../src/ASF/thirdparty/wireless/lorawan/tal/sx1276/inc" -I"../src/ASF/thirdparty/wireless/lorawan/services/pds/inc" -I"../src/ASF/thirdparty/wireless/services/nvm" -I"../src/ASF/sam0/drivers/nvm" -I"../src/ASF/thirdparty/wireless/lorawan/pmm/inc" -I"../src/ASF/sam0/drivers/rtc" -I"../src/ASF/thirdparty/wireless/lorawan/services/sw_timer/inc" -I"../src/ASF/thirdparty/wireless/services/common_hw_timer" -I"../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0" -I"../src/ASF/thirdparty/wireless/lorawan/services/aes/inc" -I"../src/ASF/sam0/drivers/aes" -I"../src/ASF/thirdparty/wireless/lorawan/mac/inc" -I"../src/ASF/thirdparty/wireless/lorawan/tal/inc" -I"../src/ASF/thirdparty/wireless/lorawan/services/resources/inc" -I"../src/ASF/sam0/drivers/adc" -I"../src/ASF/sam0/drivers/adc/adc_sam_l_c" -I"../src/ASF/thirdparty/wireless/lorawan/services/edbg_eui" -I"../src/ASF/sam0/drivers/sercom/i2c" -I"../src/config"  -O1 -fdata-sections -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m0plus -c -pipe -fno-strict-aliasing -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -std=gnu99 -ffunction-sections -fdata-sections -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int -Wmain -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs -Wunused -Wuninitialized -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow -Wbad-function-cast -Wwrite-strings -Wsign-compare -Waggregate-return  -Wmissing-declarations -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations -Wpacked -Wredundant-decls -Wnested-externs -Wlong-long -Wunreachable-code -Wcast-align --param max-inline-insns-single=500 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/gps.o: ../src/gps.c
 	@echo Building file: $<
 	@echo Invoking: ARM/GNU C Compiler : 6.3.1
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAMR34J18B__ -DDEBUG -DRTC_COUNT_ASYNC=true -DEU_BAND=1 -DSYSTICK_MODE -DADC_CALLBACK_MODE=true -DNA_BAND=1 -DENABLE_PDS=1 -DTC_ASYNC=true -D_DEBUG_=0 -DAU_BAND=1 -DJPN_BAND=1 -DAS_BAND=1 -D__SAMR34J18B__ -DCERT_APP=1 -DCONF_PMM_ENABLE -DI2C_MASTER_CALLBACK_MODE=true -DSPI_CALLBACK_MODE=false -DKR_BAND=1 -DEDBG_EUI_READ=1 -DARM_MATH_CM0PLUS=true -DBOARD=SAMR34_XPLAINED_PRO -DEXTINT_CALLBACK_MODE=true -DIND_BAND=1 -DUSART_CALLBACK_MODE=true  -I"../src/ASF/sam0/boards/samr34_xplained_pro" -I"../src/ASF/sam0/boards" -I"../src/ASF/sam0/utils/cmsis/samr34/source" -I"../src/ASF/sam0/utils" -I"../src/ASF/sam0/utils/header_files" -I"../src/ASF/sam0/utils/preprocessor" -I"../src/ASF/thirdparty/CMSIS/Include" -I"../src/ASF/thirdparty/CMSIS/Lib/GCC" -I"../src/ASF/common/utils" -I"../src/ASF/sam0/utils/cmsis/samr34/include" -I"../src/ASF/common/boards" -I"../src/ASF/sam0/drivers/port" -I"../src/ASF/sam0/drivers/system/pinmux" -I"../src" -I"../src/ASF/thirdparty/wireless/addons/sio2host/uart" -I"../src/ASF/sam0/utils/stdio/stdio_serial" -I"../src/ASF/common/services/serial" -I"../src/ASF/sam0/drivers/sercom/usart" -I"../src/ASF/sam0/drivers/sercom" -I"../src/ASF/sam0/drivers/system" -I"../src/ASF/sam0/drivers/system/clock/clock_samr34" -I"../src/ASF/sam0/drivers/system/clock" -I"../src/ASF/sam0/drivers/system/interrupt" -I"../src/ASF/sam0/drivers/system/interrupt/system_interrupt_samr34" -I"../src/ASF/sam0/drivers/system/power/power_sam_l" -I"../src/ASF/sam0/drivers/system/power" -I"../src/ASF/sam0/drivers/system/reset/reset_sam_l" -I"../src/ASF/sam0/drivers/system/reset" -I"../src/ASF/thirdparty/wireless/lorawan/inc" -I"../src/ASF/thirdparty/wireless/lorawan/hal/inc" -I"../src/ASF/common2/services/delay" -I"../src/ASF/common2/services/delay/sam0" -I"../src/ASF/sam0/drivers/sercom/spi" -I"../src/ASF/sam0/drivers/extint" -I"../src/ASF/sam0/drivers/tc" -I"../src/ASF/thirdparty/wireless/lorawan/sys/inc" -I"../src/ASF/thirdparty/wireless/lorawan/regparams/inc" -I"../src/ASF/thirdparty/wireless/lorawan/regparams/multiband/inc" -I"../src/ASF/thirdparty/wireless/lorawan/tal/sx1276/inc" -I"../src/ASF/thirdparty/wireless/lorawan/services/pds/inc" -I"../src/ASF/thirdparty/wireless/services/nvm" -I"../src/ASF/sam0/drivers/nvm" -I"../src/ASF/thirdparty/wireless/lorawan/pmm/inc" -I"../src/ASF/sam0/drivers/rtc" -I"../src/ASF/thirdparty/wireless/lorawan/services/sw_timer/inc" -I"../src/ASF/thirdparty/wireless/services/common_hw_timer" -I"../src/ASF/thirdparty/wireless/services/common_hw_timer/sam0" -I"../src/ASF/thirdparty/wireless/lorawan/services/aes/inc" -I"../src/ASF/sam0/drivers/aes" -I"../src/ASF/thirdparty/wireless/lorawan/mac/inc" -I"../src/ASF/thirdparty/wireless/lorawan/tal/inc" -I"../src/ASF/thirdparty/wireless/lorawan/services/resources/inc" -I"../src/ASF/sam0/drivers/adc" -I"../src/ASF/sam0/drivers/adc/adc_sam_l_c" -I"../src/ASF/thirdparty/wireless/lorawan/services/edbg_eui" -I"../src/ASF/sam0/drivers/sercom/i2c" -I"../src/config"  -O1 -fdata-sections -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m0plus -c -pipe -fno-strict-aliasing -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -std=gnu99 -ffunction-sections -fdata-sections -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int -Wmain -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs -Wunused -Wuninitialized -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow -Wbad-function-cast -Wwrite-strings -Wsign-compare -Waggregate-return  -Wmissing-declarations -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations -Wpacked -Wredundant-decls -Wnested-externs -Wlong-long -Wunreachable-code -Wcast-align --param max-inline-insns-single=500 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

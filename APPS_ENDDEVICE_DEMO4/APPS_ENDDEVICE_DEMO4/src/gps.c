@@ -1,12 +1,11 @@
 #include "gps.h"
+#include "compiler.h"
 
 extern int gps_uart_getchar_nowait(void);
 
-typedef enum _GpsTaskState_t {
-	GPS_TASK_STATE_READY,
-	GPS_TASK_STATE_NMEA_RX_IN_PROGRESS,
-	GPS_TASK_STATE_UBX_RX_IN_PROGRESS
-} GpsTaskState_t;
+static void gpsRxCharStateReady(const char rx_char);
+static void gpsRxCharStateNmeaRxInProgress(const char rx_char);
+static void gpsRxCharStateUbxRxInProgress(const char rx_char);
 
 void runGpsTask(void) {
     int byte;

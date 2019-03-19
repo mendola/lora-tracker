@@ -185,6 +185,7 @@ static void demoTimerCb(void * cnt);
 static void lTimerCb(void * data);
 static SYSTEM_TaskStatus_t displayTask(void);
 static SYSTEM_TaskStatus_t processTask(void);
+static SYSTEM_TaskStatus_t gpsTask(void);
 static void processRunDemoCertApp(void);
 static void processRunRestoreBand(void);
 static void processJoinAndSend(void);
@@ -204,6 +205,8 @@ static void dev_eui_read(void);
 /************************** FUNCTION PROTOTYPES ********************************/
 SYSTEM_TaskStatus_t APP_TaskHandler(void);
 static float convert_celsius_to_fahrenheit(float cel_val);
+extern void runGpsTask(void);
+
 /*********************************************************************//*
  \brief      Function that processes the Rx data
  \param[in]  data - Rx data payload
@@ -435,7 +438,7 @@ static void processJoinAndSend(void)
 			if (PMM_SLEEP_REQ_DENIED == PMM_Sleep(&sleepReq))
 			{
 				HAL_Radio_resources_init();
-				sio2host_init();
+				uart_init();
 				appTaskState = JOIN_SEND_STATE;
 				appPostTask(DISPLAY_TASK_HANDLER);
 				printf("\r\nsleep_not_ok\r\n");	
@@ -930,7 +933,7 @@ void sendData(void)
 static void appWakeup(uint32_t sleptDuration)
 {
     HAL_Radio_resources_init();
-    sio2host_init();
+    uart_init();
 	appTaskState = JOIN_SEND_STATE;
     appPostTask(DISPLAY_TASK_HANDLER);
     printf("\r\nsleep_ok %ld ms\r\n", sleptDuration);
@@ -951,7 +954,7 @@ static void app_resources_uninit(void)
     port_pin_set_config(HOST_SERCOM_PAD1_PIN, &pin_conf);
 #endif
     /* Disable UART module */
-    sio2host_deinit();
+    uart_usb_deinit();
     /* Disable Transceiver SPI Module */
     HAL_RadioDeInit();
 }
