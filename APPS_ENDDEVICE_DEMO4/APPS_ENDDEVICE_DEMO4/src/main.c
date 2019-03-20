@@ -43,7 +43,7 @@
 #include "system_init.h"
 #include "system_assert.h"
 #include "aes_engine.h"
-#include "enddevice_demo.h"
+#include "application_tasks.h"
 #include "sio2host.h"
 #include "extint.h"
 #include "conf_app.h"
@@ -160,7 +160,7 @@ void radio_tx_callback(void) {
 	tx_packet.bufferLen = 30;
 	tx_packet.bufferPtr = (uint8_t*)g_payload;
 	
-	RadioError_t status = RADIO_Transmit(&tx_packet);
+	RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
 	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
 }
@@ -330,6 +330,10 @@ int main(void)
 	PrintRadioSettings();
 
 	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
+
+    ConfigureGps();
+    StartGpsTask();
+
     while (1)
     {
         usb_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer

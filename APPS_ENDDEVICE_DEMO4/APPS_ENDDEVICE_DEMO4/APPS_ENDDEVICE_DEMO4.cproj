@@ -236,8 +236,8 @@
           <file path="src/config/conf_certification.h" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/certification_src/conf_certification.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/enddevice_cert.c" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/certification_src/enddevice_cert.c" changed="False" content-id="Atmel.ASF" />
           <file path="src/enddevice_cert.h" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/certification_src/enddevice_cert.h" changed="False" content-id="Atmel.ASF" />
-          <file path="src/enddevice_demo.c" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/enddevice_demo.c" changed="False" content-id="Atmel.ASF" />
-          <file path="src/enddevice_demo.h" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/enddevice_demo.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/application_tasks.c" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/application_tasks.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/application_tasks.h" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/application_tasks.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/main.c" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/main.c" changed="False" content-id="Atmel.ASF" />
           <file path="src/config/conf_app.h" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/multiband/samr34_xpro/conf_app.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/config/conf_board.h" framework="" version="" source="thirdparty/wireless/lorawan/apps/enddevice_demo/multiband/samr34_xpro/conf_board.h" changed="False" content-id="Atmel.ASF" />
@@ -1537,7 +1537,7 @@
     <None Include="src\ASF\thirdparty\wireless\lorawan\tal\inc\radio_interface.h">
       <SubType>compile</SubType>
     </None>
-    <None Include="src\enddevice_demo.h">
+    <None Include="src\application_tasks.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam0\utils\cmsis\samr34\include\instance\tc3.h">
@@ -1774,7 +1774,7 @@
     <Compile Include="src\enddevice_cert.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\enddevice_demo.c">
+    <Compile Include="src\application_tasks.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\gps.c">
