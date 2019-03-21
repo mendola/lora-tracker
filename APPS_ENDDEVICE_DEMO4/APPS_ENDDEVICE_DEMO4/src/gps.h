@@ -25,13 +25,6 @@ typedef enum _NmeaMessageType_t {
 	NMEA_MESSAGE_ADDRESS_GPRMC,
 } NmeaMessageType_t;
 
-/* Module Variables */
-uint8_t nmea_buffer_[NMEA_BUFFER_LENGTH];
-int8_t nmea_buffer_char_count_ = 0;
-
-uint8_t ubx_buffer_[UBX_BUFFER_LENGTH];
-int8_t ubx_buffer_char_count_ = 0;
-
 /* Function prototypes */
 static GpsTaskState_t gpsTaskState;
 

@@ -41,6 +41,8 @@
 /* === MACROS ============================================================== */
 
 /* === PROTOTYPES ========================================================== */
+void gps_usart_read_callback(struct usart_module *const usart_module);
+void gps_usart_write_callback(struct usart_module *const usart_module);
 
 /* === GLOBALS ========================================================== */
 static struct usart_module usb_uart_module;
@@ -108,12 +110,30 @@ void uart_gps_init(void) {
 	gps_uart_config.pinmux_pad2 = GPS_UART_SERCOM_PINMUX_PAD2;
 	gps_uart_config.pinmux_pad3 = GPS_UART_SERCOM_PINMUX_PAD3;
 	gps_uart_config.baudrate    = GPS_UART_BAUDRATE;
-	stdio_serial_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config);
+	
+	while (usart_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config) != STATUS_OK) {
+	}
+	
 	usart_enable(&gps_uart_module);
+	
+	
+	usart_register_callback(&usart_instance,
+	gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_register_callback(&usart_instance,
+	gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
+	//! [setup_register_callbacks]
+
+	//! [setup_enable_callbacks]
+	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_RECEIVED);
+	//! [setup_enable_callbacks]
+		
+	//stdio_serial_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config);
+	//usart_enable(&gps_uart_module);
 	/* Enable transceivers */
-	usart_enable_transceiver(&gps_uart_module, USART_TRANSCEIVER_TX);
-	usart_enable_transceiver(&gps_uart_module, USART_TRANSCEIVER_RX);
-	GPS_UART_HOST_RX_ISR_ENABLE();
+	//usart_enable_transceiver(&gps_uart_module, USART_TRANSCEIVER_TX);
+	//usart_enable_transceiver(&gps_uart_module, USART_TRANSCEIVER_RX);
+	// GPS_UART_HOST_RX_ISR_ENABLE();
 }
 
 void uart_usb_deinit(void) { //sio2host_deinit
@@ -385,4 +405,15 @@ void gps_uart_disable(void) {
 void gps_uart_enable(void) {
 	usart_enable(&gps_uart_module);
 }
+
+void gps_usart_read_callback(struct usart_module *const usart_module)
+{
+	usart_write_buffer_job(&usart_instance,
+	(uint8_t *)rx_buffer, MAX_RX_BUFFER_LENGTH);
+}
+
+void gps_usart_write_callback(struct usart_module *const usart_module)
+{
+}
+
 /* EOF */

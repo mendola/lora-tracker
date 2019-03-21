@@ -186,6 +186,8 @@ static void lTimerCb(void * data);
 static SYSTEM_TaskStatus_t displayTask(void);
 static SYSTEM_TaskStatus_t processTask(void);
 static SYSTEM_TaskStatus_t gpsTask(void);
+static SYSTEM_TaskStatus_t heartbeatTask(void);
+
 static void processRunDemoCertApp(void);
 static void processRunRestoreBand(void);
 static void processJoinAndSend(void);
@@ -218,7 +220,7 @@ static void demo_handle_evt_rx_data(void *appHandle, appCbParams_t *appdata);
 
 static SYSTEM_TaskStatus_t (*appTaskHandlers[APP_TASKS_COUNT])(void) = {
     /* In the order of descending priority */
-    displayTask,
+    heartbeatTask,
     processTask,
     gpsTask
 };
@@ -229,6 +231,31 @@ static SYSTEM_TaskStatus_t (*appTaskHandlers[APP_TASKS_COUNT])(void) = {
 static SYSTEM_TaskStatus_t gpsTask(void) {
     runGpsTask();
 	return SYSTEM_TASK_SUCCESS;
+}
+
+/* TODO This is trash and needs refactoring (circular deps)*/
+void StartHeartbeatTask(void) {
+	appPostTask(DISPLAY_TASK_HANDLER);
+}
+
+static SYSTEM_TaskStatus_t heartbeatTask(void) {
+	static uint8_t ledstate = 0;
+	static uint64_t prevtime_us = 0;
+	
+	uint64_t now_us = SwTimerGetTime();
+	
+	if (now_us - prevtime_us >= 1000000) {
+		if (ledstate == 0 ) {
+			ledstate = 1;
+		} else {
+			ledstate = 0;
+		}
+		
+		prevtime_us = now_us;
+		set_LED_data(LED_GREEN,&ledstate);
+		printf("Heartbeat: %d", ledstate);
+	}
+	appPostTask(DISPLAY_TASK_HANDLER);
 }
 
 static SYSTEM_TaskStatus_t displayTask(void)
@@ -277,6 +304,10 @@ void usb_serial_data_handler(void)
 			}
 		}
 	}
+}
+
+void usb_serial_data_handler(void) {
+	
 }
 
 /*********************************************************************//**

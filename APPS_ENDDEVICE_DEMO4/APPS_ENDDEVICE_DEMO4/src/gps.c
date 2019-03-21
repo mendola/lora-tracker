@@ -1,5 +1,6 @@
 #include "gps.h"
 #include "compiler.h"
+#include "string.h"
 
 extern int gps_uart_getchar_nowait(void);
 extern void appPostGpsTask(void);
@@ -8,6 +9,13 @@ static void gpsRxCharStateReady(const char rx_char);
 static void gpsRxCharStateNmeaRxInProgress(const char rx_char);
 static void gpsRxCharStateUbxRxInProgress(const char rx_char);
 
+
+/* Module Variables */
+uint8_t nmea_buffer_[NMEA_BUFFER_LENGTH];
+int8_t nmea_buffer_char_count_ = 0;
+
+uint8_t ubx_buffer_[UBX_BUFFER_LENGTH];
+int8_t ubx_buffer_char_count_ = 0;
 
 /* Send appropriate messages to GPS to configure settings */
 void ConfigureGps(void) {
@@ -48,7 +56,7 @@ static readNmeaMessageType(char* buffer, int8_t length) {
     if (length >= 6 && strncmp((char*)buffer + 1, "GPRMC", 5) == 0) {
         printf("Received GPRMC messge\r\n");
 
-    } else if (length >= && strncmp((char*)buffer + 1, "PUBX", 4 == 0)) {
+    } else if (length >= 5 && strncmp((char*)buffer + 1, "PUBX", 4 == 0)) {
         printf("Received PUBX message\r\n");
 
     }
@@ -116,7 +124,7 @@ static void HandleCompleteNmeaPacket(void) {
 
 
     if(!verify_nmea_checksum_passes(nmea_buffer_ + 1, nmea_buffer_char_count_ - 1)){
-        printf("NMEA Checksum Failed.\r\n")
+        printf("NMEA Checksum Failed.\r\n");
         return;
     }
 
