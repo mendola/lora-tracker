@@ -306,7 +306,7 @@ void usb_serial_data_handler(void)
 	}
 }
 
-void usb_serial_data_handler(void) {
+void gps_serial_data_handler(void) {
 	
 }
 

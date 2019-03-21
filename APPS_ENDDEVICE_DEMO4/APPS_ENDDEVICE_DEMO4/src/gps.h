@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+/* Serial macros */
+#define GPS_SERIAL_BUFFER_LENGTH 20
+
 /* NMEA macros */
 #define NMEA_START_CHAR		'$'
 #define NMEA_END_CHAR		'\n'

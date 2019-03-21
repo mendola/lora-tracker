@@ -52,8 +52,10 @@ static struct usart_module gps_uart_module;
  * Receive buffer
  * The buffer size is defined in sio2host.h
  */
-static uint8_t usb_serial_rx_buf[USB_SERIAL_RX_BUF_SIZE_HOST];
-static uint8_t gps_serial_rx_buf[GPS_SERIAL_RX_BUF_SIZE_HOST];
+static uint8_t usb_serial_rx_buf_[USB_SERIAL_RX_BUF_SIZE_HOST];
+static uint8_t gps_serial_rx_buf_[GPS_SERIAL_RX_BUF_SIZE_HOST];
+static bool gps_fresh_data_buffer = false;
+
 
 /**
  * Receive buffer head
@@ -72,6 +74,7 @@ static uint8_t gps_serial_rx_buf_tail;
  */
 static uint8_t usb_serial_rx_count;
 static uint8_t gps_serial_rx_count;
+
 
 
 /* === IMPLEMENTATION ====================================================== */
@@ -117,16 +120,11 @@ void uart_gps_init(void) {
 	usart_enable(&gps_uart_module);
 	
 	
-	usart_register_callback(&usart_instance,
-	gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
-	usart_register_callback(&usart_instance,
-	gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
-	//! [setup_register_callbacks]
+	usart_register_callback(&usart_instance, gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_register_callback(&usart_instance, gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
 
-	//! [setup_enable_callbacks]
 	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);
 	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_RECEIVED);
-	//! [setup_enable_callbacks]
 		
 	//stdio_serial_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config);
 	//usart_enable(&gps_uart_module);
@@ -150,6 +148,20 @@ void uart_gps_deinit(void) { //sio2host_deinit
 	/* Disable transceivers */
 	usart_disable_transceiver(&gps_uart_module, USART_TRANSCEIVER_TX);
 	usart_disable_transceiver(&gps_uart_module, USART_TRANSCEIVER_RX);
+}
+
+void gps_uart_request_rx(void) {
+	usart_read_buffer_job(&gps_uart_module, (uint8_t *)gps_serial_rx_buf_, GPS_SERIAL_RX_BUF_SIZE_HOST);
+}
+
+void gps_uart_copy_data(uint8_t* destination, int8_t maxlen) {
+	int8_t copycount;
+	if (maxlen < USB_SERIAL_RX_BUF_SIZE_HOST){
+		copycount = maxlen;
+	} else {
+		copycount = USB_SERIAL_RX_BUF_SIZE_HOST;
+	}
+	memcpy((void*)destination, (void*)gps_serial_rx_buf_, maxlen * sizeof(uint8_t));
 }
 
 uint8_t usb_uart_tx(uint8_t *data, uint8_t length) {
@@ -408,8 +420,12 @@ void gps_uart_enable(void) {
 
 void gps_usart_read_callback(struct usart_module *const usart_module)
 {
-	usart_write_buffer_job(&usart_instance,
-	(uint8_t *)rx_buffer, MAX_RX_BUFFER_LENGTH);
+	//usart_write_buffer_job(&usart_instance, (uint8_t *)rx_buffer, MAX_RX_BUFFER_LENGTH);
+	gps_fresh_data_buffer = true;
+}
+
+bool gpsUartHasData(void) {
+	return gps_fresh_data_buffer;
 }
 
 void gps_usart_write_callback(struct usart_module *const usart_module)

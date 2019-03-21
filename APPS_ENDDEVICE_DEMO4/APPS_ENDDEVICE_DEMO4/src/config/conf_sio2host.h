@@ -42,7 +42,7 @@
 /** Since MCPS.DATA.indication requires max no of bytes of around 150 bytes than
  *all other primitives,the Maximum Buffer size is kept as 156 bytes */
 #define USB_SERIAL_RX_BUF_SIZE_HOST    128
-#define GPS_SERIAL_RX_BUF_SIZE_HOST    128
+#define GPS_SERIAL_RX_BUF_SIZE_HOST    20
 
 /***** PINMUX DEFINITIONS FOR USB USART on SERCOM0 ******/
 #define USB_UART_SERCOM                SERCOM0
