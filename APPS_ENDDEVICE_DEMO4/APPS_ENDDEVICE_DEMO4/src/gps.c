@@ -6,6 +6,7 @@ extern int gps_uart_getchar_nowait(void);
 extern void appPostGpsTask(void);
 extern void gps_uart_copy_data(uint8_t* destination, int8_t maxlen);
 extern bool gpsUartHasData(void);
+void gps_uart_request_rx(void);
 
 static void gpsRxCharStateReady(const char rx_char);
 static void gpsRxCharStateNmeaRxInProgress(const char rx_char);
@@ -37,6 +38,7 @@ void runGpsTask(void) {
     char rx_char;
 
     if(gpsUartHasData()){
+		printf("Gps Has Data!");
         gps_uart_copy_data(serial_buffer_, GPS_SERIAL_BUFFER_LENGTH);
 
         for (int i = 0; i<serial_buffer_char_count_; i++) {

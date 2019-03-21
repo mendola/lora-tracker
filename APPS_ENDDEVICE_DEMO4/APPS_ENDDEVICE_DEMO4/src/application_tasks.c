@@ -253,7 +253,7 @@ static SYSTEM_TaskStatus_t heartbeatTask(void) {
 		
 		prevtime_us = now_us;
 		set_LED_data(LED_GREEN,&ledstate);
-		printf("Heartbeat: %d", ledstate);
+		//printf("Heartbeat: %d", ledstate);
 	}
 	appPostTask(DISPLAY_TASK_HANDLER);
 }

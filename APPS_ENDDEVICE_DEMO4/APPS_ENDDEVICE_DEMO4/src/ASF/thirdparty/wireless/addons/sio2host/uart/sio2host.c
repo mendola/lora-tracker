@@ -120,11 +120,11 @@ void uart_gps_init(void) {
 	usart_enable(&gps_uart_module);
 	
 	
-	usart_register_callback(&usart_instance, gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
-	usart_register_callback(&usart_instance, gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
+	usart_register_callback(&gps_uart_module, gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_register_callback(&gps_uart_module, gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
 
-	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_TRANSMITTED);
-	usart_enable_callback(&usart_instance, USART_CALLBACK_BUFFER_RECEIVED);
+	usart_enable_callback(&gps_uart_module, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_enable_callback(&gps_uart_module, USART_CALLBACK_BUFFER_RECEIVED);
 		
 	//stdio_serial_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config);
 	//usart_enable(&gps_uart_module);
@@ -236,7 +236,7 @@ uint8_t usb_uart_rx(uint8_t *data, uint8_t max_length) {
 	data_received = max_length;
 	while (max_length > 0) {
 		/* Start to copy from head. */
-		*data = usb_serial_rx_buf[usb_serial_rx_buf_head];
+		*data = usb_serial_rx_buf_[usb_serial_rx_buf_head];
 		data++;
 		max_length--;
 		if ((USB_SERIAL_RX_BUF_SIZE_HOST - 1) == usb_serial_rx_buf_head) {
@@ -302,7 +302,7 @@ uint8_t gps_uart_rx(uint8_t *data, uint8_t max_length) {
 	data_received = max_length;
 	while (max_length > 0) {
 		/* Start to copy from head. */
-		*data = gps_serial_rx_buf[gps_serial_rx_buf_head];
+		*data = gps_serial_rx_buf_[gps_serial_rx_buf_head];
 		data++;
 		max_length--;
 		if ((GPS_SERIAL_RX_BUF_SIZE_HOST - 1) == gps_serial_rx_buf_head) {
@@ -366,7 +366,7 @@ void USB_USART_ISR(uint8_t instance) {
 	/* The number of data in the receive buffer is incremented and the
 	 * buffer is updated. */
 
-	usb_serial_rx_buf[usb_serial_rx_buf_tail] = temp;
+	usb_serial_rx_buf_[usb_serial_rx_buf_tail] = temp;
 
 	if ((USB_SERIAL_RX_BUF_SIZE_HOST - 1) == usb_serial_rx_buf_tail) {
 		/* Reached the end of buffer, revert back to beginning of
@@ -389,7 +389,7 @@ void GPS_USART_ISR(uint8_t instance) {  // Needs rewriting
 	/* The number of data in the receive buffer is incremented and the
 	 * buffer is updated. */
 
-	gps_serial_rx_buf[gps_serial_rx_buf_tail] = temp;
+	gps_serial_rx_buf_[gps_serial_rx_buf_tail] = temp;
 
 	if ((GPS_SERIAL_RX_BUF_SIZE_HOST - 1) == gps_serial_rx_buf_tail) {
 		/* Reached the end of buffer, revert back to beginning of
