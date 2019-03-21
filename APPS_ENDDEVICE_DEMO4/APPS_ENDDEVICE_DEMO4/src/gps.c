@@ -6,6 +6,8 @@ extern int gps_uart_getchar_nowait(void);
 extern void appPostGpsTask(void);
 extern void gps_uart_copy_data(uint8_t* destination, int8_t maxlen);
 extern bool gpsUartHasData(void);
+extern status_code_genare_t gps_uart_blocking_read(uint16_t *const rx_data);
+
 void gps_uart_request_rx(void);
 
 static void gpsRxCharStateReady(const char rx_char);
@@ -35,34 +37,37 @@ void StartGpsTask(void) {
 }
 
 void runGpsTask(void) {
-    char rx_char;
+    uint16_t rx_data;
+	char rx_char;
+	
+    //if(gpsUartHasData()){
+		//printf("Gps Has Data!");
+        //gps_uart_copy_data(serial_buffer_, GPS_SERIAL_BUFFER_LENGTH);
 
-    if(gpsUartHasData()){
-		printf("Gps Has Data!");
-        gps_uart_copy_data(serial_buffer_, GPS_SERIAL_BUFFER_LENGTH);
-
-        for (int i = 0; i<serial_buffer_char_count_; i++) {
-            rx_char = (char)serial_buffer_[i];
-            
-            switch(gpsTaskState) {
-                case GPS_TASK_STATE_READY:
-                    gpsRxCharStateReady(rx_char);
-                    break;
-                case GPS_TASK_STATE_NMEA_RX_IN_PROGRESS:
-                    gpsRxCharStateNmeaRxInProgress(rx_char);
-                    break;
-                case GPS_TASK_STATE_UBX_RX_IN_PROGRESS:
-                    gpsRxCharStateUbxRxInProgress(rx_char);
-                    break;
-                default:
-                    printf("Error: invalid gpsTaskState\r\n");
-                    break;
-            }
+        //for (int i = 0; i<serial_buffer_char_count_; i++) {
+        //    rx_char = (char)serial_buffer_[i];
+			status_code_genare_t status = gps_uart_blocking_read(rx_data);
+			printf("gps_uart_blocking_read() returned: %d\r\n", status);
+			if(status == 0) {
+				switch(gpsTaskState) {
+					case GPS_TASK_STATE_READY:
+					gpsRxCharStateReady(rx_char);
+					break;
+					case GPS_TASK_STATE_NMEA_RX_IN_PROGRESS:
+					gpsRxCharStateNmeaRxInProgress(rx_char);
+					break;
+					case GPS_TASK_STATE_UBX_RX_IN_PROGRESS:
+					gpsRxCharStateUbxRxInProgress(rx_char);
+					break;
+					default:
+					printf("Error: invalid gpsTaskState\r\n");
+					break;
+				}
         }
-
-        serial_buffer_char_count_ = 0;
-        gps_uart_request_rx();
-    }
+		//}
+        //serial_buffer_char_count_ = 0;
+        //gps_uart_request_rx();
+    //}
 
 
     appPostGpsTask();
