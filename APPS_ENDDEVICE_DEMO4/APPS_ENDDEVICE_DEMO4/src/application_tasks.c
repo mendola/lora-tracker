@@ -1091,8 +1091,8 @@ SYSTEM_TaskStatus_t APP_TaskHandler(void)
                 {
                     SYSTEM_PostTask(APP_TASK_ID);
                 }
-
-                break;
+                /* Break here so that higher priority task executes next, if any */
+                //break;  ^ No
             }
         }
     }

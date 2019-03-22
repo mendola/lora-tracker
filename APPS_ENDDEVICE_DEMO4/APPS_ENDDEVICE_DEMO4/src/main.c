@@ -331,7 +331,7 @@ int main(void)
 	SetRadioSettings();
 	PrintRadioSettings();
 
-	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
+	//SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
 
     //ConfigureGps();
     StartGpsTask();

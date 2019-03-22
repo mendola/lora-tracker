@@ -120,11 +120,11 @@ void uart_gps_init(void) {
 	usart_enable(&gps_uart_module);
 	
 	
-	//usart_register_callback(&gps_uart_module, gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
-	//usart_register_callback(&gps_uart_module, gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
+	usart_register_callback(&gps_uart_module, gps_usart_write_callback, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_register_callback(&gps_uart_module, gps_usart_read_callback, USART_CALLBACK_BUFFER_RECEIVED);
 
-	//usart_enable_callback(&gps_uart_module, USART_CALLBACK_BUFFER_TRANSMITTED);
-	//usart_enable_callback(&gps_uart_module, USART_CALLBACK_BUFFER_RECEIVED);
+	usart_enable_callback(&gps_uart_module, USART_CALLBACK_BUFFER_TRANSMITTED);
+	usart_enable_callback(&gps_uart_module, USART_CALLBACK_BUFFER_RECEIVED);
 		
 	//stdio_serial_init(&gps_uart_module, GPS_UART_SERCOM, &gps_uart_config);
 	//usart_enable(&gps_uart_module);
