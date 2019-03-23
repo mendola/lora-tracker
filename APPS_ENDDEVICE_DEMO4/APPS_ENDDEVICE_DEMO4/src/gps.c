@@ -25,6 +25,13 @@ int8_t nmea_buffer_char_count_ = 0;
 uint8_t ubx_buffer_[UBX_BUFFER_LENGTH];
 int8_t ubx_buffer_char_count_ = 0;
 
+void printRxBuffer(void) {
+	for(int i = 0; i < GPS_SERIAL_BUFFER_LENGTH; i++) {
+		printf("%c", serial_buffer_[i]);
+	}
+	printf("\r\n");
+}
+
 /* Send appropriate messages to GPS to configure settings */
 void ConfigureGps(void) {
     
@@ -39,12 +46,13 @@ void StartGpsTask(void) {
 void runGpsTask(void) {
     uint16_t rx_data;
 	char rx_char;
-	printf("Running GPS Task\r\n");
     if(gpsUartHasData()) {
-		printf("Gps Has Data!");
+		printf("Gps Has Data: ");
+		printRxBuffer();
         gps_uart_copy_data(serial_buffer_, GPS_SERIAL_BUFFER_LENGTH);
+		gps_uart_request_rx();
 
-        for (int i = 0; i<serial_buffer_char_count_; i++) {
+        for (int i = 0; i<GPS_SERIAL_BUFFER_LENGTH; i++) {
             rx_char = (char)serial_buffer_[i];
 		//	status_code_genare_t status = gps_uart_blocking_read(rx_data);
 		//	printf("gps_uart_blocking_read() returned: %d\r\n", status);
@@ -66,7 +74,6 @@ void runGpsTask(void) {
         }
 		//}
         //serial_buffer_char_count_ = 0;
-        gps_uart_request_rx();
     }
 
 

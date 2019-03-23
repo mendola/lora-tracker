@@ -42,7 +42,7 @@
 /** Since MCPS.DATA.indication requires max no of bytes of around 150 bytes than
  *all other primitives,the Maximum Buffer size is kept as 156 bytes */
 #define USB_SERIAL_RX_BUF_SIZE_HOST    128
-#define GPS_SERIAL_RX_BUF_SIZE_HOST    20
+#define GPS_SERIAL_RX_BUF_SIZE_HOST    40
 
 /***** PINMUX DEFINITIONS FOR USB USART on SERCOM0 ******/
 #define USB_UART_SERCOM                SERCOM0
@@ -64,8 +64,8 @@
 #define GPS_UART_SERCOM_MUX_SETTING    USART_RX_3_TX_2_XCK_3
 #define GPS_UART_SERCOM_PINMUX_PAD0    PINMUX_UNUSED
 #define GPS_UART_SERCOM_PINMUX_PAD1    PINMUX_UNUSED
-#define GPS_UART_SERCOM_PINMUX_PAD2    (22 << 16) | 3  // Pin PB22, function D (3)
-#define GPS_UART_SERCOM_PINMUX_PAD3    (23 << 16) | 3  // Pin PB23, function D (3)
+#define GPS_UART_SERCOM_PINMUX_PAD2    PINMUX_PB22D_SERCOM5_PAD2 //   // Pin PB22, function D (3)
+#define GPS_UART_SERCOM_PINMUX_PAD3    PINMUX_PB23D_SERCOM5_PAD3 //   // Pin PB23, function D (3)
 /** Baudrate setting */
 #define GPS_UART_BAUDRATE		  9600
 

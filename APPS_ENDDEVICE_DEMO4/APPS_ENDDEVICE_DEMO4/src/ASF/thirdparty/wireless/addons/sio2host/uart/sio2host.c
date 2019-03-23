@@ -151,6 +151,7 @@ void uart_gps_deinit(void) { //sio2host_deinit
 }
 
 void gps_uart_request_rx(void) {
+	gps_fresh_data_buffer = false;
 	usart_read_buffer_job(&gps_uart_module, (uint8_t *)gps_serial_rx_buf_, GPS_SERIAL_RX_BUF_SIZE_HOST);
 }
 
