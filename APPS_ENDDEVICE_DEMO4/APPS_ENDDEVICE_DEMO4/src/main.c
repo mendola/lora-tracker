@@ -80,6 +80,7 @@ extern bool certAppEnabled;
 bool deviceResetsForWakeup = false;
 #endif
 /************************** Extern variables ***********************************/
+int16_t getMostRecentCondensedRmcPacket(char* dest, uint8_t max_len);
 
 /************************** Function Prototypes ********************************/
 static void driver_init(void);
@@ -95,7 +96,8 @@ static void assertHandler(SystemAssertLevel_t level, uint16_t code);
 static void app_resources_uninit(void);
 #endif
 
-char g_payload[50] = {0};
+#define MAX_LORA_PAYLOAD_LENGTH 50
+char g_payload[MAX_LORA_PAYLOAD_LENGTH] = {0};
 
 
 /****************************** FUNCTIONS **************************************/
@@ -152,15 +154,23 @@ void filler(void){
 void radio_tx_callback(void) {
 	static int call_counter = 0;
 	//char payload[20] = {0};
-	strcpy(g_payload, "Team ALINA's LoRa packet #");
-	itoa(++call_counter, g_payload+26,10);
+	int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload, MAX_LORA_PAYLOAD_LENGTH);
+
+
 	//strcpy(payload+10,itoa(++call_counter));
 	
 	RadioTransmitParam_t tx_packet;
-	//payload[13] = "\r\n";
-	tx_packet.bufferLen = 30;
-	tx_packet.bufferPtr = (uint8_t*)g_payload;
-	
+	if (payload_length <= 0) {
+		strcpy(g_payload, "No gps fix :(");
+		//itoa(++call_counter, g_payload+26,10);
+		tx_packet.bufferLen = 13;
+		tx_packet.bufferPtr = (uint8_t*)g_payload;
+	} else {
+		//strcpy(g_payload, "Team ALINA's LoRa packet #");
+		//itoa(++call_counter, g_payload+26,10);
+		tx_packet.bufferLen = payload_length;
+		tx_packet.bufferPtr = (uint8_t*)g_payload;
+	}	
 	RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
 	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 	SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)radio_tx_callback);
@@ -331,7 +341,7 @@ int main(void)
 	SetRadioSettings();
 	PrintRadioSettings();
 
-	//SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
+	SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
 
     //ConfigureGps();
     StartGpsTask();

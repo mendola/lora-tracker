@@ -16,14 +16,29 @@ static void gpsRxCharStateUbxRxInProgress(const char rx_char);
 
 
 /* Module Variables */
+uint8_t most_recent_gprmc_message_condensed_[CONDENSED_GPRMC_MSG_BUFFER_LENGTH];
+int8_t most_recent_gprmc_message_length_ = 0;
+bool has_valid_gprmc_message = false;
+
 uint8_t serial_buffer_[GPS_SERIAL_BUFFER_LENGTH];
 int8_t serial_buffer_char_count_ = 0;
 
-uint8_t nmea_buffer_[NMEA_BUFFER_LENGTH];
-int8_t nmea_buffer_char_count_ = 0;
+volatile uint8_t nmea_buffer_[NMEA_BUFFER_LENGTH];
+volatile int8_t nmea_buffer_char_count_ = 0;
 
 uint8_t ubx_buffer_[UBX_BUFFER_LENGTH];
 int8_t ubx_buffer_char_count_ = 0;
+
+int16_t getMostRecentCondensedRmcPacket(char* dest, uint8_t max_len) {
+	uint16_t length;
+	if (most_recent_gprmc_message_length_ >= max_len) {
+		length = max_len;
+	} else {
+		length = most_recent_gprmc_message_length_;
+	}
+	memcpy((void*)dest, most_recent_gprmc_message_condensed_, length);
+	return length;
+}
 
 void printRxBuffer(void) {
 	for(int i = 0; i < GPS_SERIAL_BUFFER_LENGTH; i++) {
@@ -43,12 +58,19 @@ void StartGpsTask(void) {
     appPostGpsTask();
 }
 
+void printBuffer(uint8_t* buffer, int8_t length) {
+	for (int i=0; i<length; i++) {
+		printf("%c", buffer[i]);
+	}
+	printf("\r\n");
+}
+
 void runGpsTask(void) {
     uint16_t rx_data;
 	char rx_char;
     if(gpsUartHasData()) {
-		printf("Gps Has Data: ");
-		printRxBuffer();
+		//printf("Gps Has Data: ");
+		//printRxBuffer();
         gps_uart_copy_data(serial_buffer_, GPS_SERIAL_BUFFER_LENGTH);
 		gps_uart_request_rx();
 
@@ -80,15 +102,6 @@ void runGpsTask(void) {
     appPostGpsTask();
 }
 
-static void readNmeaMessageType(char* buffer, int8_t length) {
-    if (length >= 6 && strncmp((char*)buffer + 1, "GPRMC", 5) == 0) {
-        printf("Received GPRMC messge\r\n");
-
-    } else if (length >= 5 && strncmp((char*)buffer + 1, "PUBX", 4 == 0)) {
-        printf("Received PUBX message\r\n");
-
-    }
-}
 
 static uint8_t nmeaRollingXorChecksum(uint8_t* buffer, int8_t length) {
     uint8_t result = 0;
@@ -98,9 +111,123 @@ static uint8_t nmeaRollingXorChecksum(uint8_t* buffer, int8_t length) {
     return result;
 }
 
+static bool skipField(uint8_t **source, int8_t *sourceSize) {
+	if (source == NULL || *source == NULL || sourceSize == NULL)
+		return -1;
+		
+	while (*sourceSize >= 1) {
+		uint8_t currChar = (uint8_t)(*source)[0];
+	//	printf("Curr char: %c\r\n",currChar);
+		if (currChar == (uint8_t)',' || currChar == (uint8_t)'*') {
+			--(*sourceSize);
+			++(*source);
+	//		printf(" -- Return 0. source[0] is now %c\r\n",**source);
+			return 0;
+		} else {
+			//printf("%c (%d) is not %d\r\n",(char)currChar,currChar,(uint8_t)",");
+			--(*sourceSize);
+			++(*source);	
+		}
+	}
+	return -1;
+}
+
+static bool copyField(uint8_t **dest, uint8_t **source, int8_t *destCapacity, int8_t *sourceSize) {
+	if (dest == NULL || *dest == NULL || source == NULL || *source == NULL || destCapacity == NULL || sourceSize == NULL)
+		return -1;
+
+	int i = 0;
+	while (i < *sourceSize && i < *destCapacity) {
+		if ((*source)[i] == ',' || (*source)[i] == '*') {
+			memcpy((void*)*dest, *source, i + 1);
+			*sourceSize = *sourceSize - i - 1;
+			*destCapacity = *destCapacity - i - 1;
+			(*dest) = (*dest) + i + 1;
+			(*source) = (*source) + i + 1;
+			return 0;
+		} else {
+			++i;
+		}
+	}
+	return -1;
+}
+
 /* Buffer starts after $ */
-static void HandleNmeaPacketGPRMC(uint8_t* buffer, int8_t length) {
-    
+static void HandleNmeaPacketGPRMC(const uint8_t* buffer, int8_t length) {
+	uint8_t *dest = most_recent_gprmc_message_condensed_;
+	int8_t dest_capacity_left = CONDENSED_GPRMC_MSG_BUFFER_LENGTH;
+	uint8_t * source = buffer;
+	int8_t sourceSize = length;
+	
+	has_valid_gprmc_message = false;
+	most_recent_gprmc_message_length_ = 0;
+	memset((void*)most_recent_gprmc_message_condensed_, 0, sizeof(most_recent_gprmc_message_condensed_));
+	
+	/* Copy the fields we care about */
+	// Field 0: GPRMC
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 1: time UTC
+	if(copyField(&dest, &source, &dest_capacity_left, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 2: status
+	if(copyField(&dest, &source, &dest_capacity_left, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 3: latitude
+	if(copyField(&dest, &source, &dest_capacity_left, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 4: North/South Indicator
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 5: Longitude
+	if(copyField(&dest, &source, &dest_capacity_left, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 6: East/West indicator
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 7: Speed over ground
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 8: Course over Ground
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 9: Date
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 10: Magnetic Variation
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+	// Field 11: Magnetic Variation East/West indicator
+	if(skipField(&source, &sourceSize)) {
+		has_valid_gprmc_message = false;
+		return -1;
+	}
+
+	has_valid_gprmc_message = true;
+	most_recent_gprmc_message_length_ = CONDENSED_GPRMC_MSG_BUFFER_LENGTH - dest_capacity_left - 1;  // Minus extra 1 to remove trailing comma
+	return 0;
 }
 
 static int16_t ascii_pair_to_hex(uint8_t char1, uint8_t char0) {
@@ -144,26 +271,25 @@ static bool verify_nmea_checksum_passes(uint8_t* buffer, int8_t length) {
 
 
 static void HandleCompleteNmeaPacket(void) {
-    printf("Complete NMEA packet: ");
-    for(int i = 0; i<nmea_buffer_char_count_; i++){
-        printf("%c ", nmea_buffer_[i]);
-    }
-    printf("\r\n");
-
-
+//    printf("Complete NMEA packet: ");
+//    for(int i = 0; i<nmea_buffer_char_count_; i++){
+//        printf("%c", nmea_buffer_[i]);
+//    }
+//	printf("\r\n");
     if(!verify_nmea_checksum_passes(nmea_buffer_ + 1, nmea_buffer_char_count_ - 1)){
-        printf("NMEA Checksum Failed.\r\n");
+        //printf("\t -- Checksum Failed.\r\n");
         return;
-    }
+    } else {
+		//printf("\t-- Checksum Passed.\r\n");
+	}
 
-    if (nmea_buffer_char_count_ >= 6 && strncmp((char*)nmea_buffer_ + 1, "GPRMC", 5) == 0) {
-        printf("Received GPRMC messge\r\n");
+    if (nmea_buffer_char_count_ >= 6 && (strncmp((char*)nmea_buffer_ + 1, "GPRMC", 5) == 0 || strncmp((char*)nmea_buffer_ + 1, "GNRMC", 5) == 0) ) {
         HandleNmeaPacketGPRMC(nmea_buffer_ + 1, nmea_buffer_char_count_ - 1);
 
     } else if (nmea_buffer_char_count_ >= 5 && strncmp((char*)nmea_buffer_ + 1, "PUBX", 4 == 0)) {
-        printf("Received PUBX message\r\n");
+        //printf("\tMessage Type: PUBX \r\n");
     } else {
-        printf("Invalid NMEA message type");
+        //printf("\tMessage Type: Invalid \r\n");
     }
 
     nmea_buffer_char_count_ = 0;
@@ -183,7 +309,7 @@ static void gpsRxCharStateReady(const char rx_char) {
             gpsTaskState = GPS_TASK_STATE_UBX_RX_IN_PROGRESS;
             break;
         default:
-            printf("Received non-start gps char in state ready: %c\r\n", rx_char);
+           // printf("Received non-start gps char in state ready: %c\r\n", rx_char);
             break;
     }
 }
@@ -205,7 +331,7 @@ static uint8_t ValidNmeaCharacter(uint8_t c) {
 static void gpsRxCharStateNmeaRxInProgress(const char rx_char) {
     /* Make sure char is valid */
     if (!ValidNmeaCharacter(rx_char)) {
-        printf("Received invalid NMEA character: %c\r\n", rx_char);
+        //printf("Received invalid NMEA character: %c\r\n", rx_char);
         gpsTaskState = GPS_TASK_STATE_READY;
         nmea_buffer_char_count_ = 0;
         return;
