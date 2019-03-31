@@ -29,6 +29,10 @@ volatile int8_t nmea_buffer_char_count_ = 0;
 uint8_t ubx_buffer_[UBX_BUFFER_LENGTH];
 int8_t ubx_buffer_char_count_ = 0;
 
+bool gps_has_fix(void) {
+	return has_valid_gprmc_message;
+}
+
 int16_t getMostRecentCondensedRmcPacket(char* dest, uint8_t max_len) {
 	uint16_t length;
 	if (most_recent_gprmc_message_length_ >= max_len) {

@@ -46,7 +46,7 @@
 
 typedef enum _AppTaskIds_t
 {
-	DISPLAY_TASK_HANDLER,
+	HEARTBEAT_TASK_HANDLER,
 	PROCESS_TASK_HANDLER,
 	GPS_TASK_HANDLER,
 	APP_TASKS_COUNT
@@ -54,17 +54,17 @@ typedef enum _AppTaskIds_t
 
 typedef enum _AppTaskState_t
 {
-	RESTORE_BAND_STATE,
-	DEMO_CERT_APP_STATE,
-	DEMO_APP_STATE,
-	JOIN_SEND_STATE
+	APP_STATE_GO_TO_SLEEP,
+	APP_STATE_LISTEN_GPS_OFF,
+	APP_STATE_LISTEN_GPS_ON,
+	APP_STATE_TRANSMIT_GPS_ON,
+	APP_STATE_UNKNOWN
 }AppTaskState_t;
 
 
 /*********************************************************************//**
  \brief      Function to Initialize the Demo application
 *************************************************************************/
-void mote_demo_init(void);
 
 /*********************************************************************//*
  \brief      Set join parameters function
@@ -99,7 +99,6 @@ void set_multicast_params (void);
  \brief      Callback function for the ending of Bidirectional communication of
        Application data
  *************************************************************************/
-void demo_appdata_callback(void *appHandle, appCbParams_t *data);
 
 /*********************************************************************//*
  \brief      Callback function for the ending of Activation procedure

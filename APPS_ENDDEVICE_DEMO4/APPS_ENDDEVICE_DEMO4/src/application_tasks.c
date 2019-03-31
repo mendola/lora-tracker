@@ -94,8 +94,6 @@ volatile static uint8_t count = 5;
 
 static uint8_t rxchar[11];
 static bool startReceiving = false;
-extern uint8_t demoTimerId;
-extern uint8_t lTimerId;
 static AppTaskState_t appTaskState;
 
 static const char* bandStrings[] =
@@ -178,12 +176,10 @@ extern bool factory_reset;
 extern bool bandSelected;
 extern uint32_t longPress;
 
-static void sendData(void);
 static void appPostTask(AppTaskIds_t id);
 static SYSTEM_TaskStatus_t (*appTaskHandlers[])(void);
 static void demoTimerCb(void * cnt);
 static void lTimerCb(void * data);
-static SYSTEM_TaskStatus_t displayTask(void);
 static SYSTEM_TaskStatus_t processTask(void);
 static SYSTEM_TaskStatus_t gpsTask(void);
 static SYSTEM_TaskStatus_t heartbeatTask(void);
@@ -191,7 +187,6 @@ static SYSTEM_TaskStatus_t heartbeatTask(void);
 static void processRunDemoCertApp(void);
 static void processRunRestoreBand(void);
 static void processJoinAndSend(void);
-static void processRunDemoApp(void);
 static void displayRunDemoCertApp(void);
 static void displayRunRestoreBand(void);
 static void displayJoinAndSend(void);
@@ -235,8 +230,15 @@ static SYSTEM_TaskStatus_t gpsTask(void) {
 
 /* TODO This is trash and needs refactoring (circular deps)*/
 void StartHeartbeatTask(void) {
-	appPostTask(DISPLAY_TASK_HANDLER);
+	appPostTask(HEARTBEAT_TASK_HANDLER);
 }
+
+void StartApplicationTask(void) {
+    appTaskState = LISTEN_GPS_OFF;
+    appPostTask(PROCESS_TASK_HANDLER);
+    StartHeartbeatTask();
+}
+
 
 static SYSTEM_TaskStatus_t heartbeatTask(void) {
 	static uint8_t ledstate = 0;
@@ -255,32 +257,9 @@ static SYSTEM_TaskStatus_t heartbeatTask(void) {
 		set_LED_data(LED_GREEN,&ledstate);
 		//printf("Heartbeat: %d", ledstate);
 	}
-	appPostTask(DISPLAY_TASK_HANDLER);
+	appPostTask(HEARTBEAT_TASK_HANDLER);
 }
 
-static SYSTEM_TaskStatus_t displayTask(void)
-{
-	switch(appTaskState)
-	{
-		case RESTORE_BAND_STATE:
-			displayRunRestoreBand();
-			break;
-		case DEMO_CERT_APP_STATE:
-			displayRunDemoCertApp();
-			break;
-		case DEMO_APP_STATE:
-			displayRunDemoApp();
-			break;
-		case JOIN_SEND_STATE:
-			displayJoinAndSend();
-			break;
-		default:
-			printf("Error STATE Entered\r\n");
-			break;
-	}
-	
-	return SYSTEM_TASK_SUCCESS;
-}
 
 /*********************************************************************//**
 \brief    Pulls the data from UART when activated
@@ -310,223 +289,72 @@ void gps_serial_data_handler(void) {
 	
 }
 
+static AppTaskState_t go_to_sleep(void) {
+
+}
+
+static AppTaskState_t listen_gps_off(void) {
+    ...
+    command_type = cmd_type(payload);
+
+    switch (command_type) {
+        case CMD_GO_TO_SLEEP: // GPS off, MCU awake in 
+            update_sleep_duration(payload);
+            appTaskState = GO_TO_SLEEP;
+            break;
+        case CMD_LOCALIZE:
+            update_ping_rate(payload);
+            turn_on_gps(payload); // Belongs in state machine?
+            appTaskState = TRANSMIT_GPS_ON;
+            break;
+        default:
+            appTaskState = appTaskState; // Don't change gps state
+            break;
+    }
+}
+
 /*********************************************************************//**
 \brief    Calls appropriate functions based on state variables
 *************************************************************************/
 static SYSTEM_TaskStatus_t processTask(void)
 {
+    AppTaskState_t next_state = APP_STATE_UNKNOWN;
 	switch(appTaskState)
 	{
-		case RESTORE_BAND_STATE:
-			processRunRestoreBand();
-			break;
-		case DEMO_CERT_APP_STATE:
-			processRunDemoCertApp();
-			break;
-		case DEMO_APP_STATE:
-			processRunDemoApp();
-			break;
-		case JOIN_SEND_STATE:
-			processJoinAndSend();
-			break;
+        case APP_STATE_GO_TO_SLEEP:
+            sleep();
+            break;
+        case APP_STATE_LISTEN_GPS_OFF:
+            next_state = lora_listen_for_cmd();
+            if (next_state == APP_STATE_UNKNOWN) {
+                next_state = APP_STATE_GO_TO_SLEEP;
+            }
+            break;
+        case APP_STATE_LISTEN_GPS_ON:
+            next_state = lora_listen_for_cmd();
+            if (next_state == APP_STATE_UNKNOWN) {
+                next_state = APP_STATE_TRANSMIT_GPS_ON; // If listen timed out, it's time to transmit
+            }
+            break;
+        case APP_STATE_TRANSMIT_GPS_ON:
+            if (gps_has_fix()){
+                lora_send_location();
+            }
+            next_state = APP_STATE_LISTEN_GPS_ON;
+            break;
 		default:
 			printf("Error STATE Entered\r\n");
 			break;
 	}
-	
+    appTaskState = next_state;
+    appPostTask(PROCESS_TASK_HANDLER);
 	return SYSTEM_TASK_SUCCESS;
 }
 
-/*********************************************************************//**
-\brief    Activates demo application or certification application
-*************************************************************************/
-static void processRunDemoCertApp(void)
-{
-	if(serialBuffer == '1')
-	{
-		appTaskState = DEMO_APP_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-	#if (CERT_APP == 1)
-	else if(serialBuffer == '2')
-	{
-		runCertApp();
-	}
-	#endif
-	else
-	{
-		printf("Please enter a valid choice\r\n");
-		appTaskState = DEMO_CERT_APP_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-}
-
-/*********************************************************************//**
-\brief    Restores the previous band and runs
-*************************************************************************/
-static void processRunRestoreBand(void)
-{
-	StackRetStatus_t status = LORAWAN_SUCCESS;
-	uint8_t prevBand = 0xff;
-	uint8_t choice = 0xff;
-	
-	PDS_RestoreAll();
-	LORAWAN_GetAttr(ISMBAND,NULL,&prevBand);
-	for (uint32_t i = 0; i < sizeof(bandTable)-1; i++)
-	{
-		if(bandTable[i] == prevBand)
-		{
-			choice = i;
-			break;
-		}
-	}
-	if(choice >0 && choice < sizeof(bandTable)-1)
-	{
-		status = LORAWAN_Reset(bandTable[choice]);
-	}
-	if(status == LORAWAN_SUCCESS && choice < sizeof(bandTable)-1)
-	{
-		uint32_t joinStatus = 0;
-		PDS_RestoreAll();
-		LORAWAN_GetAttr(LORAWAN_STATUS,NULL, &joinStatus);
-		printf("\r\nPDS_RestorationStatus: Success\r\n" );
-		if(joinStatus & LORAWAN_NW_JOINED)
-		{
-			joined = true;
-			printf("joinStatus: Joined\r\n");
-		}
-		else
-		{
-			joined = false;
-			printf("JoinStatus : Denied\r\n");
-			set_LED_data(LED_AMBER,&on);
-			SYSTEM_PostTask(APP_TASK_ID);
-		}
-		printf("Band: %s\r\n",bandStrings[choice]);
-
-		print_application_config();
-		appTaskState = JOIN_SEND_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-	else
-	{
-		printf("Restoration failed\r\n");
-		appTaskState = DEMO_APP_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-}
-
-/*********************************************************************//**
-\brief    Sends Join request or Data to the network
-*************************************************************************/
-static void processJoinAndSend(void)
-{
-	StackRetStatus_t status = LORAWAN_SUCCESS;
-	if(serialBuffer == '1')
-	{
-		status = LORAWAN_Join(DEMO_APP_ACTIVATION_TYPE);
-		if (LORAWAN_SUCCESS == (StackRetStatus_t)status)
-		{
-			set_LED_data(LED_GREEN,&on);
-			printf("\nJoin Request Sent\n\r");
-
-		}
-		else
-		{
-			set_LED_data(LED_AMBER,&on);
-			print_stack_status(status);
-			appTaskState = JOIN_SEND_STATE;
-			appPostTask(DISPLAY_TASK_HANDLER);
-		}
-	}
-	else if(serialBuffer == '2' && joined == true)
-	{
-		sendData();
-	}
-	else if(serialBuffer == '2' && !joined)
-	{
-		set_LED_data(LED_AMBER,&on);
-		printf("Device not joined to the network\r\n");
-		appTaskState = JOIN_SEND_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-#ifdef CONF_PMM_ENABLE
-	else if(serialBuffer == '3')
-	{
-		static bool deviceResetsForWakeup = false;
-		PMM_SleepReq_t sleepReq;
-		/* Put the application to sleep */
-		sleepReq.sleepTimeMs = DEMO_CONF_DEFAULT_APP_SLEEP_TIME_MS;
-		sleepReq.pmmWakeupCallback = appWakeup;
-		sleepReq.sleep_mode = CONF_PMM_SLEEPMODE_WHEN_IDLE;
-		if (CONF_PMM_SLEEPMODE_WHEN_IDLE == SLEEP_MODE_STANDBY)
-		{
-			deviceResetsForWakeup = false;
-		}
-		if (true == LORAWAN_ReadyToSleep(deviceResetsForWakeup))
-		{
-			app_resources_uninit();
-			if (PMM_SLEEP_REQ_DENIED == PMM_Sleep(&sleepReq))
-			{
-				HAL_Radio_resources_init();
-				uart_init();
-				appTaskState = JOIN_SEND_STATE;
-				appPostTask(DISPLAY_TASK_HANDLER);
-				printf("\r\nsleep_not_ok\r\n");	
-			}
-		}
-		else
-		{
-			printf("\r\nsleep_not_ok\r\n");
-			appTaskState = JOIN_SEND_STATE;
-			appPostTask(DISPLAY_TASK_HANDLER);
-		}
-	}
-	else if(serialBuffer == '4')
-#else
-	else if(serialBuffer == '3')
-#endif
-	{
-		appTaskState = DEMO_APP_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-	else
-	{
-		set_LED_data(LED_AMBER,&on);
-		printf("Invalid choice entered\r\n");
-		appTaskState = JOIN_SEND_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-}
-
-/*********************************************************************//**
-\brief    Runs the Demo application
-*************************************************************************/
-static void processRunDemoApp(void)
-{
-	uint8_t num = serialBuffer - '0';
-	if(num == sizeof(bandTable)-1)
-	{
-		NVIC_SystemReset();
-	}
-	else if(num == sizeof(bandTable)-2)
-	{
-		PDS_DeleteAll();
-		appTaskState = DEMO_APP_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
-	else if(num >0 && num < sizeof(bandTable) -2)
-	{
-		LORAWAN_Reset(bandTable[num]);
-		mote_set_parameters(bandTable[num],num);
-		set_LED_data(LED_GREEN,&on);
-	}
-	else
-	{
-		printf("Not a valid regional band choice\r\n");
-		appTaskState = DEMO_APP_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-	}
+void lora_send_locationtransmit_location(void) {
+    if (gps_has_fix()) {
+        lora_send_location();
+    }
 }
 
 /*********************************************************************//**
@@ -600,364 +428,12 @@ static void displayRunDemoApp(void)
 /*********************************************************************//**
 \brief    Initialization the Demo application
 *************************************************************************/
-void mote_demo_init(void)
-{
-    bool status = false;
-    /* Initialize the resources */
-    resource_init();
-	/* Read DEV EUI from EDBG */
-	dev_eui_read();
-	startReceiving = false;
-    /* Initialize the LORAWAN Stack */
-    LORAWAN_Init(demo_appdata_callback, demo_joindata_callback);
-    printf("\n\n\r*******************************************************\n\r");
-    printf("\n\rMicrochip LoRaWAN Stack %s\r\n",STACK_VER);
-    printf("\r\nInit - Successful\r\n");
-
-    status = PDS_IsRestorable();
-    if(status)
-    {
-        static uint8_t prevBand = 0xFF;
-        uint8_t prevChoice = 0xFF;
-        PDS_RestoreAll();
-        LORAWAN_GetAttr(ISMBAND,NULL,&prevBand);
-        for (uint32_t i = 0; i < sizeof(bandTable) -1; i++)
-        {
-            if(bandTable[i] == prevBand)
-            {
-                prevChoice = i;
-                break;
-            }
-        }
-        memset(rxchar,0,sizeof(rxchar));
-        usb_uart_rx(rxchar,10);
-        printf ("Last configured Regional band %s\r\n",bandStrings[prevChoice]);
-        printf("Press any key to change band\r\n Continuing in %s in ", bandStrings[prevChoice]);
-
-        SwTimerStart(demoTimerId,MS_TO_US(1000),SW_TIMEOUT_RELATIVE,(void *)demoTimerCb,NULL);
-    }
-    else
-    {
-		appTaskState = DEMO_CERT_APP_STATE;
-        appPostTask(DISPLAY_TASK_HANDLER);
-    }
-}
-
-/*********************************************************************//*
- \brief      Function that processes the Rx data
- \param[in]  data - Rx data payload
- \param[in]  dataLen - The number of Rx bytes
- ************************************************************************/
-static void demo_handle_evt_rx_data(void *appHandle, appCbParams_t *appdata)
-{
-    uint8_t *pData = appdata->param.rxData.pData;
-    uint8_t dataLength = appdata->param.rxData.dataLength;
-    uint32_t devAddress = appdata->param.rxData.devAddr;
-
-    //Successful transmission
-    if((dataLength > 0U) && (NULL != pData))
-    {
-        printf("*** Received DL Data ***\n\r");
-        printf("\nFrame Received at port %d\n\r",pData[0]);
-        printf("\nFrame Length - %d\n\r",dataLength);
-        printf("\nAddress - 0x%lx\n\r", devAddress);
-        printf ("\nPayload: ");
-        for (uint8_t i =0; i<dataLength - 1; i++)
-        {
-            printf("%x",pData[i+1]);
-        }
-        printf("\r\n*************************\r\n");
-    }
-    else
-    {
-        printf("Received ACK for Confirmed data\r\n");
-    }
-}
-
-/*********************************************************************//**
-\brief Callback function for the ending of Bidirectional communication of
-       Application data
- *************************************************************************/
-void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
-{
-    StackRetStatus_t status = LORAWAN_INVALID_REQUEST;
-
-    if (LORAWAN_EVT_RX_DATA_AVAILABLE == appdata->evt)
-    {
-        status = appdata->param.rxData.status;
-        switch(status)
-        {
-            case LORAWAN_SUCCESS:
-            {
-                demo_handle_evt_rx_data(appHandle, appdata);
-            }
-            break;
-            case LORAWAN_RADIO_NO_DATA:
-            {
-                printf("\n\rRADIO_NO_DATA \n\r");
-            }
-            break;
-            case LORAWAN_RADIO_DATA_SIZE:
-                printf("\n\rRADIO_DATA_SIZE \n\r");
-            break;
-            case LORAWAN_RADIO_INVALID_REQ:
-                printf("\n\rRADIO_INVALID_REQ \n\r");
-            break;
-            case LORAWAN_RADIO_BUSY:
-                printf("\n\rRADIO_BUSY \n\r");
-            break;
-            case LORAWAN_RADIO_OUT_OF_RANGE:
-                printf("\n\rRADIO_OUT_OF_RANGE \n\r");
-            break;
-            case LORAWAN_RADIO_UNSUPPORTED_ATTR:
-                printf("\n\rRADIO_UNSUPPORTED_ATTR \n\r");
-            break;
-            case LORAWAN_RADIO_CHANNEL_BUSY:
-                printf("\n\rRADIO_CHANNEL_BUSY \n\r");
-            break;
-            case LORAWAN_NWK_NOT_JOINED:
-                printf("\n\rNWK_NOT_JOINED \n\r");
-            break;
-            case LORAWAN_INVALID_PARAMETER:
-                printf("\n\rINVALID_PARAMETER \n\r");
-            break;
-            case LORAWAN_KEYS_NOT_INITIALIZED:
-                printf("\n\rKEYS_NOT_INITIALIZED \n\r");
-            break;
-            case LORAWAN_SILENT_IMMEDIATELY_ACTIVE:
-                printf("\n\rSILENT_IMMEDIATELY_ACTIVE\n\r");
-            break;
-            case LORAWAN_FCNTR_ERROR_REJOIN_NEEDED:
-                printf("\n\rFCNTR_ERROR_REJOIN_NEEDED \n\r");
-            break;
-            case LORAWAN_INVALID_BUFFER_LENGTH:
-                printf("\n\rINVALID_BUFFER_LENGTH \n\r");
-            break;
-            case LORAWAN_MAC_PAUSED :
-                printf("\n\rMAC_PAUSED  \n\r");
-            break;
-            case LORAWAN_NO_CHANNELS_FOUND:
-                printf("\n\rNO_CHANNELS_FOUND \n\r");
-            break;
-            case LORAWAN_BUSY:
-                printf("\n\rBUSY\n\r");
-            break;
-            case LORAWAN_NO_ACK:
-                printf("\n\rNO_ACK \n\r");
-            break;
-            case LORAWAN_NWK_JOIN_IN_PROGRESS:
-                printf("\n\rALREADY JOINING IS IN PROGRESS \n\r");
-            break;
-            case LORAWAN_RESOURCE_UNAVAILABLE:
-                printf("\n\rRESOURCE_UNAVAILABLE \n\r");
-            break;
-            case LORAWAN_INVALID_REQUEST:
-                printf("\n\rINVALID_REQUEST \n\r");
-            break;
-            case LORAWAN_FCNTR_ERROR:
-                printf("\n\rFCNTR_ERROR \n\r");
-            break;
-            case LORAWAN_MIC_ERROR:
-                printf("\n\rMIC_ERROR \n\r");
-            break;
-            case LORAWAN_INVALID_MTYPE:
-                printf("\n\rINVALID_MTYPE \n\r");
-            break;
-            case LORAWAN_MCAST_HDR_INVALID:
-                printf("\n\rMCAST_HDR_INVALID \n\r");
-            break;
-            default:
-                printf("UNKNOWN ERROR\n\r");
-            break;
-        }
-    }
-    else if(LORAWAN_EVT_TRANSACTION_COMPLETE == appdata->evt)
-    {
-        switch(status = appdata->param.transCmpl.status)
-        {
-            case LORAWAN_SUCCESS:
-            {
-                printf("Transmission Success\r\n");
-            }
-            break;
-            case LORAWAN_RADIO_SUCCESS:
-            {
-                printf("Transmission Success\r\n");
-            }
-            break;
-            case LORAWAN_RADIO_NO_DATA:
-            {
-                printf("\n\rRADIO_NO_DATA \n\r");
-            }
-            break;
-            case LORAWAN_RADIO_DATA_SIZE:
-                printf("\n\rRADIO_DATA_SIZE \n\r");
-            break;
-            case LORAWAN_RADIO_INVALID_REQ:
-                printf("\n\rRADIO_INVALID_REQ \n\r");
-            break;
-            case LORAWAN_RADIO_BUSY:
-                printf("\n\rRADIO_BUSY \n\r");
-            break;
-            case LORAWAN_TX_TIMEOUT:
-                printf("\nTx Timeout\n\r");
-            break;
-            case LORAWAN_RADIO_OUT_OF_RANGE:
-                printf("\n\rRADIO_OUT_OF_RANGE \n\r");
-            break;
-            case LORAWAN_RADIO_UNSUPPORTED_ATTR:
-                printf("\n\rRADIO_UNSUPPORTED_ATTR \n\r");
-            break;
-            case LORAWAN_RADIO_CHANNEL_BUSY:
-                printf("\n\rRADIO_CHANNEL_BUSY \n\r");
-            break;
-            case LORAWAN_NWK_NOT_JOINED:
-                printf("\n\rNWK_NOT_JOINED \n\r");
-            break;
-            case LORAWAN_INVALID_PARAMETER:
-                printf("\n\rINVALID_PARAMETER \n\r");
-            break;
-            case LORAWAN_KEYS_NOT_INITIALIZED:
-                printf("\n\rKEYS_NOT_INITIALIZED \n\r");
-            break;
-            case LORAWAN_SILENT_IMMEDIATELY_ACTIVE:
-                printf("\n\rSILENT_IMMEDIATELY_ACTIVE\n\r");
-            break;
-            case LORAWAN_FCNTR_ERROR_REJOIN_NEEDED:
-                printf("\n\rFCNTR_ERROR_REJOIN_NEEDED \n\r");
-            break;
-            case LORAWAN_INVALID_BUFFER_LENGTH:
-                printf("\n\rINVALID_BUFFER_LENGTH \n\r");
-            break;
-            case LORAWAN_MAC_PAUSED :
-                printf("\n\rMAC_PAUSED  \n\r");
-            break;
-            case LORAWAN_NO_CHANNELS_FOUND:
-                printf("\n\rNO_CHANNELS_FOUND \n\r");
-            break;
-            case LORAWAN_BUSY:
-                printf("\n\rBUSY\n\r");
-            break;
-            case LORAWAN_NO_ACK:
-                printf("\n\rNO_ACK \n\r");
-            break;
-            case LORAWAN_NWK_JOIN_IN_PROGRESS:
-                printf("\n\rALREADY JOINING IS IN PROGRESS \n\r");
-            break;
-            case LORAWAN_RESOURCE_UNAVAILABLE:
-                printf("\n\rRESOURCE_UNAVAILABLE \n\r");
-            break;
-            case LORAWAN_INVALID_REQUEST:
-                printf("\n\rINVALID_REQUEST \n\r");
-            break;
-            case LORAWAN_FCNTR_ERROR:
-                printf("\n\rFCNTR_ERROR \n\r");
-            break;
-            case LORAWAN_MIC_ERROR:
-                printf("\n\rMIC_ERROR \n\r");
-            break;
-            case LORAWAN_INVALID_MTYPE:
-                printf("\n\rINVALID_MTYPE \n\r");
-            break;
-            case LORAWAN_MCAST_HDR_INVALID:
-                printf("\n\rMCAST_HDR_INVALID \n\r");
-            break;
-            default:
-                printf("\n\rUNKNOWN ERROR\n\r");
-            break;
-
-                    }
-        printf("\n\r*************************************************\n\r");
-    }
-
-    SwTimerStop(lTimerId);
-    set_LED_data(LED_GREEN,&off);
-    if(status != LORAWAN_SUCCESS)
-    {
-        set_LED_data(LED_AMBER,&on);
-    }
-	appTaskState = JOIN_SEND_STATE;
-    appPostTask(DISPLAY_TASK_HANDLER);
-}
 
 /*********************************************************************//*
 \brief Callback function for the ending of Activation procedure
  ************************************************************************/
-void demo_joindata_callback(bool status)
-{
-    /* This is called every time the join process is finished */
-    set_LED_data(LED_GREEN,&off);
-    if(true == status)
-    {
-        uint32_t devAddress;
-        bool mcastEnabled;
-
-        joined = true;
-        printf("\nJoining Successful\n\r");
-        LORAWAN_GetAttr(DEV_ADDR, NULL, &devAddress);
-        LORAWAN_GetAttr(MCAST_ENABLE, NULL, &mcastEnabled);
-
-        if (devAddress != DEMO_APP_MCAST_GROUP_ADDRESS)
-        {
-            printf("\nDevAddr: 0x%lx\n\r", devAddress);
-        }
-        else if ((devAddress == DEMO_APP_MCAST_GROUP_ADDRESS) && (true == mcastEnabled))
-        {
-            printf("\nAddress conflict between Device Address and Multicast group address\n\r");
-        }
-        print_application_config();
-        set_LED_data(LED_GREEN,&on);
-    }
-    else
-    {
-        joined = false;
-        set_LED_data(LED_AMBER,&on);
-        printf("\nJoining Denied\n\r");
-    }
-    printf("\n\r*******************************************************\n\r");
-    PDS_StoreAll();
-	
-	appTaskState = JOIN_SEND_STATE;
-    appPostTask(DISPLAY_TASK_HANDLER);
-}
-
-void lTimerCb(void *data)
-{
-    SwTimerStart(lTimerId,MS_TO_US(100),SW_TIMEOUT_RELATIVE,(void *)lTimerCb,NULL);
-    set_LED_data(LED_GREEN,&toggle);
-}
-
-/*********************************************************************//*
- \brief      Function to send data from end device to application server
-  ************************************************************************/
-void sendData(void)
-{
-    int status = -1;
-    /* Read temperature sensor value */
-    get_resource_data(TEMP_SENSOR,(uint8_t *)&cel_val);
-    fahren_val = convert_celsius_to_fahrenheit(cel_val);
-    printf("\nTemperature:");
-    snprintf(temp_sen_str,sizeof(temp_sen_str),"%.1fC/%.1fF\n", cel_val, fahren_val);
-    printf("%.1f\xf8 C/%.1f\xf8 F\n\r", cel_val, fahren_val);
-
-    data_len = strlen(temp_sen_str);
-    lorawanSendReq.buffer = &temp_sen_str;
-    lorawanSendReq.bufferLength = data_len - 1;
-    lorawanSendReq.confirmed = DEMO_APP_TRANSMISSION_TYPE;
-    lorawanSendReq.port = DEMO_APP_FPORT;
-    status = LORAWAN_Send(&lorawanSendReq);
-    if (LORAWAN_SUCCESS == status)
-    {
-        printf("\nTx Data Sent \r\n");
-        set_LED_data(LED_GREEN,&on);
-        SwTimerStart(lTimerId,MS_TO_US(100),SW_TIMEOUT_RELATIVE,(void *)lTimerCb,NULL);
-    }
-    else
-    {
-        print_stack_status(status);
-		appTaskState = JOIN_SEND_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-    }
+void demo_joindata_callback(bool status) {
+    (void) status;
 }
 
 #ifdef CONF_PMM_ENABLE
@@ -965,8 +441,9 @@ static void appWakeup(uint32_t sleptDuration)
 {
     HAL_Radio_resources_init();
     uart_init();
-	appTaskState = JOIN_SEND_STATE;
-    appPostTask(DISPLAY_TASK_HANDLER);
+	appTaskState = APP_STATE_LISTEN_GPS_OFF;
+    appPostTask(HEARTBEAT_TASK_HANDLER);
+    appPostTask(PROCESS_TASK_HANDLER);
     printf("\r\nsleep_ok %ld ms\r\n", sleptDuration);
 }
 #endif
@@ -1002,51 +479,7 @@ static void  runCertApp(void)
     cert_app_init();
 }
 #endif
-/*********************************************************************//*
- \brief      Timer callback for demo application.
-             Used during the initial 5 sec wait period.
- \param[in]  cnt - not used
- ************************************************************************/
-void demoTimerCb(void * cnt)
-{
-    uint8_t i = 10;
-    int8_t rxdata = 0;
-    printf("%d..",count);
-    count--;
-	startReceiving = false;
-    usb_uart_rx(rxchar,10);
-    for(i = 0;i<=10;i++)
-    {
-        if(rxchar[i] != 13 && rxchar[i] != 10)
-        {
-            rxdata = rxchar[i];
-            break;
-        }
-    }
-    if(!count)
-    {
-        printf("\r\n");
-    }
-    /* No input so far. start timer till expiry */
-    if(count > 0 && (!rxdata))
-    {
-        SwTimerStart(demoTimerId,MS_TO_US(1000),SW_TIMEOUT_RELATIVE,(void *)demoTimerCb,NULL);
-    }
-    /* user did not press any input */
-    else if(count == 0 && (!rxdata))
-    {
-		appTaskState = RESTORE_BAND_STATE;
-        appPostTask(DISPLAY_TASK_HANDLER);
-    }
-    /* User pressed a key */
-    else if(rxdata)
-    {
-        printf("\r\n");
-		appTaskState = DEMO_CERT_APP_STATE;
-        appPostTask(DISPLAY_TASK_HANDLER);
-    }
 
-}
 
 /*********************************************************************//*
  \brief      App Post Task
@@ -1224,90 +657,6 @@ void set_multicast_params (void)
     }
 }
 
-
-/***********************************************************************
- \brief      Function to Initialize set default parameters
- \param[in]  void
- \return     LORAWAN_SUCCESS, if successfully set all the parameters
-             LORAWAN_INVALID_PARAMETER, otherwise
- ************************************************************************/
-StackRetStatus_t mote_set_parameters(IsmBand_t ismBand, const uint16_t index)
-{
-    StackRetStatus_t status;
-
-    LORAWAN_Reset(ismBand);
-#if (NA_BAND == 1 || AU_BAND == 1)
-    if ((ismBand == ISM_NA915) || (ismBand == ISM_AU915))
-    {
-        #define MAX_NA_CHANNELS 72
-        #define MAX_SUBBAND_CHANNELS 8
-
-        ChannelParameters_t ch_params;
-
-        uint8_t allowed_min_125khz_ch,allowed_max_125khz_ch,allowed_500khz_channel;
-
-        allowed_min_125khz_ch = (SUBBAND-1)*MAX_SUBBAND_CHANNELS;
-
-        allowed_max_125khz_ch = ((SUBBAND-1)*MAX_SUBBAND_CHANNELS) + 7 ;
-
-        allowed_500khz_channel = SUBBAND+63;
-
-        for (ch_params.channelId = 0; ch_params.channelId < MAX_NA_CHANNELS; ch_params.channelId++)
-        {
-            if((ch_params.channelId >= allowed_min_125khz_ch) && (ch_params.channelId <= allowed_max_125khz_ch))
-            {
-                ch_params.channelAttr.status = true;
-            }
-            else if(ch_params.channelId == allowed_500khz_channel)
-            {
-                ch_params.channelAttr.status = true;
-            }
-            else
-            {
-                ch_params.channelAttr.status = false;
-            }
-
-            LORAWAN_SetAttr(CH_PARAM_STATUS, &ch_params);
-        }
-    }
-#endif
-
-
-    /* Initialize the join parameters for Demo application */
-    status = set_join_parameters(DEMO_APP_ACTIVATION_TYPE);
-
-    if (LORAWAN_SUCCESS != status)
-    {
-        printf("\nJoin parameters initialization failed\n\r");
-        return status;
-    }
-
-    /* Set the device type */
-    status = set_device_type(DEMO_APP_ENDDEVICE_CLASS);
-
-    if (LORAWAN_SUCCESS != status)
-    {
-        printf("\nUnsupported Device Type\n\r");
-        return status;
-    }
-
-
-    /* Send Join request for Demo application */
-    status = LORAWAN_Join(DEMO_APP_ACTIVATION_TYPE);
-
-    if (LORAWAN_SUCCESS == status && index < sizeof(bandTable))
-    {
-        printf("\nJoin Request Sent for %s\n\r",bandStrings[index]);
-    }
-    else
-    {
-        print_stack_status(status);
-		appTaskState = JOIN_SEND_STATE;
-		appPostTask(DISPLAY_TASK_HANDLER);
-    }
-
-    return status;
-}
 
 /*********************************************************************//*
  \brief      Function to Print array of characters
