@@ -1,7 +1,6 @@
 #include "lora.h"
 #include "application_tasks.h"
 #include "gps.h"
-#include "app_sleep.h"
 
 #define MAX_LORA_PAYLOAD_LENGTH 50
 #define COMMAND_PACKET_LENGTH 5
@@ -18,7 +17,7 @@ char g_payload[MAX_LORA_PAYLOAD_LENGTH] = {0};
 char rx_data[MAX_LORA_PAYLOAD_LENGTH] = {0};
 uint8_t rx_dataLength = 0;
 
-uint16_t application_listen_timeout_ = 10;  // in seconds
+uint16_t application_listen_timeout_ = 5;  // in seconds
 bool receiver_listening_ = false;
 bool actual_message_received_ = false;
 
@@ -92,18 +91,6 @@ void lora_init(void) {
 	PrintRadioSettings();
 }
 
-AppTaskState_t handle_go_to_sleep_command(void) {
-   uint16_t sleep_duration = (rx_data[3] << 8) | rx_data[4];
-    set_sleep_time_ms(sleep_duration);
-    return APP_STATE_GO_TO_SLEEP;
-}
-
-AppTaskState_t handle_localize_command(void) {
-    uint16_t ping_period = (rx_data[3] << 8) | rx_data[4];
-    //set_ping_period(ping_period);
-    //StartGpsTask();
-    return APP_STATE_TRANSMIT_GPS_ON;
-}
 
 AppTaskState_t handle_received_packet(void) {
 	actual_message_received_ = false;

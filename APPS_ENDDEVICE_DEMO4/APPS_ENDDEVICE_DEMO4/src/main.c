@@ -156,7 +156,7 @@ int main(void)
 	
     while (1)
     {
-        usb_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer
+        //usb_serial_data_handler();  // Interrupt-based usart drivers may have left stuff in buffer
 		//gps_serial_data_handler();
 		SYSTEM_RunTasks();
 		//printf("Main looped");

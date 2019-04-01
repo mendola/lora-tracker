@@ -80,7 +80,7 @@ static uint8_t gps_serial_rx_count;
 /* === IMPLEMENTATION ====================================================== */
 void uart_init(void) {
 	uart_usb_init();
-	uart_gps_init();
+	//uart_gps_init();
 }
 
 void uart_usb_init(void) {

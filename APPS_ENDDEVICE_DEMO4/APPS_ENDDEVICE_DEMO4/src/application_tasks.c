@@ -74,7 +74,6 @@
 #endif
 #include "atomic.h"
 #include <stdint.h>
-#include "app_sleep.h"
 #include "lora.h"
 #include "gps.h"
 /******************************** MACROS ***************************************/
@@ -238,7 +237,7 @@ void StartHeartbeatTask(void) {
 }
 
 void StartApplicationTask(void) {
-    appTaskState = APP_STATE_LISTEN_GPS_OFF;
+    appTaskState = APP_STATE_AWAITING_UART_CMD;
     appPostTask(PROCESS_TASK_HANDLER);
     StartHeartbeatTask();
 }
@@ -282,7 +281,7 @@ void usb_serial_data_handler(void)
 			{
 				startReceiving = false;
   			    serialBuffer = rxChar;
-			    appPostTask(PROCESS_TASK_HANDLER);
+			    //appPostTask(PROCESS_TASK_HANDLER);
 				printf("\r\n");			
 			}
 		}
@@ -308,9 +307,21 @@ static AppTaskState_t check_for_uart_input(void) {
         case 'S':
             next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
             break;
+		default:
+			next_state = APP_STATE_AWAITING_UART_CMD;
+			break;
     }
 
     return next_state;
+}
+
+static void print_options(void) {
+	printf("\r\n******** READY FOR COMMAND ********\r\n");
+	printf("> l or L\r\n");
+	printf("\t -- Put the node into localization mode and then listen for position\r\n");
+	printf("> s or S\r\n");
+	printf("\t -- Put the node into sleep mode\r\n");
+	printf("\r\n***********************************\r\n");
 }
 
 /*********************************************************************//**
@@ -322,6 +333,11 @@ static SYSTEM_TaskStatus_t processTask(void)
 	switch(appTaskState)
 	{
         case APP_STATE_AWAITING_UART_CMD:
+			if (!startReceiving) {
+				print_options();
+				startReceiving = true;
+			}
+			usb_serial_data_handler();
             next_state = check_for_uart_input();
             if (next_state == APP_STATE_UNKNOWN) {
                 next_state = APP_STATE_AWAITING_UART_CMD;
@@ -439,7 +455,7 @@ void appWakeup(uint32_t sleptDuration)
 {
     HAL_Radio_resources_init();
     uart_init();
-	appTaskState = APP_STATE_LISTEN_GPS_OFF;
+	appTaskState = APP_STATE_AWAITING_UART_CMD;
     appPostTask(HEARTBEAT_TASK_HANDLER);
     appPostTask(PROCESS_TASK_HANDLER);
     printf("\r\nsleep_ok %ld ms\r\n", sleptDuration);
@@ -495,10 +511,6 @@ void appPostTask(AppTaskIds_t id)
     SYSTEM_PostTask(APP_TASK_ID);
 }
 
-/* TODO This is trash and needs refactoring (circular deps)*/
-void appPostGpsTask(void) {
-    appPostTask(GPS_TASK_HANDLER);
-}
 
 /*********************************************************************//*
  \brief      Application Task Handler
