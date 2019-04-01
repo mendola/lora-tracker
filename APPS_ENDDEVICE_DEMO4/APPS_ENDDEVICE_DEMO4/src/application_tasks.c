@@ -74,6 +74,9 @@
 #endif
 #include "atomic.h"
 #include <stdint.h>
+#include "app_sleep.h"
+#include "lora.h"
+#include "gps.h"
 /******************************** MACROS ***************************************/
 
 /************************** GLOBAL VARIABLES ***********************************/
@@ -176,7 +179,7 @@ extern bool factory_reset;
 extern bool bandSelected;
 extern uint32_t longPress;
 
-static void appPostTask(AppTaskIds_t id);
+void appPostTask(AppTaskIds_t id);
 static SYSTEM_TaskStatus_t (*appTaskHandlers[])(void);
 static void demoTimerCb(void * cnt);
 static void lTimerCb(void * data);
@@ -191,18 +194,20 @@ static void displayRunDemoCertApp(void);
 static void displayRunRestoreBand(void);
 static void displayJoinAndSend(void);
 static void displayRunDemoApp(void);
-#if (CERT_APP == 1)
-static void runCertApp(void);
-#endif
-#ifdef CONF_PMM_ENABLE
-static void appWakeup(uint32_t sleptDuration);
-static void app_resources_uninit(void);
-#endif
+
+
+void appWakeup(uint32_t sleptDuration);
+void app_resources_uninit(void);
+
 static void dev_eui_read(void);
 /************************** FUNCTION PROTOTYPES ********************************/
 SYSTEM_TaskStatus_t APP_TaskHandler(void);
 static float convert_celsius_to_fahrenheit(float cel_val);
 extern void runGpsTask(void);
+
+void set_app_state(AppTaskState_t state) {
+	appTaskState = state;
+}
 
 /*********************************************************************//*
  \brief      Function that processes the Rx data
@@ -234,7 +239,7 @@ void StartHeartbeatTask(void) {
 }
 
 void StartApplicationTask(void) {
-    appTaskState = LISTEN_GPS_OFF;
+    appTaskState = APP_STATE_LISTEN_GPS_OFF;
     appPostTask(PROCESS_TASK_HANDLER);
     StartHeartbeatTask();
 }
@@ -257,7 +262,7 @@ static SYSTEM_TaskStatus_t heartbeatTask(void) {
 		set_LED_data(LED_GREEN,&ledstate);
 		//printf("Heartbeat: %d", ledstate);
 	}
-	appPostTask(HEARTBEAT_TASK_HANDLER);
+	//appPostTask(HEARTBEAT_TASK_HANDLER);
 }
 
 
@@ -293,25 +298,6 @@ static AppTaskState_t go_to_sleep(void) {
 
 }
 
-static AppTaskState_t listen_gps_off(void) {
-    ...
-    command_type = cmd_type(payload);
-
-    switch (command_type) {
-        case CMD_GO_TO_SLEEP: // GPS off, MCU awake in 
-            update_sleep_duration(payload);
-            appTaskState = GO_TO_SLEEP;
-            break;
-        case CMD_LOCALIZE:
-            update_ping_rate(payload);
-            turn_on_gps(payload); // Belongs in state machine?
-            appTaskState = TRANSMIT_GPS_ON;
-            break;
-        default:
-            appTaskState = appTaskState; // Don't change gps state
-            break;
-    }
-}
 
 /*********************************************************************//**
 \brief    Calls appropriate functions based on state variables
@@ -322,7 +308,7 @@ static SYSTEM_TaskStatus_t processTask(void)
 	switch(appTaskState)
 	{
         case APP_STATE_GO_TO_SLEEP:
-            sleep();
+            next_state = sleep();
             break;
         case APP_STATE_LISTEN_GPS_OFF:
             next_state = lora_listen_for_cmd();
@@ -348,13 +334,8 @@ static SYSTEM_TaskStatus_t processTask(void)
 	}
     appTaskState = next_state;
     appPostTask(PROCESS_TASK_HANDLER);
+	appPostTask(HEARTBEAT_TASK_HANDLER);
 	return SYSTEM_TASK_SUCCESS;
-}
-
-void lora_send_locationtransmit_location(void) {
-    if (gps_has_fix()) {
-        lora_send_location();
-    }
 }
 
 /*********************************************************************//**
@@ -437,7 +418,7 @@ void demo_joindata_callback(bool status) {
 }
 
 #ifdef CONF_PMM_ENABLE
-static void appWakeup(uint32_t sleptDuration)
+void appWakeup(uint32_t sleptDuration)
 {
     HAL_Radio_resources_init();
     uart_init();
@@ -448,8 +429,8 @@ static void appWakeup(uint32_t sleptDuration)
 }
 #endif
 
-#ifdef CONF_PMM_ENABLE
-static void app_resources_uninit(void)
+
+void app_resources_uninit(void)
 {
     /* Disable USART TX and RX Pins */
     struct port_config pin_conf;
@@ -463,10 +444,11 @@ static void app_resources_uninit(void)
 #endif
     /* Disable UART module */
     uart_usb_deinit();
+	uart_gps_deinit();
     /* Disable Transceiver SPI Module */
     HAL_RadioDeInit();
+	//HAL_DisbleDIO1Interrupt();
 }
-#endif
 
 
 #if (CERT_APP == 1)
@@ -520,16 +502,16 @@ SYSTEM_TaskStatus_t APP_TaskHandler(void)
 
                 appTaskHandlers[taskId]();
 
-                if (appTaskFlags)
-                {
-                    SYSTEM_PostTask(APP_TASK_ID);
-                }
                 /* Break here so that higher priority task executes next, if any */
                 //break;  ^ No
             }
         }
     }
 
+    if (appTaskFlags)
+    {
+        SYSTEM_PostTask(APP_TASK_ID);
+    }
     return SYSTEM_TASK_SUCCESS;
 }
 

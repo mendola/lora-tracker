@@ -967,6 +967,12 @@
     <Folder Include="src\config\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\app_sleep.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\app_sleep.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\asf.h">
       <SubType>compile</SubType>
     </None>
@@ -1781,6 +1787,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\gps.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\lora.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\lora.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\main.c">

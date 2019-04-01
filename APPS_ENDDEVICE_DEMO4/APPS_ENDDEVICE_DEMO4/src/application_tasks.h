@@ -38,11 +38,14 @@
 #ifndef DEMO_APP_H_
 #define DEMO_APP_H_
 
+#include "stack_common.h"
+#include "lorawan.h"
 /*********************************************************************//**
  \brief      Macro to check the LoRaWAN stack status attribute
              network joined bit
 *************************************************************************/
 #define LORAWAN_NW_JOINED	0x01
+
 
 typedef enum _AppTaskIds_t
 {
@@ -141,6 +144,12 @@ void usb_serial_data_handler(void);
 void gps_serial_data_handler(void);
 
 void StartHeartbeatTask(void);
+void StartApplicationTask(void);
+void StartHeartbeatTask(void);
+void appPostTask(AppTaskIds_t id);
+void set_app_state(AppTaskState_t state);
+void app_resources_uninit(void);
+void appWakeup(uint32_t sleptDuration);
 
 #endif /* DEMO_APP_H_ */
 

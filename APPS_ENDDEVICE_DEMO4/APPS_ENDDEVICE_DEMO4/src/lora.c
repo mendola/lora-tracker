@@ -1,7 +1,13 @@
 #include "lora.h"
+#include "application_tasks.h"
+#include "gps.h"
+#include "app_sleep.h"
 
 #define MAX_LORA_PAYLOAD_LENGTH 50
 #define COMMAND_PACKET_LENGTH 5
+
+#define CMD_GO_TO_SLEEP 0x11
+#define CMD_LOCALIZE 0x22
 
 uint16_t my_address = 0xABCD;
 
@@ -9,12 +15,59 @@ char g_payload[MAX_LORA_PAYLOAD_LENGTH] = {0};
 char rx_data[MAX_LORA_PAYLOAD_LENGTH] = {0};
 uint8_t rx_dataLength = 0;
 
-uint16_t application_listen_timeout_ = 5000;  // not sure if 5s or 5000s
+uint16_t application_listen_timeout_ = 10;  // in seconds
 bool receiver_listening_ = false;
 bool actual_message_received_ = false;
 
 void set_ping_period(uint16_t ping_period) {
     application_listen_timeout_ = ping_period;
+}
+
+
+void PrintRadioSettings(void) {
+	printf("********* RADIO Settings *********\r\n");
+	uint32_t frequency = 0;
+	RadioMode_t freq_ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency);
+	if (freq_ret != ERR_NONE) {
+		printf("Failed to read CHANNEL_FREQUENCY\r\n");
+		return freq_ret;
+		} else {
+		printf("%d\r\n", frequency);
+	}
+
+	RadioModulation_t modulation;
+	RadioMode_t mod_ret = RADIO_GetAttr(MODULATION, &modulation);
+	if (mod_ret != ERR_NONE) {
+		printf("Failed to read MODULATION\r\n");
+		return mod_ret;
+		} else {
+		if(modulation == MODULATION_FSK) {
+			printf("MODULATION: MODULATION_FSK\r\n");
+			} else if (modulation == MODULATION_LORA) {
+			printf("MODULATION: MODULATION_LORA\r\n");
+			} else {
+			printf("Invalid Modulation type.\r\n");
+		}
+	}
+
+	RadioLoRaBandWidth_t bandwidth;
+	RadioMode_t bw_ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
+	if (bw_ret != ERR_NONE) {
+		printf("Failed to read BANDWIDTH\r\n");
+		return bw_ret;
+		} else {
+		if(bandwidth == BW_125KHZ) {
+			printf("BANDWIDTH: BW_125KHZ\r\n");
+			} else if (bandwidth == BW_250KHZ) {
+			printf("BANDWIDTH: BW_250KHZ\r\n");
+			} else if (bandwidth == BW_500KHZ) {
+			printf("BANDWIDTH: BW_500KHZ\r\n");
+			} else if (bandwidth == BW_UNDEFINED) {
+			printf("BANDWIDTH: BW_UNDEFINED\r\n");
+			} else {
+			printf("Invalid Modulation type (FSK?). \r\n");
+		}
+	}
 }
 
 void lora_init(void) {
@@ -37,7 +90,7 @@ void lora_init(void) {
 }
 
 AppTaskState_t handle_go_to_sleep_command(void) {
-   uint16_t sleep_duration_ = (rx_data[3] << 8) | rx_data[4];
+   uint16_t sleep_duration = (rx_data[3] << 8) | rx_data[4];
     set_sleep_time_ms(sleep_duration);
     return APP_STATE_GO_TO_SLEEP;
 }
@@ -50,40 +103,44 @@ AppTaskState_t handle_localize_command(void) {
 }
 
 AppTaskState_t handle_received_packet(void) {
+	actual_message_received_ = false;
     if (rx_dataLength < COMMAND_PACKET_LENGTH) {
+		rx_dataLength = 0;
         return APP_STATE_UNKNOWN;
     }
     uint16_t node_address = (rx_data[0] << 8) | rx_data[1];
     if (node_address != my_address)
+		rx_dataLength = 0;
         return APP_STATE_UNKNOWN;
-
+		
+	rx_dataLength = 0;
     uint8_t command_code = rx_data[2];
     if (command_code == CMD_GO_TO_SLEEP) {
         return handle_go_to_sleep_command();
     } else if (command_code == CMD_LOCALIZE) {
         return handle_localize_command();
     }
-
 }
 
 AppTaskState_t lora_listen_for_cmd(void) {
-    RadioReceiveParam_t radioReceiveParam;
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
-    radioReceiveParam.action = RECEIVE_START;
-    radioReceiveParam.rxWindowSize = application_listen_timeout_;
-    receiver_listening_ = true;
-    rx_dataLength = 0;
-    if (RADIO_Receive(&radioReceiveParam) != 0) {
-        receiver_listening_ = false;
-        printf("Radio failed to enter Receive mode\r\n") ;
-    } else {
-        while (receiver_listening_) {
-            ;
-        }
-        if (actual_message_received_) {
-            next_state = handle_received_packet();
-        } 
-    }
+	if (!receiver_listening_) {
+		if (actual_message_received_) {
+			printf("Message received.\r\n");
+			next_state = handle_received_packet();
+		} else {
+			printf("Putting radio in Receive mode...\r\n");
+			RadioReceiveParam_t radioReceiveParam;
+			radioReceiveParam.action = RECEIVE_START;
+			radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+			receiver_listening_ = true;
+			rx_dataLength = 0;
+			if (RADIO_Receive(&radioReceiveParam) != 0) {
+				receiver_listening_ = false;
+				printf("Radio failed to enter Receive mode\r\n") ;
+			}
+		}
+	}
     return next_state;
 }
 
@@ -183,51 +240,6 @@ void SetRadioSettings(void) {
 }
 
 
-void PrintRadioSettings(void) {
-    printf("********* RADIO Settings *********\r\n");
-    uint32_t frequency = 0;
-    RadioMode_t freq_ret = RADIO_GetAttr(CHANNEL_FREQUENCY, &frequency);
-    if (freq_ret != ERR_NONE) {
-        printf("Failed to read CHANNEL_FREQUENCY\r\n");
-        return freq_ret;
-    } else {
-        printf("%d\r\n", frequency);
-    }
-
-    RadioModulation_t modulation;
-    RadioMode_t mod_ret = RADIO_GetAttr(MODULATION, &modulation);
-    if (mod_ret != ERR_NONE) {
-        printf("Failed to read MODULATION\r\n");
-        return mod_ret;
-    } else {
-        if(modulation == MODULATION_FSK) {
-            printf("MODULATION: MODULATION_FSK\r\n");
-        } else if (modulation == MODULATION_LORA) {
-            printf("MODULATION: MODULATION_LORA\r\n");
-        } else {
-            printf("Invalid Modulation type.\r\n");
-        }
-    }
-
-    RadioLoRaBandWidth_t bandwidth;
-    RadioMode_t bw_ret = RADIO_GetAttr(BANDWIDTH, &bandwidth);
-    if (bw_ret != ERR_NONE) {
-        printf("Failed to read BANDWIDTH\r\n");
-        return bw_ret;
-    } else {
-        if(bandwidth == BW_125KHZ) {
-            printf("BANDWIDTH: BW_125KHZ\r\n");
-        } else if (bandwidth == BW_250KHZ) {
-            printf("BANDWIDTH: BW_250KHZ\r\n");
-        } else if (bandwidth == BW_500KHZ) {
-            printf("BANDWIDTH: BW_500KHZ\r\n");
-        } else if (bandwidth == BW_UNDEFINED) {
-            printf("BANDWIDTH: BW_UNDEFINED\r\n");
-        } else {
-            printf("Invalid Modulation type (FSK?). \r\n");
-        }
-    }
-}
 
 /*********************************************************************//*
  \brief      Function that processes the Rx data
@@ -358,7 +370,7 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
 				uint8_t *pData = appdata->param.rxData.pData ;
 				if((dataLength > 0U) && (NULL != pData)) {
                     if (dataLength >= MAX_LORA_PAYLOAD_LENGTH) {
-                        dataLength = MAX_LORA_PAYLOAD_LENGTH
+                        dataLength = MAX_LORA_PAYLOAD_LENGTH;
                     }
 					printf ("\r\nPayload of length %d received: %s", dataLength, (char*)pData) ;
                     memcpy((void*)rx_data, pData, dataLength);

@@ -62,6 +62,8 @@
 
 #include "gps.h"
 #include "radio_interface.h"
+#include "lora.h"
+
 /************************** Macro definition ***********************************/
 /* Button debounce time in ms */
 #define APP_DEBOUNCE_TIME       50

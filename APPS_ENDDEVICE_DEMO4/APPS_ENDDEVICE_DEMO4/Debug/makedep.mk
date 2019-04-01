@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\app_sleep.c
+
 src\ASF\common2\services\delay\sam0\systick_counter.c
 
 src\ASF\common\utils\interrupt\interrupt_sam_nvic.c
@@ -128,9 +130,11 @@ src\ASF\thirdparty\wireless\services\nvm\sam0\sam_nvm.c
 
 src\enddevice_cert.c
 
-src\enddevice_demo.c
+src\application_tasks.c
 
 src\gps.c
+
+src\lora.c
 
 src\main.c
 

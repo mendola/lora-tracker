@@ -161,5 +161,10 @@ bool SYSTEM_ReadyToSleep(void)
     return !(sysTaskFlag & 0xffff);
 }
 
+void SYSTEM_Kill(void) {
+	ATOMIC_SECTION_ENTER
+    sysTaskFlag &= 0;
+    ATOMIC_SECTION_EXIT
+}
 /* eof system_task_manager.c */
 

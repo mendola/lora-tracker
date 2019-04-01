@@ -2,6 +2,7 @@
 #define GPS_H
 
 #include <stdint.h>
+#include "compiler.h"
 
 /* Serial macros */
 #define GPS_SERIAL_BUFFER_LENGTH 40
@@ -35,5 +36,7 @@ static GpsTaskState_t gpsTaskState;
 void ConfigureGps(void);
 void StartGpsTask(void);
 void runGpsTask(void);
+bool gps_has_fix(void);
+int16_t getMostRecentCondensedRmcPacket(char* dest, uint8_t max_len);
 
 #endif /* GPS_H */
