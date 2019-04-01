@@ -222,7 +222,6 @@ static SYSTEM_TaskStatus_t (*appTaskHandlers[APP_TASKS_COUNT])(void) = {
     /* In the order of descending priority */
     heartbeatTask,
     processTask,
-    gpsTask
 };
 
 /*********************************************************************//**
@@ -298,6 +297,21 @@ static AppTaskState_t go_to_sleep(void) {
 
 }
 
+static AppTaskState_t check_for_uart_input(void) {
+    AppTaskState_t next_state = APP_STATE_UNKNOWN;
+    switch (serialBuffer) {
+        case 'l':
+        case 'L':
+            next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+            break;
+        case 's':
+        case 'S':
+            next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+            break;
+    }
+
+    return next_state;
+}
 
 /*********************************************************************//**
 \brief    Calls appropriate functions based on state variables
@@ -307,26 +321,29 @@ static SYSTEM_TaskStatus_t processTask(void)
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
 	switch(appTaskState)
 	{
-        case APP_STATE_GO_TO_SLEEP:
-            next_state = sleep();
-            break;
-        case APP_STATE_LISTEN_GPS_OFF:
-            next_state = lora_listen_for_cmd();
+        case APP_STATE_AWAITING_UART_CMD:
+            next_state = check_for_uart_input();
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_GO_TO_SLEEP;
+                next_state = APP_STATE_AWAITING_UART_CMD;
             }
             break;
-        case APP_STATE_LISTEN_GPS_ON:
-            next_state = lora_listen_for_cmd();
+        case APP_STATE_SEND_LORA_LOCALIZE_CMD:
+            next_state = send_lora_localize_cmd();
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_TRANSMIT_GPS_ON; // If listen timed out, it's time to transmit
+                next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD; // If listen timed out, it's time to transmit
             }
             break;
-        case APP_STATE_TRANSMIT_GPS_ON:
-            if (gps_has_fix()){
-                lora_send_location();
+        case APP_STATE_SEND_LORA_SLEEP_CMD:
+            next_state = send_lora_sleep_cmd();
+            if (next_state == APP_STATE_UNKNOWN) {
+                next_state = APP_STATE_SEND_LORA_SLEEP_CMD; // If listen timed out, it's time to transmit
             }
-            next_state = APP_STATE_LISTEN_GPS_ON;
+            break;
+        case APP_STATE_LORA_LISTENING:
+            next_state = lora_listen();
+            if (next_state == APP_STATE_UNKNOWN) {
+                next_state = APP_STATE_LORA_LISTENING; // If listen timed out, it's time to transmit
+            }
             break;
 		default:
 			printf("Error STATE Entered\r\n");

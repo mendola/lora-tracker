@@ -5,11 +5,14 @@
 
 #define MAX_LORA_PAYLOAD_LENGTH 50
 #define COMMAND_PACKET_LENGTH 5
+#define LOCATION_PACKET_MIN_LENGTH 1
 
 #define CMD_GO_TO_SLEEP 0x11
 #define CMD_LOCALIZE 0x22
 
-uint16_t my_address = 0xABCD;
+uint16_t dest_address = 0xABCD;
+uint16_t ping_period = 10;
+uint16_t cmd_sleep_time = 10000;
 
 char g_payload[MAX_LORA_PAYLOAD_LENGTH] = {0};
 char rx_data[MAX_LORA_PAYLOAD_LENGTH] = {0};
@@ -97,51 +100,19 @@ AppTaskState_t handle_go_to_sleep_command(void) {
 
 AppTaskState_t handle_localize_command(void) {
     uint16_t ping_period = (rx_data[3] << 8) | rx_data[4];
-    set_ping_period(ping_period);
-    StartGpsTask();
+    //set_ping_period(ping_period);
+    //StartGpsTask();
     return APP_STATE_TRANSMIT_GPS_ON;
 }
 
 AppTaskState_t handle_received_packet(void) {
 	actual_message_received_ = false;
-    if (rx_dataLength < COMMAND_PACKET_LENGTH) {
-		rx_dataLength = 0;
-        return APP_STATE_UNKNOWN;
+    printf(">");
+    for (int i = 0; i < rx_dataLength; i++ ){
+        printf("%c", rx_data[i]);
     }
-    uint16_t node_address = (rx_data[0] << 8) | rx_data[1];
-    if (node_address != my_address)
-		rx_dataLength = 0;
-        return APP_STATE_UNKNOWN;
-		
-	rx_dataLength = 0;
-    uint8_t command_code = rx_data[2];
-    if (command_code == CMD_GO_TO_SLEEP) {
-        return handle_go_to_sleep_command();
-    } else if (command_code == CMD_LOCALIZE) {
-        return handle_localize_command();
-    }
-}
-
-AppTaskState_t lora_listen_for_cmd(void) {
-    AppTaskState_t next_state = APP_STATE_UNKNOWN;
-	if (!receiver_listening_) {
-		if (actual_message_received_) {
-			printf("Message received.\r\n");
-			next_state = handle_received_packet();
-		} else {
-			printf("Putting radio in Receive mode...\r\n");
-			RadioReceiveParam_t radioReceiveParam;
-			radioReceiveParam.action = RECEIVE_START;
-			radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
-			receiver_listening_ = true;
-			rx_dataLength = 0;
-			if (RADIO_Receive(&radioReceiveParam) != 0) {
-				receiver_listening_ = false;
-				printf("Radio failed to enter Receive mode\r\n") ;
-			}
-		}
-	}
-    return next_state;
+    printf("\r\n");
+    return APP_STATE_AWAITING_UART_CMD;
 }
 
 
@@ -170,6 +141,85 @@ void lora_send_location(void) {
 	//SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)lora_send_location);
 }
 
+AppTaskState_t send_lora_localize_cmd(void) {
+    AppTaskState_t next_state = APP_STATE_UNKNOWN;
+    uint8_t tx_buffer[7];
+    
+    tx_buffer[0] = dest_address >> 8;
+    tx_buffer[1] = dest_address & 0xFF;
+    tx_buffer[2] = CMD_LOCALIZE;
+    tx_buffer[3] = ping_period >> 8;
+    tx_buffer[4] = ping_period & 0xFF;
+    tx_buffer[5] = '\r';
+    tx_buffer[6] = '\n';
+
+	RadioTransmitParam_t tx_packet;
+        
+    memcpy((void*)g_payload, tx_buffer, 7);
+    //itoa(++call_counter, g_payload+26,10);
+    tx_packet.bufferLen = 7;
+    tx_packet.bufferPtr = (uint8_t*)g_payload;
+
+	RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
+	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+    if (status == ERR_NONE) {
+        next_state = APP_STATE_LORA_LISTENING;
+    } else {
+        next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+    }
+    return next_state;
+}
+
+AppTaskState_t send_lora_sleep_cmd(void) {
+    AppTaskState_t next_state = APP_STATE_UNKNOWN;
+    uint8_t tx_buffer[7];
+    
+    tx_buffer[0] = dest_address >> 8;
+    tx_buffer[1] = dest_address & 0xFF;
+    tx_buffer[2] = CMD_GO_TO_SLEEP;
+    tx_buffer[3] = cmd_sleep_time >> 8;
+    tx_buffer[4] = cmd_sleep_time & 0xFF;
+    tx_buffer[5] = '\r';
+    tx_buffer[6] = '\n';
+
+	RadioTransmitParam_t tx_packet;
+        
+    memcpy((void*)g_payload, tx_buffer, 7);
+    //itoa(++call_counter, g_payload+26,10);
+    tx_packet.bufferLen = 7;
+    tx_packet.bufferPtr = (uint8_t*)g_payload;
+
+	RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
+	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+    if (status == ERR_NONE) {
+        next_state = APP_STATE_LORA_LISTENING;
+    } else {
+        next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+    }
+    return next_state;
+}
+
+AppTaskState_t lora_listen(void) {
+    AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	if (!receiver_listening_) {
+		if (actual_message_received_) {
+			printf("Message received.\r\n");
+			next_state = handle_received_packet();
+		} else {
+			printf("Putting radio in Receive mode...\r\n");
+			RadioReceiveParam_t radioReceiveParam;
+			radioReceiveParam.action = RECEIVE_START;
+			radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+			receiver_listening_ = true;
+			rx_dataLength = 0;
+			if (RADIO_Receive(&radioReceiveParam) != 0) {
+				receiver_listening_ = false;
+				printf("Radio failed to enter Receive mode\r\n") ;
+			}
+		}
+	}
+    return next_state;
+}
 
 void SetRadioSettings(void) {
 	// Configure Radio Parameters

@@ -11,5 +11,8 @@ void SetRadioSettings(void);
 void demo_appdata_callback(void *appHandle, appCbParams_t *data);
 void lora_send_location(void);
 AppTaskState_t lora_listen_for_cmd(void);
+AppTaskState_t send_lora_localize_cmd(void);
+AppTaskState_t send_lora_sleep_cmd(void);
+AppTaskState_t lora_listen(void);
 
 #endif // LORA_H
