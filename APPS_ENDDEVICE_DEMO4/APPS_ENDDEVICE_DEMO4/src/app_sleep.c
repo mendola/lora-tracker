@@ -24,7 +24,7 @@ AppTaskState_t sleep(void) {
     /* Put the application to sleep */
     sleepReq.sleepTimeMs = sleep_time_ms_;
     sleepReq.pmmWakeupCallback = appWakeup;
-    sleepReq.sleep_mode = CONF_PMM_SLEEPMODE_WHEN_IDLE;
+    sleepReq.sleep_mode = SLEEP_MODE_STANDBY; //SLEEP_MODE_BACKUP; //SLEEP_MODE_STANDBY //CONF_PMM_SLEEPMODE_WHEN_IDLE;
 	
     if (true == LORAWAN_ReadyToSleep(false))
     {
@@ -36,7 +36,7 @@ AppTaskState_t sleep(void) {
             uart_init();
             set_app_state(APP_STATE_GO_TO_SLEEP);
             appPostTask(PROCESS_TASK_HANDLER);
-            printf("\r\nsleep_not_ok\r\n");	
+            //printf("\r\nsleep_not_ok\r\n");	
         } else { // Sleep sucess
 			printf("\r\nSLEEPY\r\n");
 			next_state = APP_STATE_LISTEN_GPS_OFF;
@@ -44,7 +44,7 @@ AppTaskState_t sleep(void) {
     }
     else
     {
-        printf("\r\nsleep_not_ok\r\n");
+        //printf("\r\nsleep_not_ok\r\n");
         appPostTask(PROCESS_TASK_HANDLER);
     }
 	return next_state;
