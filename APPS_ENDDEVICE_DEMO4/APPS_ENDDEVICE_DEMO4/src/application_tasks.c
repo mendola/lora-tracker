@@ -96,6 +96,7 @@ volatile static uint8_t count = 5;
 
 static uint8_t rxchar[11];
 static bool startReceiving = false;
+
 static AppTaskState_t appTaskState;
 
 static const char* bandStrings[] =
@@ -311,7 +312,7 @@ static AppTaskState_t check_for_uart_input(void) {
 			next_state = APP_STATE_AWAITING_UART_CMD;
 			break;
     }
-
+	serialBuffer = 0;
     return next_state;
 }
 
