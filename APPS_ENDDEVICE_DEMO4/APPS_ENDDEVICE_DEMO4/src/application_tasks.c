@@ -324,9 +324,11 @@ static SYSTEM_TaskStatus_t processTask(void)
             break;
         case APP_STATE_TRANSMIT_GPS_ON:
             if (gps_has_fix()){
-                lora_send_location();
-            }
-            next_state = APP_STATE_LISTEN_GPS_ON;
+                next_state = lora_send_location();
+            } else {
+				printf("No gps fix. Not transmitting.\r\n");
+				next_state = APP_STATE_TRANSMIT_GPS_ON;
+			}
             break;
 		default:
 			printf("Error STATE Entered\r\n");

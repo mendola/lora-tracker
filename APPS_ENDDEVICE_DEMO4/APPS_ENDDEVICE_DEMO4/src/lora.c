@@ -4,7 +4,7 @@
 #include "app_sleep.h"
 
 #define MAX_LORA_PAYLOAD_LENGTH 50
-#define COMMAND_PACKET_LENGTH 5
+#define COMMAND_PACKET_LENGTH 7
 
 #define CMD_GO_TO_SLEEP 0x11
 #define CMD_LOCALIZE 0x22
@@ -19,6 +19,9 @@ uint16_t application_listen_timeout_ = 10;  // in seconds
 bool receiver_listening_ = false;
 bool actual_message_received_ = false;
 bool radio_timed_out_ = false;
+
+bool transmitter_sending_ = false;
+bool transmit_success_ = false;
 
 void set_ping_period(uint16_t ping_period) {
     application_listen_timeout_ = ping_period;
@@ -91,14 +94,16 @@ void lora_init(void) {
 }
 
 AppTaskState_t handle_go_to_sleep_command(void) {
-   uint16_t sleep_duration = (rx_data[3] << 8) | rx_data[4];
+	uint16_t sleep_duration = (rx_data[3] << 8) | rx_data[4];
     set_sleep_time_ms(sleep_duration);
+	printf("Received command to go to sleep for %d ms.\r\n", sleep_duration);
     return APP_STATE_GO_TO_SLEEP;
 }
 
 AppTaskState_t handle_localize_command(void) {
     uint16_t ping_period = (rx_data[3] << 8) | rx_data[4];
     set_ping_period(ping_period);
+	printf("Received command to transmit at period of %d.\r\n", ping_period);
     StartGpsTask();
     return APP_STATE_TRANSMIT_GPS_ON;
 }
@@ -110,10 +115,10 @@ AppTaskState_t handle_received_packet(void) {
         return APP_STATE_UNKNOWN;
     }
     uint16_t node_address = (rx_data[0] << 8) | rx_data[1];
-    if (node_address != my_address)
+    if (node_address != my_address) {
 		rx_dataLength = 0;
         return APP_STATE_UNKNOWN;
-		
+	}
 	rx_dataLength = 0;
     uint8_t command_code = rx_data[2];
     if (command_code == CMD_GO_TO_SLEEP) {
@@ -152,29 +157,29 @@ AppTaskState_t lora_listen_for_cmd(void) {
 }
 
 
-void lora_send_location(void) {
-	static int call_counter = 0;
-	//char payload[20] = {0};
-	int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload, MAX_LORA_PAYLOAD_LENGTH);
-
-
-	//strcpy(payload+10,itoa(++call_counter));
-	
-	RadioTransmitParam_t tx_packet;
-	if (payload_length <= 0) {
-		strcpy(g_payload, "No gps fix :(");
-		//itoa(++call_counter, g_payload+26,10);
-		tx_packet.bufferLen = 13;
-		tx_packet.bufferPtr = (uint8_t*)g_payload;
-	} else {
-		//strcpy(g_payload, "Team ALINA's LoRa packet #");
-		//itoa(++call_counter, g_payload+26,10);
-		tx_packet.bufferLen = payload_length;
-		tx_packet.bufferPtr = (uint8_t*)g_payload;
-	}	
-	RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
-	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
-	//SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)lora_send_location);
+AppTaskState_t lora_send_location(void) {
+	AppTaskState_t next_state = APP_STATE_TRANSMIT_GPS_ON;
+	if (!transmitter_sending_) {
+		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload, MAX_LORA_PAYLOAD_LENGTH);
+		RadioTransmitParam_t tx_packet;
+		if (payload_length <= 0) {
+			strcpy(g_payload, "No gps fix :(");
+		} else {
+			if (transmit_success_) {
+				transmit_success_ = false;
+				next_state = APP_STATE_LISTEN_GPS_ON;
+			} else {
+				//strcpy(g_payload, "Team ALINA's LoRa packet #");
+				//itoa(++call_counter, g_payload+26,10);
+				tx_packet.bufferLen = payload_length;
+				tx_packet.bufferPtr = (uint8_t*)g_payload;	
+				RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
+				//printf("Payload: %s  Ret=%d\r\n", g_payload, status);	
+				transmitter_sending_ = true;		
+			}
+		}	
+	}
+	return next_state;
 }
 
 
@@ -380,10 +385,15 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
                     if (dataLength >= MAX_LORA_PAYLOAD_LENGTH) {
                         dataLength = MAX_LORA_PAYLOAD_LENGTH;
                     }
-					printf ("\r\nPayload of length %d received: %s", dataLength, (char*)pData) ;
+					//printf ("\r\nPayload of length %d received: %s", dataLength, (char*)pData) ;
                     memcpy((void*)rx_data, pData, dataLength);
-                    actual_message_received_ = true;
-                    rx_dataLength = dataLength;
+					if (receiver_listening_) {
+						actual_message_received_ = true;
+						rx_dataLength = dataLength;
+					}
+					if (transmitter_sending_) {
+						transmit_success_ = true;
+					}
 				}
 			}
 			break ;
@@ -399,11 +409,13 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             case LORAWAN_SUCCESS:
             {
                 printf("Transmission Success\r\n");
+				transmit_success_ = true;
             }
             break;
             case LORAWAN_RADIO_SUCCESS:
             {
                 printf("Transmission Success\r\n");
+				transmit_success_ = true;
             }
             break;
             case LORAWAN_RADIO_NO_DATA:
@@ -493,6 +505,6 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
     }
     
     receiver_listening_ = false;
-
+	transmitter_sending_ = false;
 }
 
