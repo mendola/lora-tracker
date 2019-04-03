@@ -18,6 +18,7 @@ uint8_t rx_dataLength = 0;
 uint16_t application_listen_timeout_ = 10;  // in seconds
 bool receiver_listening_ = false;
 bool actual_message_received_ = false;
+bool radio_timed_out_ = false;
 
 void set_ping_period(uint16_t ping_period) {
     application_listen_timeout_ = ping_period;
@@ -129,15 +130,21 @@ AppTaskState_t lora_listen_for_cmd(void) {
 			printf("Message received.\r\n");
 			next_state = handle_received_packet();
 		} else {
-			printf("Putting radio in Receive mode...\r\n");
-			RadioReceiveParam_t radioReceiveParam;
-			radioReceiveParam.action = RECEIVE_START;
-			radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
-			receiver_listening_ = true;
-			rx_dataLength = 0;
-			if (RADIO_Receive(&radioReceiveParam) != 0) {
-				receiver_listening_ = false;
-				printf("Radio failed to enter Receive mode\r\n") ;
+			if (radio_timed_out_){
+				radio_timed_out_ = false;
+				next_state = APP_STATE_GO_TO_SLEEP;
+				printf("Radio Rx timed out. Going to sleep.\r\n");
+			} else {
+				printf("Putting radio in Receive mode...\r\n");
+				RadioReceiveParam_t radioReceiveParam;
+				radioReceiveParam.action = RECEIVE_START;
+				radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+				receiver_listening_ = true;
+				rx_dataLength = 0;
+				if (RADIO_Receive(&radioReceiveParam) != 0) {
+					receiver_listening_ = false;
+					printf("Radio failed to enter Receive mode\r\n") ;
+				}	
 			}
 		}
 	}
@@ -292,7 +299,8 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             break;
             case LORAWAN_RADIO_NO_DATA:
             {
-                printf("\n\rRADIO_NO_DATA \n\r");
+                //printf("\n\rRADIO_NO_DATA \n\r");
+				radio_timed_out_ = true;
             }
             break;
             case LORAWAN_RADIO_DATA_SIZE:
@@ -400,7 +408,8 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             break;
             case LORAWAN_RADIO_NO_DATA:
             {
-                printf("\n\rRADIO_NO_DATA \n\r");
+                //printf("\n\rRADIO_NO_DATA \n\r");
+				radio_timed_out_ = true;
             }
             break;
             case LORAWAN_RADIO_DATA_SIZE:

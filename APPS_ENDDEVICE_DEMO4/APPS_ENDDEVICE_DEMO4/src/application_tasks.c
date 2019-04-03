@@ -313,7 +313,7 @@ static SYSTEM_TaskStatus_t processTask(void)
         case APP_STATE_LISTEN_GPS_OFF:
             next_state = lora_listen_for_cmd();
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_GO_TO_SLEEP;
+                next_state = APP_STATE_LISTEN_GPS_OFF;
             }
             break;
         case APP_STATE_LISTEN_GPS_ON:
