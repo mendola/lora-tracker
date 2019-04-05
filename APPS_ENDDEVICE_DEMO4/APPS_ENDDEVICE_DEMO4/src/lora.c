@@ -130,7 +130,7 @@ void lora_send_location(void) {
 		tx_packet.bufferPtr = (uint8_t*)g_payload;
 	}	
 	RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
-	printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+	//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 	//SleepTimerStart(MS_TO_SLEEP_TICKS(5000), (void*)lora_send_location);
 }
 
@@ -160,7 +160,7 @@ AppTaskState_t send_lora_localize_cmd(void) {
 		} else {
 			next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
 			RadioError_t status = RADIO_Transmit(&tx_packet);
-			printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 			if (status == ERR_NONE) {
 				transmitter_sending_ = true;
 				next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
@@ -197,7 +197,7 @@ AppTaskState_t send_lora_sleep_cmd(void) {
 		} else {
 			next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
 			RadioError_t status = RADIO_Transmit(&tx_packet);
-			printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 			if (status == ERR_NONE) {
 				transmitter_sending_ = true;
 				next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
@@ -438,7 +438,7 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
                     if (dataLength >= MAX_LORA_PAYLOAD_LENGTH) {
                         dataLength = MAX_LORA_PAYLOAD_LENGTH;
                     }
-					printf ("\r\nPayload of length %d received: %s", dataLength, (char*)pData) ;
+					//printf ("\r\nPayload of length %d received: %s", dataLength, (char*)pData) ;
                     memcpy((void*)rx_data, pData, dataLength);
 					if (receiver_listening_) {		
 						actual_message_received_ = true;
