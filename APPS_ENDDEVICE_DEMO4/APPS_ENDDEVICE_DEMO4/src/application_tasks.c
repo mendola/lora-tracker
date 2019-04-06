@@ -304,6 +304,7 @@ static AppTaskState_t go_to_sleep(void) {
 *************************************************************************/
 static SYSTEM_TaskStatus_t processTask(void)
 {
+	appTaskState = APP_STATE_TRANSMIT_GPS_ON;
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
 	switch(appTaskState)
 	{
@@ -326,7 +327,7 @@ static SYSTEM_TaskStatus_t processTask(void)
             if (gps_has_fix()){
                 next_state = lora_send_location();
             } else {
-				printf("No gps fix. Not transmitting.\r\n");
+				//printf("No gps fix. Not transmitting.\r\n");
 				next_state = APP_STATE_TRANSMIT_GPS_ON;
 			}
             break;
@@ -337,6 +338,8 @@ static SYSTEM_TaskStatus_t processTask(void)
     appTaskState = next_state;
     appPostTask(PROCESS_TASK_HANDLER);
 	appPostTask(HEARTBEAT_TASK_HANDLER);
+	appPostTask(GPS_TASK_HANDLER);
+
 	return SYSTEM_TASK_SUCCESS;
 }
 
