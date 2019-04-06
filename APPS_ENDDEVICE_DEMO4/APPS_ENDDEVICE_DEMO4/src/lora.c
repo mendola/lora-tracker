@@ -100,7 +100,7 @@ void lora_init(void) {
 
 AppTaskState_t handle_received_packet(void) {
 	actual_message_received_ = false;
-    printf(">");
+    printf("Message Received: ");
     for (int i = 0; i < rx_dataLength; i++ ){
         printf("%c", rx_data[i]);
     }
