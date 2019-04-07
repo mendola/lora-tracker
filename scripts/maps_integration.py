@@ -1,45 +1,43 @@
 import PIL.Image
 import time
 import pdb
-import requests 
-import matplotlib.pyplot as plt 
+import requests
+import matplotlib.pyplot as plt
 from matplotlib import animation
-from mapping_globals import current_map, current_coordinates, map_needs_updating
-
 
 # Put the API key in api_key.txt (1 line, no quotes)
-with open ("api_key.txt", "r") as myfile:
+with open ("AIzaSyBzejvcBAbCrDdgbFJgV_Tz1--KQn4aldA", "r") as myfile:
     api_key=myfile.readlines()[0]
-  
-# url variable store url 
+
+# url variable store url
 url = "https://maps.googleapis.com/maps/api/staticmap?"
 
 point_list = []
 
 def fetch_map(latitude,longitude):
-    # center defines the center of the map, 
-    # equidistant from all edges of the map.  
+    # center defines the center of the map,
+    # equidistant from all edges of the map.
     center = "%f,%f" % (latitude, longitude)
     point_list.append(center)
 
-    # zoom defines the zoom 
-    # level of the map 
+    # zoom defines the zoom
+    # level of the map
     zoom = 18
-    # get method of requests module 
-    # return response object 
-    r = requests.get(url + "center=" + center + "&markers=color:red|" + center + "&zoom=" + str(zoom) + "&size= 400x400&key=" + api_key + "&sensor=false") 
+    # get method of requests module
+    # return response object
+    r = requests.get(url + "center=" + center + "&markers=color:red|" + center + "&zoom=" + str(zoom) + "&size= 400x400&key=" + api_key + "&sensor=false")
     if (len(r.content) > 1000):
-        # wb mode is stand for write binary mode 
-        f = open('current_map.png', 'wb') 
+        # wb mode is stand for write binary mode
+        f = open('current_map.png', 'wb')
 
-        
-        # r.content gives content, 
+
+        # r.content gives content,
         # in this case gives image
-        f.write(r.content) 
-        
-        # close mthod of file object 
-        # save and close the file 
-        f.close() 
+        f.write(r.content)
+
+        # close mthod of file object
+        # save and close the file
+        f.close()
         return True
     else:
         return False
@@ -48,5 +46,3 @@ def fetch_map(latitude,longitude):
 def plot_on_map(latitude_degrees, longitude_degrees):
     print("This function will grab a new map from google maps if needed, and overlay the point on it")
     fetch_map(latitude_degrees, longitude_degrees)
-
-    
