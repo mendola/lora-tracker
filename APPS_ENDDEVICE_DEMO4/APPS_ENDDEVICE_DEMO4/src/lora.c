@@ -100,12 +100,20 @@ void lora_init(void) {
 
 AppTaskState_t handle_received_packet(void) {
 	actual_message_received_ = false;
-    printf("Message Received: ");
-    for (int i = 0; i < rx_dataLength; i++ ){
-        printf("%c", rx_data[i]);
+    AppTaskState_t ret = APP_STATE_UNKNOWN;
+    if (strncmp(rx_data, dest_address, 4) == 0) {
+        printf("Message Received: ");
+        for (int i = 0; i < rx_dataLength; i++ ){
+            printf("%c", rx_data[i]);
+        }
+        printf("\r\n");
+        ret = APP_STATE_AWAITING_UART_CMD;
+    } else {
+        printf("Received message without correct source ID\r\n");
+        ret = APP_STATE_LORA_LISTENING
     }
-    printf("\r\n");
-    return APP_STATE_AWAITING_UART_CMD;
+
+    return ret;
 }
 
 
