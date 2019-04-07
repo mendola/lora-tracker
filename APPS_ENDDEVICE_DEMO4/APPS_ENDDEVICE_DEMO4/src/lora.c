@@ -160,10 +160,10 @@ AppTaskState_t lora_listen_for_cmd(void) {
 AppTaskState_t lora_send_location(void) {
 	AppTaskState_t next_state = APP_STATE_TRANSMIT_GPS_ON;
 	if (!transmitter_sending_) {
-		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload, MAX_LORA_PAYLOAD_LENGTH);
+		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload+2, MAX_LORA_PAYLOAD_LENGTH-2) + 2; // Plus 2 for Node ID
 		RadioTransmitParam_t tx_packet;
-		if (payload_length <= 0) {
-			strcpy(g_payload, "No gps fix :(");
+		if (payload_length <= 2) {
+			strcpy(g_payload + 2, "No gps fix :(");
 		} else {
 			if (transmit_success_) {
 				transmit_success_ = false;
@@ -171,6 +171,7 @@ AppTaskState_t lora_send_location(void) {
 			} else {
 				//strcpy(g_payload, "Team ALINA's LoRa packet #");
 				//itoa(++call_counter, g_payload+26,10);
+                memcpy(g_payload, (uint8_t*)&my_address, 2);
 				tx_packet.bufferLen = payload_length;
 				tx_packet.bufferPtr = (uint8_t*)g_payload;	
 				RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
