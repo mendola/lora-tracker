@@ -160,10 +160,11 @@ AppTaskState_t lora_listen_for_cmd(void) {
 AppTaskState_t lora_send_location(void) {
 	AppTaskState_t next_state = APP_STATE_TRANSMIT_GPS_ON;
 	if (!transmitter_sending_) {
-		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload, MAX_LORA_PAYLOAD_LENGTH);
+		memcpy(g_payload, &my_address, sizeof(my_address));
+		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload + 2, MAX_LORA_PAYLOAD_LENGTH) + 2;
 		RadioTransmitParam_t tx_packet;
 		if (payload_length <= 0) {
-			strcpy(g_payload, "No gps fix :(");
+			//strcpy(g_payload, "No gps fix :(");
 		} else {
 			if (transmit_success_) {
 				transmit_success_ = false;
@@ -174,7 +175,7 @@ AppTaskState_t lora_send_location(void) {
 				tx_packet.bufferLen = payload_length;
 				tx_packet.bufferPtr = (uint8_t*)g_payload;	
 				RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
-				//printf("Payload: %s  Ret=%d\r\n", g_payload, status);	
+				printf("Payload: %s  Ret=%d\r\n", g_payload, status);	
 				transmitter_sending_ = true;		
 			}
 		}	
