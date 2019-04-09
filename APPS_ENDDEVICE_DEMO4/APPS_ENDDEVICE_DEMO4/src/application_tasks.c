@@ -330,6 +330,7 @@ static void print_options(void) {
 *************************************************************************/
 static SYSTEM_TaskStatus_t processTask(void)
 {
+	appTaskState = APP_STATE_LORA_LISTENING;
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
 	switch(appTaskState)
 	{

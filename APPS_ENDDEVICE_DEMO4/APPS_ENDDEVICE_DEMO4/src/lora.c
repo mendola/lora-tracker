@@ -110,7 +110,7 @@ AppTaskState_t handle_received_packet(void) {
         ret = APP_STATE_AWAITING_UART_CMD;
     } else {
         printf("Received message without correct source ID\r\n");
-        ret = APP_STATE_LORA_LISTENING
+        ret = APP_STATE_LORA_LISTENING;
     }
 
     return ret;
@@ -231,7 +231,7 @@ AppTaskState_t lora_listen(void) {
 				printf("Putting radio in Receive mode...\r\n");
 				RadioReceiveParam_t radioReceiveParam;
 				radioReceiveParam.action = RECEIVE_START;
-				radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+				radioReceiveParam.rxWindowSize = 0;30 * application_listen_timeout_; // Convert to s
 				receiver_listening_ = true;
 				rx_dataLength = 0;
 				if (RADIO_Receive(&radioReceiveParam) != 0) {
