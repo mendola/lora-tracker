@@ -105,12 +105,16 @@ AppTaskState_t handle_received_packet(void) {
     if (strncmp(rx_data, &dest_address, 2) == 0) {
 		rx_counter++;
 
-        printf("Message #%d received:\r\n\tLength: %d\r\n\tPayload: ", rx_counter,rx_dataLength);
+        printf("Message #%d received:\r\n\tLength: %d\r\n\tPayload (char): ", rx_counter,rx_dataLength);
         for (int i = 0; i < rx_dataLength; i++ ){
             printf("%c", rx_data[i]);
         }
-        printf("\r\n");
+        printf("\r\n\tPayload (hex)");
         ret = APP_STATE_AWAITING_UART_CMD;
+        for (int i = 0; i < rx_dataLength; i++ ){
+	        printf("%x ", rx_data[i]);
+        }
+		printf("\r\n");
     } else {
         printf("Received message without correct source ID\r\n");
         ret = APP_STATE_LORA_LISTENING;
