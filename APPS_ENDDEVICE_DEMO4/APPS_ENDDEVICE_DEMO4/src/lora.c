@@ -99,10 +99,13 @@ void lora_init(void) {
 
 
 AppTaskState_t handle_received_packet(void) {
+	static uint16_t rx_counter = 0;
 	actual_message_received_ = false;
     AppTaskState_t ret = APP_STATE_UNKNOWN;
     if (strncmp(rx_data, &dest_address, 2) == 0) {
-        printf("Message Received: ");
+		rx_counter++;
+
+        printf("Message #%d received:\r\n\tLength: %d\r\n\tPayload: ", rx_counter,rx_dataLength);
         for (int i = 0; i < rx_dataLength; i++ ){
             printf("%c", rx_data[i]);
         }
