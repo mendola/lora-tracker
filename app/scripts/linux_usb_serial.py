@@ -115,7 +115,7 @@ def map_loop():
     except IOError:
         print('makin a new map')
     # default coordinates to NEU ~
-        fetch_map(42.33915179, -71.08756650)
+        fetch_map(42.338958, -71.0880675)
         current_map = PIL.Image.open('current_map.png')
 
     print("Starting map loop!!!")
