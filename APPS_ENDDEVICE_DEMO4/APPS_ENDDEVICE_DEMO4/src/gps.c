@@ -34,15 +34,17 @@ bool gps_has_fix(void) {
 }
 
 int16_t getMostRecentCondensedRmcPacket(char* dest, uint8_t max_len) {
-	uint16_t length;
-	if (most_recent_gprmc_message_length_ >= max_len) {
-		length = max_len;
-	} else {
-		length = most_recent_gprmc_message_length_;
+	uint16_t length = 0;
+	if (most_recent_gprmc_message_length_ > 0){	
+		if (most_recent_gprmc_message_length_ >= max_len) {
+			length = max_len;
+		} else {
+			length = most_recent_gprmc_message_length_;
+		}
+		memcpy((void*)dest, most_recent_gprmc_message_condensed_, length);
+		memset((void*)most_recent_gprmc_message_condensed_, 0, sizeof(most_recent_gprmc_message_condensed_));
+		most_recent_gprmc_message_length_ = 0;
 	}
-	memcpy((void*)dest, most_recent_gprmc_message_condensed_, length);
-	memset((void*)most_recent_gprmc_message_condensed_, 0, sizeof(most_recent_gprmc_message_condensed_));
-
 	return length;
 }
 

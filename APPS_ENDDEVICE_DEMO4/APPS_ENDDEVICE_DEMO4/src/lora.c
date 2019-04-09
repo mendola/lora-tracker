@@ -161,17 +161,17 @@ AppTaskState_t lora_send_location(void) {
 	AppTaskState_t next_state = APP_STATE_TRANSMIT_GPS_ON;
 	static uint16_t message_counter = 0;
 	if (!transmitter_sending_) {
-		memcpy(g_payload, &my_address, sizeof(my_address));
-		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload + 2, MAX_LORA_PAYLOAD_LENGTH) + 2;
-		RadioTransmitParam_t tx_packet;
-		if (payload_length <= 2) {
-			memcpy(g_payload + 2, (void*)"No Fix\r\n",8);
-			payload_length = 10;
-		}
 		if (transmit_success_) {
 			transmit_success_ = false;
 			next_state = APP_STATE_LISTEN_GPS_ON;
 		} else {
+			memcpy(g_payload, &my_address, sizeof(my_address));
+			int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload + 2, MAX_LORA_PAYLOAD_LENGTH) + 2;
+			RadioTransmitParam_t tx_packet;
+			if (payload_length <= 2) {
+				memcpy(g_payload + 2, (void*)"No Fix\r\n",8);
+				payload_length = 10;
+			}
 			//strcpy(g_payload, "Team ALINA's LoRa packet #");
 			//itoa(++call_counter, g_payload+26,10);
 			tx_packet.bufferLen = payload_length;
