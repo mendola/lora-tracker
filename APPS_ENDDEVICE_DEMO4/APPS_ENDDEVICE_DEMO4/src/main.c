@@ -155,7 +155,7 @@ int main(void)
 	//SleepTimerStart(MS_TO_SLEEP_TICKS(1000), (void*)radio_tx_callback);
 
     //ConfigureGps();
-    //StartGpsTask();
+    StartGpsTask();
     StartApplicationTask();
 	
     while (1)

@@ -305,6 +305,7 @@ static AppTaskState_t go_to_sleep(void) {
 static SYSTEM_TaskStatus_t processTask(void)
 {
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	appTaskState = APP_STATE_TRANSMIT_GPS_ON;
 	switch(appTaskState)
 	{
         case APP_STATE_GO_TO_SLEEP:
