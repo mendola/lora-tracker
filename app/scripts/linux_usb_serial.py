@@ -133,16 +133,15 @@ def map_loop():
     plt.show()
 
 
-# serial_thread = threading.Thread(target=usb_interface)
-# serial_thread.daemon = False
-# serial_thread.start()
-#
-# plotting_thread = threading.Thread(target=map_loop)
-# plotting_thread.daemon = False
-# plotting_thread.start()
+serial_thread = threading.Thread(target=usb_interface)
+serial_thread.daemon = False
+serial_thread.start()
+plotting_thread = threading.Thread(target=map_loop)
+plotting_thread.daemon = False
+plotting_thread.start()
 
 # usb_interface()
-map_loop()
+# map_loop()
 
 def stop(a, b):
     global STOP
