@@ -47,7 +47,7 @@ def handle_raw_char(char):
             else:
                 print(newdata,end='')
         except UnicodeDecodeError:
-            print("Fucc")
+            pass
     else:
         if totalbytes < 4:
             latitude += char
