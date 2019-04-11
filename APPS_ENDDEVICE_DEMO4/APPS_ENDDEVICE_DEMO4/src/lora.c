@@ -110,7 +110,7 @@ AppTaskState_t handle_received_packet(void) {
         ret = APP_STATE_AWAITING_UART_CMD;
     } else {
         printf("Received message without correct source ID\r\n");
-        ret = APP_STATE_LORA_LISTENING
+        ret = APP_STATE_LORA_LISTENING;
     }
 
     return ret;
