@@ -77,6 +77,7 @@
 #include "lora.h"
 #include "gps.h"
 /******************************** MACROS ***************************************/
+#define USB_SERIAL_BUFFER_LENGTH  10
 
 /************************** GLOBAL VARIABLES ***********************************/
 static bool joined = false;
@@ -166,7 +167,9 @@ static uint8_t demoAppEui[8] = DEMO_APPLICATION_EUI;
 static uint8_t demoAppKey[16] = DEMO_APPLICATION_KEY;
 
 static LorawanSendReq_t lorawanSendReq;
-static char serialBuffer;
+
+static char serialBuffer[USB_SERIAL_BUFFER_LENGTH];
+static uint8_t serialBufferCount = 0;
 
 /* Muticast Parameters */
 static bool demoMcastEnable = DEMO_APP_MCAST_ENABLE;
@@ -178,6 +181,8 @@ extern bool button_pressed;
 extern bool factory_reset;
 extern bool bandSelected;
 extern uint32_t longPress;
+extern void set_ping_period(uint16_t period_s);
+extern void set_cmd_sleep_time(uint16_t period_s);
 
 void appPostTask(AppTaskIds_t id);
 static SYSTEM_TaskStatus_t (*appTaskHandlers[])(void);
@@ -268,25 +273,30 @@ static SYSTEM_TaskStatus_t heartbeatTask(void) {
 /*********************************************************************//**
 \brief    Pulls the data from UART when activated
 *************************************************************************/
-void usb_serial_data_handler(void)
+bool usb_serial_data_handler(void)
 {
-	int rxChar;
-	char serialData;
+	int charRet;
+	bool received_full_packet = false;
 	/* verify if there was any character received*/
-	if (startReceiving == true)
-	{
-		if((-1) != (rxChar = usb_uart_getchar_nowait()))
-		{
-			serialData = (char)rxChar;
-			if((serialData != '\r') && (serialData != '\n') && (serialData != '\b'))
-			{
+	while (startReceiving == true && (-1) != (charRet = usb_uart_getchar_nowait())) {
+		char rxChar = (char) charRet;
+		printf("%c", rxChar);
+		if((rxChar == '\r') || (rxChar == '\n') || (rxChar == '\b')) {
+			startReceiving = false;
+			received_full_packet = true;
+			//appPostTask(PROCESS_TASK_HANDLER);
+		} else {
+			if (serialBufferCount < USB_SERIAL_BUFFER_LENGTH) {
+  				serialBuffer[serialBufferCount++] = rxChar;
+			} 
+			if (serialBufferCount >= USB_SERIAL_BUFFER_LENGTH) {
 				startReceiving = false;
-  			    serialBuffer = rxChar;
-			    //appPostTask(PROCESS_TASK_HANDLER);
-				printf("\r\n");			
+				received_full_packet = true;
 			}
+			
 		}
 	}
+	return received_full_packet;
 }
 
 void gps_serial_data_handler(void) {
@@ -299,29 +309,74 @@ static AppTaskState_t go_to_sleep(void) {
 
 static AppTaskState_t check_for_uart_input(void) {
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
-    switch (serialBuffer) {
+	const uint8_t first_byte = (uint8_t)serialBuffer[0];
+	int i = 1;
+	uint16_t period = 0;
+	uint8_t curr_char;
+	
+    switch (first_byte) {
         case 'l':
-        case 'L':
-            next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+        case 'L': ;
+		    next_state = APP_STATE_AWAITING_UART_CMD;
+
+			while (i < serialBufferCount &&  serialBuffer[i] != '\r' && serialBuffer[i] != '\n' && serialBuffer[i] != '.') {
+				curr_char = serialBuffer[i];
+				if ((curr_char < 48 || curr_char > 57) && (curr_char != ' ')) {
+					period = 0;
+					printf("Invalid Localization Sleep Time\r\n");
+					next_state = APP_STATE_AWAITING_UART_CMD;
+					break;
+				} else if (curr_char != ' ') {
+					period = period * 10 + (curr_char - 48);
+			        next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+				}
+				i++;
+			}
+			if (period > 0 && period < 10000) {
+				set_ping_period(period);
+			} else {
+				printf("Invalid sleep period\r\n");
+				next_state = APP_STATE_AWAITING_UART_CMD;
+			}
             break;
         case 's':
-        case 'S':
-            next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+        case 'S': ;
+		    next_state = APP_STATE_AWAITING_UART_CMD;
+
+		    while (i < serialBufferCount &&  serialBuffer[i] != '\r' && serialBuffer[i] != '\n' && serialBuffer[i] != '.') {
+			    uint8_t curr_char = serialBuffer[i];
+				if ((curr_char < 48 || curr_char > 57) && (curr_char != ' ')) {
+				    period = 0;
+				    printf("Invalid Power-Save Sleep Time\r\n");
+				    next_state = APP_STATE_AWAITING_UART_CMD;
+				    break;
+				} else if (curr_char != ' ') {
+				    period = period * 10 + (curr_char - 48);
+				    next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+			    }
+				i++;
+		    }
+		    if (period > 0 && period < 10000) {
+			    set_cmd_sleep_time(period);
+		    } else {
+				printf("Invalid sleep period\r\n");
+				next_state = APP_STATE_AWAITING_UART_CMD;
+			}
             break;
 		default:
 			next_state = APP_STATE_AWAITING_UART_CMD;
 			break;
     }
-	serialBuffer = 0;
+	memset((void*)serialBuffer, 0, USB_SERIAL_BUFFER_LENGTH);
+	serialBufferCount = 0;
+	
     return next_state;
 }
 
 static void print_options(void) {
 	printf("\r\n******** READY FOR COMMAND ********\r\n");
-	printf("> l or L\r\n");
-	printf("\t -- Put the node into localization mode and then listen for position\r\n");
-	printf("> s or S\r\n");
-	printf("\t -- Put the node into sleep mode\r\n");
+	printf("> l <duration> or L <duration> -- Put the node into localization mode with a beacon every <duration> seconds.\r\n");
+	printf("> s <duration> or S <duration> -- Put the node into sleep mode for <duration> seconds, before listening for commands for 10 seconds.\r\n");
 	printf("\r\n***********************************\r\n");
 }
 
@@ -338,28 +393,32 @@ static SYSTEM_TaskStatus_t processTask(void)
 				print_options();
 				startReceiving = true;
 			}
-			usb_serial_data_handler();
-            next_state = check_for_uart_input();
-            if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_AWAITING_UART_CMD;
-            }
+			bool received_full_packet = usb_serial_data_handler();
+			if (received_full_packet) {
+				next_state = check_for_uart_input();
+				if (next_state == APP_STATE_UNKNOWN) {
+					next_state = APP_STATE_AWAITING_UART_CMD;
+				}
+			} else {
+				next_state = APP_STATE_AWAITING_UART_CMD;
+			}
             break;
         case APP_STATE_SEND_LORA_LOCALIZE_CMD:
             next_state = send_lora_localize_cmd();
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD; // If listen timed out, it's time to transmit
+                next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD; 
             }
             break;
         case APP_STATE_SEND_LORA_SLEEP_CMD:
             next_state = send_lora_sleep_cmd();
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_SEND_LORA_SLEEP_CMD; // If listen timed out, it's time to transmit
+                next_state = APP_STATE_SEND_LORA_SLEEP_CMD; 
             }
             break;
         case APP_STATE_LORA_LISTENING:
             next_state = lora_listen();
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_LORA_LISTENING; // If listen timed out, it's time to transmit
+                next_state = APP_STATE_LORA_LISTENING; 
             }
             break;
 		default:

@@ -139,7 +139,7 @@ void check_stack_status(void);
 /*********************************************************************//**
 \brief    Pulls the data from UART when activated
 *************************************************************************/
-void usb_serial_data_handler(void);
+bool usb_serial_data_handler(void);
 void gps_serial_data_handler(void);
 
 void StartHeartbeatTask(void);

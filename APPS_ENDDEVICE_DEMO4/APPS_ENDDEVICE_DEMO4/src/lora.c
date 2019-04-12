@@ -27,10 +27,13 @@ bool receiver_timed_out_ = false;
 bool transmit_success_ = false;
 bool transmitter_sending_ = false;
 
-void set_ping_period(uint16_t ping_period) {
-    application_listen_timeout_ = ping_period;
+void set_ping_period(uint16_t period_s) {
+    ping_period = period_s;
 }
 
+void set_cmd_sleep_time(uint16_t period_s) {
+	cmd_sleep_time = period_s;
+}
 
 void PrintRadioSettings(void) {
 	printf("********* RADIO Settings *********\r\n");
@@ -167,6 +170,7 @@ AppTaskState_t send_lora_localize_cmd(void) {
 			next_state = APP_STATE_LORA_LISTENING;
 		} else {
 			next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+			printf("Directing Node to Send its location every %d seconds...\r\n", ping_period);
 			RadioError_t status = RADIO_Transmit(&tx_packet);
 			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 			if (status == ERR_NONE) {
@@ -204,6 +208,7 @@ AppTaskState_t send_lora_sleep_cmd(void) {
 			next_state = APP_STATE_LORA_LISTENING;
 		} else {
 			next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+			printf("Directing Node to Sleep for %d seconds...\r\n", cmd_sleep_time);
 			RadioError_t status = RADIO_Transmit(&tx_packet);
 			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 			if (status == ERR_NONE) {
