@@ -188,9 +188,10 @@ void appPostTask(AppTaskIds_t id);
 static SYSTEM_TaskStatus_t (*appTaskHandlers[])(void);
 static void demoTimerCb(void * cnt);
 static void lTimerCb(void * data);
-static SYSTEM_TaskStatus_t processTask(void);
+static SYSTEM_TaskStatus_t radioTask(void);
 static SYSTEM_TaskStatus_t gpsTask(void);
 static SYSTEM_TaskStatus_t heartbeatTask(void);
+static SYSTEM_TaskStatus_t keyboardTask(void);
 
 static void processRunDemoCertApp(void);
 static void processRunRestoreBand(void);
@@ -225,8 +226,9 @@ static void demo_handle_evt_rx_data(void *appHandle, appCbParams_t *appdata);
 
 static SYSTEM_TaskStatus_t (*appTaskHandlers[APP_TASKS_COUNT])(void) = {
     /* In the order of descending priority */
+	keyboardTask,
     heartbeatTask,
-    processTask,
+    radioTask,
 };
 
 /*********************************************************************//**
@@ -243,11 +245,99 @@ void StartHeartbeatTask(void) {
 }
 
 void StartApplicationTask(void) {
-    appTaskState = APP_STATE_AWAITING_UART_CMD;
-    appPostTask(PROCESS_TASK_HANDLER);
+    appTaskState = APP_STATE_LORA_LISTENING;
+    appPostTask(RADIO_TASK_HANDLER);
+    appPostTask(KEYBOARD_TASK_HANDLER);
     StartHeartbeatTask();
 }
 
+static void print_options(void) {
+	printf("\r\n******** READY FOR COMMAND ********\r\n");
+	printf("> l <duration> or L <duration> -- Put the node into localization mode with a beacon every <duration> seconds.\r\n");
+	printf("> s <duration> or S <duration> -- Put the node into sleep mode for <duration> seconds, before listening for commands for 10 seconds.\r\n");
+	printf("\r\n***********************************\r\n");
+}
+
+static AppTaskState_t check_for_uart_input(void) {
+	AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	const uint8_t first_byte = (uint8_t)serialBuffer[0];
+	int i = 1;
+	uint16_t period = 0;
+	uint8_t curr_char;
+	
+	switch (first_byte) {
+		case 'l':
+		case 'L': ;
+		next_state = APP_STATE_LORA_LISTENING;
+
+		while (i < serialBufferCount &&  serialBuffer[i] != '\r' && serialBuffer[i] != '\n' && serialBuffer[i] != '.') {
+			curr_char = serialBuffer[i];
+			if ((curr_char < 48 || curr_char > 57) && (curr_char != ' ')) {
+				period = 0;
+				printf("Invalid Localization Sleep Time\r\n");
+				next_state = APP_STATE_UNKNOWN;
+				break;
+				} else if (curr_char != ' ') {
+				period = period * 10 + (curr_char - 48);
+				next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+			}
+			i++;
+		}
+		if (period > 0 && period < 10000) {
+			set_ping_period(period);
+			} else {
+			printf("Invalid sleep period\r\n");
+			next_state = APP_STATE_UNKNOWN;
+		}
+		break;
+		case 's':
+		case 'S': ;
+		next_state = APP_STATE_UNKNOWN;
+
+		while (i < serialBufferCount &&  serialBuffer[i] != '\r' && serialBuffer[i] != '\n' && serialBuffer[i] != '.') {
+			uint8_t curr_char = serialBuffer[i];
+			if ((curr_char < 48 || curr_char > 57) && (curr_char != ' ')) {
+				period = 0;
+				printf("Invalid Power-Save Sleep Time\r\n");
+				next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+				break;
+				} else if (curr_char != ' ') {
+				period = period * 10 + (curr_char - 48);
+				next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+			}
+			i++;
+		}
+		if (period > 0 && period < 10000) {
+			set_cmd_sleep_time(period);
+			} else {
+			printf("Invalid sleep period\r\n");
+			next_state = APP_STATE_UNKNOWN;
+		}
+		break;
+		default:
+		next_state = APP_STATE_UNKNOWN;
+		break;
+	}
+	memset((void*)serialBuffer, 0, USB_SERIAL_BUFFER_LENGTH);
+	serialBufferCount = 0;
+	
+	return next_state;
+}
+
+static SYSTEM_TaskStatus_t keyboardTask(void) {
+    if (!startReceiving) {
+	    print_options();
+	    startReceiving = true;
+    }
+    bool received_full_packet = usb_serial_data_handler();
+    if (received_full_packet) {
+		AppTaskState_t next_state = check_for_uart_input();
+	    if (next_state != APP_STATE_UNKNOWN) {
+		    appTaskState = next_state;
+	    }
+	}
+   	return SYSTEM_TASK_SUCCESS;
+}
 
 static SYSTEM_TaskStatus_t heartbeatTask(void) {
 	static uint8_t ledstate = 0;
@@ -266,7 +356,7 @@ static SYSTEM_TaskStatus_t heartbeatTask(void) {
 		set_LED_data(LED_GREEN,&ledstate);
 		//printf("Heartbeat: %d", ledstate);
 	}
-	//appPostTask(HEARTBEAT_TASK_HANDLER);
+	return SYSTEM_TASK_SUCCESS;
 }
 
 
@@ -284,7 +374,7 @@ bool usb_serial_data_handler(void)
 		if((rxChar == '\r') || (rxChar == '\n') || (rxChar == '\b')) {
 			startReceiving = false;
 			received_full_packet = true;
-			//appPostTask(PROCESS_TASK_HANDLER);
+			//appPostTask(RADIO_TASK_HANDLER);
 		} else {
 			if (serialBufferCount < USB_SERIAL_BUFFER_LENGTH) {
   				serialBuffer[serialBufferCount++] = rxChar;
@@ -307,102 +397,15 @@ static AppTaskState_t go_to_sleep(void) {
 
 }
 
-static AppTaskState_t check_for_uart_input(void) {
-    AppTaskState_t next_state = APP_STATE_UNKNOWN;
-	const uint8_t first_byte = (uint8_t)serialBuffer[0];
-	int i = 1;
-	uint16_t period = 0;
-	uint8_t curr_char;
-	
-    switch (first_byte) {
-        case 'l':
-        case 'L': ;
-		    next_state = APP_STATE_AWAITING_UART_CMD;
-
-			while (i < serialBufferCount &&  serialBuffer[i] != '\r' && serialBuffer[i] != '\n' && serialBuffer[i] != '.') {
-				curr_char = serialBuffer[i];
-				if ((curr_char < 48 || curr_char > 57) && (curr_char != ' ')) {
-					period = 0;
-					printf("Invalid Localization Sleep Time\r\n");
-					next_state = APP_STATE_AWAITING_UART_CMD;
-					break;
-				} else if (curr_char != ' ') {
-					period = period * 10 + (curr_char - 48);
-			        next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
-				}
-				i++;
-			}
-			if (period > 0 && period < 10000) {
-				set_ping_period(period);
-			} else {
-				printf("Invalid sleep period\r\n");
-				next_state = APP_STATE_AWAITING_UART_CMD;
-			}
-            break;
-        case 's':
-        case 'S': ;
-		    next_state = APP_STATE_AWAITING_UART_CMD;
-
-		    while (i < serialBufferCount &&  serialBuffer[i] != '\r' && serialBuffer[i] != '\n' && serialBuffer[i] != '.') {
-			    uint8_t curr_char = serialBuffer[i];
-				if ((curr_char < 48 || curr_char > 57) && (curr_char != ' ')) {
-				    period = 0;
-				    printf("Invalid Power-Save Sleep Time\r\n");
-				    next_state = APP_STATE_AWAITING_UART_CMD;
-				    break;
-				} else if (curr_char != ' ') {
-				    period = period * 10 + (curr_char - 48);
-				    next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
-			    }
-				i++;
-		    }
-		    if (period > 0 && period < 10000) {
-			    set_cmd_sleep_time(period);
-		    } else {
-				printf("Invalid sleep period\r\n");
-				next_state = APP_STATE_AWAITING_UART_CMD;
-			}
-            break;
-		default:
-			next_state = APP_STATE_AWAITING_UART_CMD;
-			break;
-    }
-	memset((void*)serialBuffer, 0, USB_SERIAL_BUFFER_LENGTH);
-	serialBufferCount = 0;
-	
-    return next_state;
-}
-
-static void print_options(void) {
-	printf("\r\n******** READY FOR COMMAND ********\r\n");
-	printf("> l <duration> or L <duration> -- Put the node into localization mode with a beacon every <duration> seconds.\r\n");
-	printf("> s <duration> or S <duration> -- Put the node into sleep mode for <duration> seconds, before listening for commands for 10 seconds.\r\n");
-	printf("\r\n***********************************\r\n");
-}
 
 /*********************************************************************//**
 \brief    Calls appropriate functions based on state variables
 *************************************************************************/
-static SYSTEM_TaskStatus_t processTask(void)
+static SYSTEM_TaskStatus_t radioTask(void)
 {
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
 	switch(appTaskState)
 	{
-        case APP_STATE_AWAITING_UART_CMD:
-			if (!startReceiving) {
-				print_options();
-				startReceiving = true;
-			}
-			bool received_full_packet = usb_serial_data_handler();
-			if (received_full_packet) {
-				next_state = check_for_uart_input();
-				if (next_state == APP_STATE_UNKNOWN) {
-					next_state = APP_STATE_AWAITING_UART_CMD;
-				}
-			} else {
-				next_state = APP_STATE_AWAITING_UART_CMD;
-			}
-            break;
         case APP_STATE_SEND_LORA_LOCALIZE_CMD:
             next_state = send_lora_localize_cmd();
             if (next_state == APP_STATE_UNKNOWN) {
@@ -426,8 +429,9 @@ static SYSTEM_TaskStatus_t processTask(void)
 			break;
 	}
     appTaskState = next_state;
-    appPostTask(PROCESS_TASK_HANDLER);
+    appPostTask(RADIO_TASK_HANDLER);
 	appPostTask(HEARTBEAT_TASK_HANDLER);
+	appPostTask(KEYBOARD_TASK_HANDLER);
 	return SYSTEM_TASK_SUCCESS;
 }
 
@@ -456,7 +460,7 @@ static void displayRunRestoreBand(void)
 	//sio2host_rx(rxchar,10);
 	set_LED_data(LED_AMBER,&off);
 	set_LED_data(LED_GREEN,&off);
-	appPostTask(PROCESS_TASK_HANDLER);
+	appPostTask(RADIO_TASK_HANDLER);
 }
 
 /*********************************************************************//**
@@ -515,9 +519,10 @@ void appWakeup(uint32_t sleptDuration)
 {
     HAL_Radio_resources_init();
     uart_init();
-	appTaskState = APP_STATE_AWAITING_UART_CMD;
+	appTaskState = APP_STATE_LORA_LISTENING;
     appPostTask(HEARTBEAT_TASK_HANDLER);
-    appPostTask(PROCESS_TASK_HANDLER);
+    appPostTask(RADIO_TASK_HANDLER);
+	appPostTask(KEYBOARD_TASK_HANDLER);
     printf("\r\nsleep_ok %ld ms\r\n", sleptDuration);
 }
 #endif

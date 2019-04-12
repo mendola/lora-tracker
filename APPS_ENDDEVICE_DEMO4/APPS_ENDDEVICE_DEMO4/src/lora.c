@@ -35,6 +35,17 @@ void set_cmd_sleep_time(uint16_t period_s) {
 	cmd_sleep_time = period_s;
 }
 
+void RADIO_Stop(){
+	RadioReceiveParam_t radioReceiveParam;
+	radioReceiveParam.action = RECEIVE_STOP;
+	radioReceiveParam.rxWindowSize =  0;
+	rx_dataLength = 0;
+	if (RADIO_Receive(&radioReceiveParam) != 0) {
+		receiver_listening_ = false;
+		printf("Cut off radio from listening.\r\n") ;
+	}
+}
+
 void PrintRadioSettings(void) {
 	printf("********* RADIO Settings *********\r\n");
 	uint32_t frequency = 0;
@@ -110,7 +121,7 @@ AppTaskState_t handle_received_packet(void) {
             printf("%c", rx_data[i]);
         }
         printf("\r\n");
-        ret = APP_STATE_AWAITING_UART_CMD;
+        ret = APP_STATE_UNKNOWN;
     } else {
         printf("Received message without correct source ID\r\n");
         ret = APP_STATE_LORA_LISTENING;
@@ -169,8 +180,9 @@ AppTaskState_t send_lora_localize_cmd(void) {
 			transmit_success_ = false;
 			next_state = APP_STATE_LORA_LISTENING;
 		} else {
-			next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+			next_state = APP_STATE_UNKNOWN;
 			printf("Directing Node to Send its location every %d seconds...\r\n", ping_period);
+			RADIO_Stop();
 			RadioError_t status = RADIO_Transmit(&tx_packet);
 			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 			if (status == ERR_NONE) {
@@ -209,6 +221,7 @@ AppTaskState_t send_lora_sleep_cmd(void) {
 		} else {
 			next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
 			printf("Directing Node to Sleep for %d seconds...\r\n", cmd_sleep_time);
+			RADIO_Stop();
 			RadioError_t status = RADIO_Transmit(&tx_packet);
 			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
 			if (status == ERR_NONE) {
@@ -231,12 +244,12 @@ AppTaskState_t lora_listen(void) {
 			if (receiver_timed_out_) {
 				receiver_timed_out_ = false;
 				printf("Receiver timed out.");
-				next_state = APP_STATE_AWAITING_UART_CMD;
+				next_state = APP_STATE_UNKNOWN;
 			} else {
 				printf("Putting radio in Receive mode...\r\n");
 				RadioReceiveParam_t radioReceiveParam;
 				radioReceiveParam.action = RECEIVE_START;
-				radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+				radioReceiveParam.rxWindowSize =  0; 30 * application_listen_timeout_; // Convert to s
 				receiver_listening_ = true;
 				rx_dataLength = 0;
 				if (RADIO_Receive(&radioReceiveParam) != 0) {
