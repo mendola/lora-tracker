@@ -27,6 +27,16 @@ void set_ping_period(uint16_t ping_period) {
     application_listen_timeout_ = ping_period;
 }
 
+void RADIO_Stop(){
+	RadioReceiveParam_t radioReceiveParam;
+	radioReceiveParam.action = RECEIVE_STOP;
+	radioReceiveParam.rxWindowSize =  0;
+	rx_dataLength = 0;
+	if (RADIO_Receive(&radioReceiveParam) != 0) {
+		receiver_listening_ = false;
+		printf("Cut off radio from listening.\r\n") ;
+	}
+}
 
 void PrintRadioSettings(void) {
 	printf("********* RADIO Settings *********\r\n");
@@ -95,7 +105,7 @@ void lora_init(void) {
 
 AppTaskState_t handle_go_to_sleep_command(void) {
 	uint16_t sleep_duration = (rx_data[3] << 8) | rx_data[4];
-    set_sleep_time_ms(sleep_duration);
+    set_sleep_time_ms(sleep_duration*1000);
 	printf("Received command to go to sleep for %d ms.\r\n", sleep_duration);
     return APP_STATE_GO_TO_SLEEP;
 }
@@ -128,22 +138,31 @@ AppTaskState_t handle_received_packet(void) {
     }
 }
 
-AppTaskState_t lora_listen_for_cmd(void) {
+AppTaskState_t lora_listen_for_cmd(AppTaskState_t current_state, AppTaskState_t timout_state) {
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
-	if (!receiver_listening_) {
+	if (transmitter_sending_) {
+		RADIO_Stop();
+	}
+	
+	if (!receiver_listening_ && !transmitter_sending_) {
 		if (actual_message_received_) {
 			printf("Message received.\r\n");
 			next_state = handle_received_packet();
 		} else {
 			if (radio_timed_out_){
 				radio_timed_out_ = false;
-				next_state = APP_STATE_GO_TO_SLEEP;
-				printf("Radio Rx timed out. Going to sleep.\r\n");
+				next_state = timout_state;
+				printf("Radio Rx timed out. Going to state %d.\r\n", timout_state);
 			} else {
-				printf("Putting radio in Receive mode...\r\n");
 				RadioReceiveParam_t radioReceiveParam;
 				radioReceiveParam.action = RECEIVE_START;
-				radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+				if (current_state == APP_STATE_LISTEN_GPS_OFF) {
+					radioReceiveParam.rxWindowSize = 30 * 10;  // 10s
+				} else {
+					radioReceiveParam.rxWindowSize = 30 * application_listen_timeout_; // Convert to s
+				}
+				printf("Putting radio in Receive mode with timeout of %d seconds...\r\n", radioReceiveParam.rxWindowSize / 30);
+
 				receiver_listening_ = true;
 				rx_dataLength = 0;
 				if (RADIO_Receive(&radioReceiveParam) != 0) {
@@ -159,7 +178,8 @@ AppTaskState_t lora_listen_for_cmd(void) {
 
 AppTaskState_t lora_send_location(void) {
 	AppTaskState_t next_state = APP_STATE_TRANSMIT_GPS_ON;
-	if (!transmitter_sending_) {
+	
+	if (!transmitter_sending_ && !receiver_listening_) {
 		memcpy(g_payload, &my_address, sizeof(my_address));
 		int16_t payload_length = getMostRecentCondensedRmcPacket(g_payload + 2, MAX_LORA_PAYLOAD_LENGTH) + 2;
 		RadioTransmitParam_t tx_packet;
@@ -306,7 +326,9 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             case LORAWAN_RADIO_NO_DATA:
             {
                 //printf("\n\rRADIO_NO_DATA \n\r");
-				radio_timed_out_ = true;
+				if (receiver_listening_) {
+					radio_timed_out_ = true;
+				}
             }
             break;
             case LORAWAN_RADIO_DATA_SIZE:
@@ -422,7 +444,9 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             case LORAWAN_RADIO_NO_DATA:
             {
                 //printf("\n\rRADIO_NO_DATA \n\r");
-				radio_timed_out_ = true;
+				if (receiver_listening_) {
+					radio_timed_out_ = true;
+				}
             }
             break;
             case LORAWAN_RADIO_DATA_SIZE:
@@ -502,7 +526,7 @@ void demo_appdata_callback(void *appHandle, appCbParams_t *appdata)
             break;
 
                     }
-        printf("\n\r*************************************************\n\r");
+        printf("\n\r***APP_DEMO_CALLBACK. Rx_listening: %d, Tx_List: %d \n\r", receiver_listening_, transmitter_sending_);
     }
     
     receiver_listening_ = false;

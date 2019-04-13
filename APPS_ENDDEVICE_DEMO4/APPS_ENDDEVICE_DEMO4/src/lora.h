@@ -10,6 +10,6 @@ void radio_tx_callback(void);
 void SetRadioSettings(void);
 void demo_appdata_callback(void *appHandle, appCbParams_t *data);
 AppTaskState_t lora_send_location(void);
-AppTaskState_t lora_listen_for_cmd(void);
+AppTaskState_t lora_listen_for_cmd(AppTaskState_t current_state, AppTaskState_t timout_state);
 
 #endif // LORA_H

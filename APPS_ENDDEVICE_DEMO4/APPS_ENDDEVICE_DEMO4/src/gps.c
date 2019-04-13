@@ -242,7 +242,7 @@ static uint32_t getLatitudeMagnitude(const char** buffer, int8_t stringlength) {
 		multiplier *= 10;
 	}
 	milliminutes += degrees * 60 * 1000; // Convert degrees to milliminutes
-	printf("Milliminutes: %d\r\n",milliminutes);
+	//printf("Milliminutes: %d\r\n",milliminutes);
 	return milliminutes;
 }
 
@@ -350,7 +350,7 @@ static void HandleNmeaPacketGPRMC(const uint8_t* buffer, int8_t length) {
 	has_valid_gprmc_message = true;
 	printf(">");
 	for (int i = 0; i < CONDENSED_GPRMC_MSG_BUFFER_LENGTH; i++){
-		printf("%c", (uint8_t)most_recent_gprmc_message_condensed_[i]);
+		//printf("%c", (uint8_t)most_recent_gprmc_message_condensed_[i]);
 	}
 	//printf("%s\r\n", most_recent_gprmc_message_condensed_);
 	return 0;

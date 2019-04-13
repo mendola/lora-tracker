@@ -311,15 +311,15 @@ static SYSTEM_TaskStatus_t processTask(void)
             next_state = sleep();
             break;
         case APP_STATE_LISTEN_GPS_OFF:
-            next_state = lora_listen_for_cmd();
+            next_state = lora_listen_for_cmd(APP_STATE_LISTEN_GPS_OFF, APP_STATE_GO_TO_SLEEP);
             if (next_state == APP_STATE_UNKNOWN) {
                 next_state = APP_STATE_LISTEN_GPS_OFF;
             }
             break;
         case APP_STATE_LISTEN_GPS_ON:
-            next_state = lora_listen_for_cmd();
+            next_state = lora_listen_for_cmd(APP_STATE_LISTEN_GPS_ON, APP_STATE_TRANSMIT_GPS_ON);
             if (next_state == APP_STATE_UNKNOWN) {
-                next_state = APP_STATE_TRANSMIT_GPS_ON; // If listen timed out, it's time to transmit
+                next_state = APP_STATE_LISTEN_GPS_ON; // If listen timed out, it's time to transmit
             }
             break;
         case APP_STATE_TRANSMIT_GPS_ON:
