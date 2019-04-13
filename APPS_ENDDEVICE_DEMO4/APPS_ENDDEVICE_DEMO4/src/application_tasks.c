@@ -305,8 +305,7 @@ static AppTaskState_t go_to_sleep(void) {
 static SYSTEM_TaskStatus_t processTask(void)
 {
     AppTaskState_t next_state = APP_STATE_UNKNOWN;
-	switch(appTaskState)
-	{
+	switch(appTaskState) {
         case APP_STATE_GO_TO_SLEEP:
             next_state = sleep();
             break;
@@ -330,6 +329,18 @@ static SYSTEM_TaskStatus_t processTask(void)
 				next_state = APP_STATE_TRANSMIT_GPS_ON;
 			}
             break;
+		case APP_STATE_SEND_SLEEP_ACK:
+            next_state = lora_send_sleep_ack();
+            if (next_state == APP_STATE_UNKNOWN) {
+	            next_state = APP_STATE_SEND_SLEEP_ACK; // If listen timed out, it's time to transmit
+            }
+			break;
+		case APP_STATE_SEND_LOCALIZE_ACK:
+			next_state = lora_send_localize_ack();
+			if (next_state == APP_STATE_UNKNOWN) {
+				next_state = APP_STATE_SEND_LOCALIZE_ACK; // If listen timed out, it's time to transmit
+			}
+		break;
 		default:
 			printf("Error STATE Entered\r\n");
 			break;

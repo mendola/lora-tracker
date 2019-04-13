@@ -107,7 +107,7 @@ AppTaskState_t handle_go_to_sleep_command(void) {
 	uint16_t sleep_duration = (rx_data[3] << 8) | rx_data[4];
     set_sleep_time_ms(sleep_duration*1000);
 	printf("Received command to go to sleep for %d ms.\r\n", sleep_duration);
-    return APP_STATE_GO_TO_SLEEP;
+    return APP_STATE_SEND_SLEEP_ACK;
 }
 
 AppTaskState_t handle_localize_command(void) {
@@ -115,7 +115,7 @@ AppTaskState_t handle_localize_command(void) {
     set_ping_period(ping_period);
 	printf("Received command to transmit at period of %d.\r\n", ping_period);
     StartGpsTask();
-    return APP_STATE_TRANSMIT_GPS_ON;
+    return APP_STATE_SEND_LOCALIZE_ACK;
 }
 
 AppTaskState_t handle_received_packet(void) {
@@ -185,21 +185,91 @@ AppTaskState_t lora_send_location(void) {
 		RadioTransmitParam_t tx_packet;
 		if (payload_length <= 0) {
 			//strcpy(g_payload, "No gps fix :(");
-		} else {
+			} else {
 			if (transmit_success_) {
 				transmit_success_ = false;
 				next_state = APP_STATE_LISTEN_GPS_ON;
-			} else {
+				} else {
 				//strcpy(g_payload, "Team ALINA's LoRa packet #");
 				//itoa(++call_counter, g_payload+26,10);
 				tx_packet.bufferLen = payload_length;
-				tx_packet.bufferPtr = (uint8_t*)g_payload;	
+				tx_packet.bufferPtr = (uint8_t*)g_payload;
 				RadioError_t status = RADIO_Transmit(&tx_packet);  //TODO move to a task (not inside callback)
-				printf("Payload: %s  Ret=%d\r\n", g_payload, status);	
-				transmitter_sending_ = true;		
+				printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+				transmitter_sending_ = true;
 			}
-		}	
+		}
 	}
+	return next_state;
+}
+
+AppTaskState_t lora_send_sleep_ack(void) {
+	AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	uint8_t tx_buffer[5];
+	
+	tx_buffer[0] = my_address & 0xFF;
+	tx_buffer[1] = my_address >> 8;
+	tx_buffer[2] = CMD_GO_TO_SLEEP;
+	tx_buffer[3] = '\r';
+	tx_buffer[4] = '\n';
+
+	RadioTransmitParam_t tx_packet;
+	
+	memcpy((void*)g_payload, tx_buffer, 7);
+	//itoa(++call_counter, g_payload+26,10);
+	tx_packet.bufferLen = 7;
+	tx_packet.bufferPtr = (uint8_t*)g_payload;
+
+	if(!transmitter_sending_) {
+		if (transmit_success_){
+			transmit_success_ = false;
+			next_state = APP_STATE_GO_TO_SLEEP;
+		} else {
+			printf("Sending Sleep ACK...\r\n");
+			RADIO_Stop();
+			RadioError_t status = RADIO_Transmit(&tx_packet);
+			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+			if (status == ERR_NONE) {
+				transmitter_sending_ = true;
+			}
+		}
+	}
+
+	return next_state;
+}
+
+AppTaskState_t lora_send_localize_ack(void) {
+	AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	uint8_t tx_buffer[5];
+	tx_buffer[0] = my_address & 0xFF;
+	tx_buffer[1] = my_address >> 8;
+	tx_buffer[2] = CMD_LOCALIZE;
+	tx_buffer[3] = '\r';
+	tx_buffer[4] = '\n';
+
+	RadioTransmitParam_t tx_packet;
+	
+	memcpy((void*)g_payload, tx_buffer, 7);
+	//itoa(++call_counter, g_payload+26,10);
+	tx_packet.bufferLen = 7;
+	tx_packet.bufferPtr = (uint8_t*)g_payload;
+	
+	if(!transmitter_sending_) {
+		if (transmit_success_){
+			transmit_success_ = false;
+			next_state = APP_STATE_TRANSMIT_GPS_ON;
+		} else {
+			next_state = APP_STATE_UNKNOWN;
+			printf("Sending localize ACK...\r\n");
+			RADIO_Stop();
+			RadioError_t status = RADIO_Transmit(&tx_packet);
+			//printf("Payload: %s  Ret=%d\r\n", g_payload, status);
+			if (status == ERR_NONE) {
+				transmitter_sending_ = true;
+			}
+		}
+	}
+	
 	return next_state;
 }
 
