@@ -14,5 +14,9 @@ AppTaskState_t lora_listen_for_cmd(void);
 AppTaskState_t send_lora_localize_cmd(void);
 AppTaskState_t send_lora_sleep_cmd(void);
 AppTaskState_t lora_listen(void);
+AppTaskState_t handle_sleep_ack(void);
+AppTaskState_t handle_localize_ack(void);
+AppTaskState_t lora_listen_for_sleep_ack(void);
+AppTaskState_t lora_listen_for_localize_ack(void);
 
 #endif // LORA_H

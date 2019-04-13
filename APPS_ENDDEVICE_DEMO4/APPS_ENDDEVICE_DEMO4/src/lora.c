@@ -131,6 +131,30 @@ AppTaskState_t handle_received_packet(void) {
 }
 
 
+AppTaskState_t handle_localize_ack(void) {
+	actual_message_received_ = false;
+	AppTaskState_t ret = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+	if (rx_dataLength >= 3 && strncmp(rx_data, &dest_address, 2) == 0 && rx_data[2] == CMD_LOCALIZE) {
+		printf("Valid Localize ACK received.\r\n");
+		ret = APP_STATE_LORA_LISTENING;
+	} else {
+		printf("Received message without correct source ID\r\n");
+	}
+	return ret;
+}
+
+AppTaskState_t handle_sleep_ack(void) {
+	actual_message_received_ = false;
+	AppTaskState_t ret = APP_STATE_SEND_LORA_SLEEP_CMD;
+	if (rx_dataLength >= 3 && strncmp(rx_data, &dest_address, 2) == 0 && rx_data[2] == CMD_GO_TO_SLEEP) {
+		printf("Valid Sleep ACK received.\r\n");
+		ret = APP_STATE_LORA_LISTENING;
+		} else {
+		printf("Received message without correct source ID\r\n");
+	}
+	return ret;
+}
+
 void lora_send_location(void) {
 	static int call_counter = 0;
 	//char payload[20] = {0};
@@ -178,7 +202,7 @@ AppTaskState_t send_lora_localize_cmd(void) {
 	if(!transmitter_sending_) {
 		if (transmit_success_){
 			transmit_success_ = false;
-			next_state = APP_STATE_LORA_LISTENING;
+			next_state = APP_STATE_WAIT_FOR_LOCALIZE_ACK;
 		} else {
 			next_state = APP_STATE_UNKNOWN;
 			printf("Directing Node to Send its location every %d seconds...\r\n", ping_period);
@@ -217,7 +241,7 @@ AppTaskState_t send_lora_sleep_cmd(void) {
 	if(!transmitter_sending_) {
 		if (transmit_success_){
 			transmit_success_ = false;
-			next_state = APP_STATE_LORA_LISTENING;
+			next_state = APP_STATE_WAIT_FOR_SLEEP_ACK;
 		} else {
 			next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
 			printf("Directing Node to Sleep for %d seconds...\r\n", cmd_sleep_time);
@@ -260,6 +284,62 @@ AppTaskState_t lora_listen(void) {
 		}
 	}
     return next_state;
+}
+
+AppTaskState_t lora_listen_for_localize_ack(void) {
+	AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	if (!receiver_listening_) {
+		if (actual_message_received_) {
+			printf("Message received.\r\n");
+			next_state = handle_localize_ack();
+			} else {
+			if (receiver_timed_out_) {
+				receiver_timed_out_ = false;
+				printf("Receiver timed out.");
+				next_state = APP_STATE_SEND_LORA_LOCALIZE_CMD;
+				} else {
+				printf("Putting radio in Receive mode...\r\n");
+				RadioReceiveParam_t radioReceiveParam;
+				radioReceiveParam.action = RECEIVE_START;
+				radioReceiveParam.rxWindowSize = 30 * 3;  // wait for 3s for ack
+				receiver_listening_ = true;
+				rx_dataLength = 0;
+				if (RADIO_Receive(&radioReceiveParam) != 0) {
+					receiver_listening_ = false;
+					printf("Radio failed to enter Receive mode\r\n") ;
+				}
+			}
+		}
+	}
+	return next_state;
+}
+
+AppTaskState_t lora_listen_for_sleep_ack(void) {
+	AppTaskState_t next_state = APP_STATE_UNKNOWN;
+	if (!receiver_listening_) {
+		if (actual_message_received_) {
+			printf("Message received.\r\n");
+			next_state = handle_sleep_ack();
+			} else {
+			if (receiver_timed_out_) {
+				receiver_timed_out_ = false;
+				printf("Receiver timed out.");
+				next_state = APP_STATE_SEND_LORA_SLEEP_CMD;
+			} else {
+				printf("Putting radio in Receive mode...\r\n");
+				RadioReceiveParam_t radioReceiveParam;
+				radioReceiveParam.action = RECEIVE_START;
+				radioReceiveParam.rxWindowSize = 30 * 3;  // wait for 3s for ack
+				receiver_listening_ = true;
+				rx_dataLength = 0;
+				if (RADIO_Receive(&radioReceiveParam) != 0) {
+					receiver_listening_ = false;
+					printf("Radio failed to enter Receive mode\r\n") ;
+				}
+			}
+		}
+	}
+	return next_state;
 }
 
 void SetRadioSettings(void) {

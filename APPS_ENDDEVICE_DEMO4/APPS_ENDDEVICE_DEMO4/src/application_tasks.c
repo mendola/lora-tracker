@@ -424,6 +424,18 @@ static SYSTEM_TaskStatus_t radioTask(void)
                 next_state = APP_STATE_LORA_LISTENING; 
             }
             break;
+		case APP_STATE_WAIT_FOR_LOCALIZE_ACK:
+			next_state = lora_listen_for_localize_ack();
+            if (next_state == APP_STATE_UNKNOWN) {
+	            next_state = APP_STATE_WAIT_FOR_LOCALIZE_ACK;
+            }
+            break;
+		case APP_STATE_WAIT_FOR_SLEEP_ACK:
+			next_state = lora_listen_for_sleep_ack();
+			if (next_state == APP_STATE_UNKNOWN) {
+				next_state = APP_STATE_WAIT_FOR_SLEEP_ACK;
+			}
+		break;
 		default:
 			printf("Error STATE Entered\r\n");
 			break;
