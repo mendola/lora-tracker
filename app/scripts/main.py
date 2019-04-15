@@ -2,6 +2,7 @@ import wx
 import random
 import os
 from linux_usb_serial import * #usb_interface, map_loop
+import pdb
 
 global pingFrequency
 global ZOOM_LEVEL
@@ -27,12 +28,14 @@ class PanelOne(wx.Panel):
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-        fgs = wx.FlexGridSizer(3, 4, 9, 25)
+                fgs = wx.FlexGridSizer(3, 5, 9, 25)
 
         title = wx.StaticText(self, label="Fiercely Efficient Tracking CHip")
         separator = wx.StaticLine(self)
+        separator2 = wx.StaticLine(self)
         findButton = wx.Button(self, label="Find Me!")
         self.Bind(wx.EVT_BUTTON, self.onFindButtonClick)
+        sleepButton = wx.Button(self, label="Sleep")
 
         fetchImage = wx.Bitmap('FETCH-logo.png')
         fetchImage = scale_bitmap(fetchImage, 100, 100)
@@ -43,12 +46,17 @@ class PanelOne(wx.Panel):
         sleepHeader = wx.StaticText(self, label="Sleep time: ")
         sleepTime = wx.TextCtrl(self)
 
-        fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
-            (findButton, 1, wx.EXPAND), (localizeHeader),
-            (localizeTime), (sleepHeader), (sleepTime)])
+        zoomText = wx.StaticText(self, label="Zoom: ")
+        zoomCtrl = wx.SpinCtrl(self, value='18')
+        zoomCtrl.SetRange(1, 20)
 
-        fgs.AddGrowableRow(2, 1)
-        fgs.AddGrowableCol(1, 1)
+        fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
+            (findButton, 1, wx.EXPAND),(sleepButton, 1, wx.EXPAND),
+            (localizeHeader), (localizeTime), (sleepHeader),
+            (sleepTime), (separator2), (zoomText), (zoomCtrl)])
+
+        # fgs.AddGrowableRow(2, 1)
+        # sfgs.AddGrowableCol(1, 1)
 
         hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=15)
         self.SetSizer(hbox)
@@ -140,13 +148,6 @@ class Example(wx.Frame):
             self.panel_two.Hide()
         self.Layout()
 
-def gui():
-    app = wx.App()
-    ex = Example()
-    ex.Show()
-    app.MainLoop()
-
-
 def main():
     # serial_thread = threading.Thread(target=usb_interface)
     # serial_thread.daemon = False
@@ -155,7 +156,7 @@ def main():
     # plotting_thread = threading.Thread(target=map_loop)
     # plotting_thread.daemon = False
     # plotting_thread.start()
-    #
+
     # gui_thread = threading.Thread(target=gui)
     # gui_thread.daemon = False
     # gui_thread.start()
@@ -169,6 +170,11 @@ def main():
     signal.signal(signal.SIGINT, stop)
     signal.signal(signal.SIGTERM, stop)
 
+def gui():
+    app = wx.App()
+    ex = Example()
+    ex.Show()
+    app.MainLoop()
 
 if __name__ == '__main__':
     main()
