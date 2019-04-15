@@ -14,7 +14,7 @@ url = "https://maps.googleapis.com/maps/api/staticmap?"
 
 point_list = []
 
-def fetch_map(latitude,longitude):
+def fetch_map(latitude,longitude, zoom=10):
     # center defines the center of the map,
     # equidistant from all edges of the map.
     center = "%f,%f" % (latitude, longitude)
@@ -23,7 +23,6 @@ def fetch_map(latitude,longitude):
     # zoom defines the zoom
     # level of the map
     # lets make this dynamic?
-    zoom = 18
     # get method of requests module
     # return response object
     r = requests.get(url + "center=" + center + "&markers=color:red|" + center + "&zoom=" + str(zoom) + "&size= 400x400&key=" + api_key + "&sensor=false")
@@ -39,6 +38,7 @@ def fetch_map(latitude,longitude):
         # close mthod of file object
         # save and close the file
         f.close()
+        print("Map Updated")
         return True
     else:
         return False

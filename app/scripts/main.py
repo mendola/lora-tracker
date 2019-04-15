@@ -28,32 +28,33 @@ class PanelOne(wx.Panel):
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-                fgs = wx.FlexGridSizer(3, 5, 9, 25)
+        fgs = wx.FlexGridSizer(3, 5, 9, 25)
 
         title = wx.StaticText(self, label="Fiercely Efficient Tracking CHip")
         separator = wx.StaticLine(self)
         separator2 = wx.StaticLine(self)
-        findButton = wx.Button(self, label="Find Me!")
-        self.Bind(wx.EVT_BUTTON, self.onFindButtonClick)
-        sleepButton = wx.Button(self, label="Sleep")
-
+        self.findButton = wx.Button(self, label="Find Me!")
+        self.Bind(wx.EVT_BUTTON, self.onFindButtonClick, self.findButton)
+        self.sleepButton = wx.Button(self, label="Sleep")
+        self.Bind(wx.EVT_BUTTON, self.onSleepButtonClick, self.sleepButton)
         fetchImage = wx.Bitmap('FETCH-logo.png')
         fetchImage = scale_bitmap(fetchImage, 100, 100)
         icon = wx.StaticBitmap(self, bitmap=fetchImage)
 
         localizeHeader = wx.StaticText(self, label="Localize time: ")
-        localizeTime = wx.TextCtrl(self)
+        self.localizeTime = wx.TextCtrl(self)
         sleepHeader = wx.StaticText(self, label="Sleep time: ")
-        sleepTime = wx.TextCtrl(self)
+        self.sleepTime = wx.TextCtrl(self)
 
         zoomText = wx.StaticText(self, label="Zoom: ")
-        zoomCtrl = wx.SpinCtrl(self, value='18')
-        zoomCtrl.SetRange(1, 20)
+        self.zoomCtrl = wx.SpinCtrl(self, value='18')
+        self.zoomCtrl.SetRange(1, 20)
+        self.Bind(wx.EVT_SPINCTRL, self.onZoomCtrlClick, self.zoomCtrl)
 
         fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
-            (findButton, 1, wx.EXPAND),(sleepButton, 1, wx.EXPAND),
-            (localizeHeader), (localizeTime), (sleepHeader),
-            (sleepTime), (separator2), (zoomText), (zoomCtrl)])
+            (self.findButton, 1, wx.EXPAND),(self.sleepButton, 1, wx.EXPAND),
+            (localizeHeader), (self.localizeTime), (sleepHeader),
+            (self.sleepTime), (separator2), (zoomText), (self.zoomCtrl)])
 
         # fgs.AddGrowableRow(2, 1)
         # sfgs.AddGrowableCol(1, 1)
@@ -62,9 +63,17 @@ class PanelOne(wx.Panel):
         self.SetSizer(hbox)
 
     def onFindButtonClick(self, e):
-        print('starting function')
-        #os.system('sudo python3 scripts/linux_usb_serial.py')
-        set_current_command_from_gui('l' + str(5))
+        sleep_time = self.localizeTime.GetValue()
+        set_current_command_from_gui('l' + str(sleep_time))
+
+    def onSleepButtonClick(self, e):
+        sleep_time = self.sleepTime.GetValue()
+        set_current_command_from_gui('s' + str(sleep_time))
+
+    def onZoomCtrlClick(self, e):
+        zoom = self.zoomCtrl.GetValue()
+        set_current_zoom(zoom)
+        request_map_update()
 
 ############### Second Panel: Map Func.####################################
 class PanelTwo(wx.Panel):
@@ -83,7 +92,7 @@ class PanelTwo(wx.Panel):
 
         title = wx.StaticText(self, label="Fiercely Efficient Tracking CHip")
         separator = wx.StaticLine(self)
-        findButton = wx.Button(self, label="Find Me!")
+        self.findButton = wx.Button(self, label="Find Me!")
         zoomText = wx.StaticText(self, label="Zoom: ")
 
         fetchImage = wx.Bitmap('FETCH-logo.png')
@@ -91,12 +100,13 @@ class PanelTwo(wx.Panel):
         icon = wx.StaticBitmap(self, bitmap=fetchImage)
 
         separator2 = wx.StaticLine(self)
-        zoomCtrl = wx.SpinCtrl(self, value='18')
-        zoomCtrl.SetRange(1, 20)
+        self.zoomCtrl = wx.SpinCtrl(self, value='10')
+        self.zoomCtrl.SetRange(1, 20)
+
 
         fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
-            (findButton, 1, wx.EXPAND), (zoomText), (separator2),
-            (zoomCtrl)])
+            (self.findButton, 1, wx.EXPAND), (zoomText), (separator2),
+            (self.zoomCtrl)])
 
         fgs.AddGrowableRow(2, 1)
         fgs.AddGrowableCol(1, 1)
@@ -149,18 +159,18 @@ class Example(wx.Frame):
         self.Layout()
 
 def main():
-    # serial_thread = threading.Thread(target=usb_interface)
-    # serial_thread.daemon = False
-    # serial_thread.start()
-    #
-    # plotting_thread = threading.Thread(target=map_loop)
-    # plotting_thread.daemon = False
-    # plotting_thread.start()
+    serial_thread = threading.Thread(target=usb_interface)
+    serial_thread.daemon = False
+    serial_thread.start()
+    
+    plotting_thread = threading.Thread(target=map_loop)
+    plotting_thread.daemon = False
+    plotting_thread.start()
 
-    # gui_thread = threading.Thread(target=gui)
-    # gui_thread.daemon = False
-    # gui_thread.start()
-    gui()
+    gui_thread = threading.Thread(target=gui)
+    gui_thread.daemon = False
+    gui_thread.start()
+    #gui()
 
     def stop(a, b):
         global STOP

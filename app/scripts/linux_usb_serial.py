@@ -16,6 +16,7 @@ global map_needs_updating
 map_needs_updating = False
 STOP = False
 current_command_from_gui = None
+zoom_level = 10
 
 mini_gprmc_msg = None
 latitude = b''
@@ -27,7 +28,17 @@ def set_current_command_from_gui(cmd):
     print("Setting current command: " + str(cmd))
     current_command_from_gui = cmd # cmd.encode('utf-8')
 
+def get_current_zoom():
+    global zoom_level
+    return zoom_level
 
+def set_current_zoom(zoom):
+    global zoom_level
+    zoom_level = zoom
+
+def request_map_update():
+    map_needs_updating = True
+    
 # If there's input ready, do something, else do something
 # else. Note timeout is zero so select won't block at all.
 def nonblocking_read():
@@ -133,12 +144,13 @@ def map_loop():
 
     print("Starting map loop!!!")
     fig = plt.figure()
+    fig.canvas.set_window_title('Node Location')
     ax = fig.add_subplot(1,1,1)
     im = ax.imshow(current_map, animated=True)
     def update_map(i):
         global map_needs_updating
         if map_needs_updating:
-            fetch_map(current_coordinates[0], current_coordinates[1])
+            fetch_map(current_coordinates[0], current_coordinates[1], get_current_zoom())
             map_needs_updating = False
             current_map = PIL.Image.open('current_map.png')
             im.set_array(current_map)
