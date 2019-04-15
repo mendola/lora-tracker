@@ -1,9 +1,12 @@
 import wx
 import random
-import scripts
 import os
 
 global pingFrequency
+global ZOOM_LEVEL
+
+ZOOM_LEVEL = 18
+# default value
 
 def scale_bitmap(bitmap, width, height):
     image = wx.ImageFromBitmap(bitmap)
@@ -11,86 +14,128 @@ def scale_bitmap(bitmap, width, height):
     result = wx.BitmapFromImage(image)
     return result
 
+############# First Panel, Main App Screen ###############################
+class PanelOne(wx.Panel):
+    """"""
 
-class Example(wx.Frame):
+    #----------------------------------------------------------------------
+    def __init__(self, parent):
+        """Constructor"""
+        wx.Panel.__init__(self, parent=parent)
+        self.SetBackgroundColour('gray')
 
-    def __init__(self, parent, title):
-        super(Example, self).__init__(parent, title=title)
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.InitUI()
-        self.Centre()
+        fgs = wx.FlexGridSizer(3, 2, 9, 25)
 
-    def InitUI(self):
-
-        panel = wx.Panel(self)
-        panel.SetBackgroundColour("gray")
-        menubar = wx.MenuBar()
-
-        # eventual functionality
-        fileMenu = wx.Menu()
-        fileMenu.Append(wx.ID_NEW, '&Add Gateway')
-        fileMenu.Append(wx.ID_OPEN, '&Add Device')
-        fileMenu.Append(wx.ID_SAVE, '&About Fetch')
-        fileMenu.AppendSeparator()
-
-        imp = wx.Menu()
-        imp.Append(wx.ID_ANY, 'Import location data...')
-
-        fileMenu.AppendMenu(wx.ID_ANY, 'I&mport', imp)
-
-        qmi = wx.MenuItem(fileMenu, wx.ID_EXIT, '&Quit\tCtrl+W')
-        fileMenu.AppendItem(qmi)
-
-        self.Bind(wx.EVT_MENU, self.OnQuit, qmi)
-
-        menubar.Append(fileMenu, '&File')
-        self.SetMenuBar(menubar)
-
-        sizer = wx.GridBagSizer(7,7)
-
-        appHeader = wx.StaticText(panel, label="Fetch: Fiercly Efficient Tracking CHip")
-        sizer.Add(appHeader, pos=(0,0), flag=wx.TOP|wx.LEFT|wx.BOTTOM,
-            border=15)
-
-        #      bitmap = wx.Bitmap(path)
-        # bitmap = scale_bitmap(bitmap, 300, 200)
-        # control = wx.StaticBitmap(self, -1, bitmap)
-        fetchImage = wx.Bitmap('fetch-image.png')
-        fetchImage = scale_bitmap(fetchImage, 75, 75)
-
-        icon = wx.StaticBitmap(panel, bitmap=fetchImage)
-        sizer.Add(icon, pos=(0, 1), flag=wx.TOP|wx.RIGHT|wx.ALIGN_RIGHT,
-            border=5)
-
-        separator = wx.StaticLine(panel)
-        sizer.Add(separator, pos=(1, 0), span=(1, 4),
-            flag=wx.EXPAND|wx.BOTTOM, border=10)
-
-        findButton = wx.Button(panel, label="Find Me!")
-        sizer.Add(findButton, pos=(2,1), flag=wx.RIGHT, border=10)
+        title = wx.StaticText(self, label="Fiercely Efficient Tracking CHip")
+        separator = wx.StaticLine(self)
+        findButton = wx.Button(self, label="Find Me!")
         self.Bind(wx.EVT_BUTTON, self.onFindButtonClick)
 
-        setPingFreqText = wx.StaticText(panel, label="Set ping frequency: ")
-        sizer.Add(setPingFreqText, pos=(3, 0), flag=wx.TOP|wx.LEFT|wx.BOTTOM, border=5)
+        fetchImage = wx.Bitmap('FETCH-logo.png')
+        fetchImage = scale_bitmap(fetchImage, 100, 100)
+        icon = wx.StaticBitmap(self, bitmap=fetchImage)
 
-        pingFrequencyText = wx.TextCtrl(panel)
-        sizer.Add(pingFrequencyText, pos=(3,1), span=(1,2), flag=wx.RIGHT|wx.BOTTOM, border=5)
+        fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
+            (findButton, 1, wx.EXPAND)])
 
+        fgs.AddGrowableRow(2, 1)
+        fgs.AddGrowableCol(1, 1)
 
-        panel.SetSizer(sizer)
-        sizer.Fit(self)
-
-    def OnQuit(self, e):
-        self.Close()
+        hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=15)
+        self.SetSizer(hbox)
 
     def onFindButtonClick(self, e):
         print('starting function')
-        os.system('python3 scripts/linux_usb_serial.py')
+        os.system('python3 linux_usb_serial.py')
+
+############### Second Panel: Map Func.####################################
+class PanelTwo(wx.Panel):
+    """"""
+
+    #----------------------------------------------------------------------
+    def __init__(self, parent):
+        """Constructor"""
+        wx.Panel.__init__(self, parent=parent)
+
+        self.SetBackgroundColour('yellow')
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+
+        fgs = wx.FlexGridSizer(4, 2, 9, 25)
+
+        title = wx.StaticText(self, label="Fiercely Efficient Tracking CHip")
+        separator = wx.StaticLine(self)
+        findButton = wx.Button(self, label="Find Me!")
+        zoomText = wx.StaticText(self, label="Zoom: ")
+
+        fetchImage = wx.Bitmap('FETCH-logo.png')
+        fetchImage = scale_bitmap(fetchImage, 100, 100)
+        icon = wx.StaticBitmap(self, bitmap=fetchImage)
+
+        separator2 = wx.StaticLine(self)
+        zoomCtrl = wx.SpinCtrl(self, value='18')
+        zoomCtrl.SetRange(1, 20)
+
+        fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
+            (findButton, 1, wx.EXPAND), (zoomText), (separator2),
+            (zoomCtrl)])
+
+        fgs.AddGrowableRow(2, 1)
+        fgs.AddGrowableCol(1, 1)
+
+        hbox.Add(fgs, proportion=1, flag=wx.ALL|wx.EXPAND, border=15)
+        self.SetSizer(hbox)
+
+
+################# Main Frame ########################################
+class Example(wx.Frame):
+
+    #----------------------------------------------------------------------
+    def __init__(self):
+        wx.Frame.__init__(self, None, wx.ID_ANY,
+                          "Panel Switcher Tutorial")
+
+        self.panel_one = PanelOne(self)
+        self.panel_two = PanelTwo(self)
+        self.panel_two.Hide()
+
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.panel_one, 1, wx.EXPAND)
+        self.sizer.Add(self.panel_two, 1, wx.EXPAND)
+        self.SetSizer(self.sizer)
+
+
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        switch_panels_menu_item = fileMenu.Append(wx.ID_ANY,
+                                                  "Switch Panel",
+                                                  "Some text")
+        self.Bind(wx.EVT_MENU, self.onSwitchPanels,
+                  switch_panels_menu_item)
+        menubar.Append(fileMenu, '&File')
+        self.SetMenuBar(menubar)
+
+    #----------------------------------------------------------------------
+
+
+    def onSwitchPanels(self, event):
+        """"""
+        if self.panel_one.IsShown():
+            self.SetTitle("Panel Two Showing")
+            self.panel_one.Hide()
+            self.panel_two.Show()
+        else:
+            self.SetTitle("Panel One Showing")
+            self.panel_one.Show()
+            self.panel_two.Hide()
+        self.Layout()
 
 
 def main():
     app = wx.App()
-    ex = Example(None, title="FETCH")
+    ex = Example()
     ex.Show()
     app.MainLoop()
 
