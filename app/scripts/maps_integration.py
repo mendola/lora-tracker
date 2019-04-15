@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 # Put the API key in api_key.txt (1 line, no quotes)
-with open ("scripts/api_key.txt", "r") as myfile:
+with open ("api_key.txt", "r") as myfile:
     api_key=myfile.readlines()[0]
 
 # url variable store url

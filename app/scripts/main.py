@@ -1,6 +1,7 @@
 import wx
 import random
 import os
+from linux_usb_serial import * #usb_interface, map_loop
 
 global pingFrequency
 global ZOOM_LEVEL
@@ -48,7 +49,8 @@ class PanelOne(wx.Panel):
 
     def onFindButtonClick(self, e):
         print('starting function')
-        os.system('python3 linux_usb_serial.py')
+        #os.system('sudo python3 scripts/linux_usb_serial.py')
+        set_current_command_from_gui('l' + str(5))
 
 ############### Second Panel: Map Func.####################################
 class PanelTwo(wx.Panel):
@@ -132,12 +134,34 @@ class Example(wx.Frame):
             self.panel_two.Hide()
         self.Layout()
 
-
-def main():
+def gui():
     app = wx.App()
     ex = Example()
     ex.Show()
     app.MainLoop()
+
+
+def main():
+    serial_thread = threading.Thread(target=usb_interface)
+    serial_thread.daemon = False
+    serial_thread.start()
+
+    plotting_thread = threading.Thread(target=map_loop)
+    plotting_thread.daemon = False
+    plotting_thread.start()
+
+    gui_thread = threading.Thread(target=gui)
+    gui_thread.daemon = False
+    gui_thread.start()
+
+
+    def stop(a, b):
+        global STOP
+        STOP = True
+        raise Exception
+
+    signal.signal(signal.SIGINT, stop)
+    signal.signal(signal.SIGTERM, stop)
 
 
 if __name__ == '__main__':

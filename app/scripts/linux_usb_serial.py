@@ -15,11 +15,18 @@ current_coordinates = (b'',b'')
 global map_needs_updating
 map_needs_updating = False
 STOP = False
+current_command_from_gui = None
 
 mini_gprmc_msg = None
 latitude = b''
 longitude = b''
 totalbytes = None
+
+def set_current_command_from_gui(cmd):
+    global current_command_from_gui
+    print("Setting current command: " + str(cmd))
+    current_command_from_gui = cmd # cmd.encode('utf-8')
+
 
 # If there's input ready, do something, else do something
 # else. Note timeout is zero so select won't block at all.
@@ -47,7 +54,7 @@ def handle_raw_char(char):
             else:
                 print(newdata,end='')
         except UnicodeDecodeError:
-            print("Fucc")
+            pass
     else:
         if totalbytes < 4:
             latitude += char
@@ -84,6 +91,7 @@ def handle_minigprmc_msg(msg):
 def usb_interface():
     global current_coordinates
     global map_needs_updating
+    global current_command_from_gui
     try:
         with Serial("/dev/ttyACM0", 115200) as ser:
             ser.flushInput()
@@ -102,6 +110,11 @@ def usb_interface():
                 line_in = nonblocking_read()  # nonblocking read from keyboard
                 if line_in is not None:
                     ser.write(line_in.encode())  # Send keyboard input over serial
+                if current_command_from_gui is not None:
+                    current_command_from_gui += '\r\n'
+                    ser.write(current_command_from_gui.encode())
+                    print(">>>" + current_command_from_gui)
+                    current_command_from_gui = None
     except Exception:
         print("Stopping USB thread.")
 
@@ -133,20 +146,25 @@ def map_loop():
     plt.show()
 
 
-serial_thread = threading.Thread(target=usb_interface)
-serial_thread.daemon = False
-serial_thread.start()
-plotting_thread = threading.Thread(target=map_loop)
-plotting_thread.daemon = False
-plotting_thread.start()
+def terminal():
+    serial_thread = threading.Thread(target=usb_interface)
+    serial_thread.daemon = False
+    serial_thread.start()
 
-# usb_interface()
-# map_loop()
+    plotting_thread = threading.Thread(target=map_loop)
+    plotting_thread.daemon = False
+    plotting_thread.start()
 
-def stop(a, b):
-    global STOP
-    STOP = True
-    raise Exception
 
-signal.signal(signal.SIGINT, stop)
-signal.signal(signal.SIGTERM, stop)
+
+    def stop(a, b):
+        global STOP
+        STOP = True
+        raise Exception
+
+    signal.signal(signal.SIGINT, stop)
+    signal.signal(signal.SIGTERM, stop)
+
+
+if __name__ == '__main__':
+    terminal()
