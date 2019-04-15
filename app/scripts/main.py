@@ -27,7 +27,7 @@ class PanelOne(wx.Panel):
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
 
-        fgs = wx.FlexGridSizer(3, 2, 9, 25)
+        fgs = wx.FlexGridSizer(3, 4, 9, 25)
 
         title = wx.StaticText(self, label="Fiercely Efficient Tracking CHip")
         separator = wx.StaticLine(self)
@@ -38,8 +38,14 @@ class PanelOne(wx.Panel):
         fetchImage = scale_bitmap(fetchImage, 100, 100)
         icon = wx.StaticBitmap(self, bitmap=fetchImage)
 
+        localizeHeader = wx.StaticText(self, label="Localize time: ")
+        localizeTime = wx.TextCtrl(self)
+        sleepHeader = wx.StaticText(self, label="Sleep time: ")
+        sleepTime = wx.TextCtrl(self)
+
         fgs.AddMany([(icon), (title, 1, wx.EXPAND), (separator),
-            (findButton, 1, wx.EXPAND)])
+            (findButton, 1, wx.EXPAND), (localizeHeader),
+            (localizeTime), (sleepHeader), (sleepTime)])
 
         fgs.AddGrowableRow(2, 1)
         fgs.AddGrowableCol(1, 1)
@@ -125,11 +131,11 @@ class Example(wx.Frame):
     def onSwitchPanels(self, event):
         """"""
         if self.panel_one.IsShown():
-            self.SetTitle("Panel Two Showing")
+            self.SetTitle("Fetching Device")
             self.panel_one.Hide()
             self.panel_two.Show()
         else:
-            self.SetTitle("Panel One Showing")
+            self.SetTitle("FETCH")
             self.panel_one.Show()
             self.panel_two.Hide()
         self.Layout()
@@ -142,18 +148,18 @@ def gui():
 
 
 def main():
-    serial_thread = threading.Thread(target=usb_interface)
-    serial_thread.daemon = False
-    serial_thread.start()
-
-    plotting_thread = threading.Thread(target=map_loop)
-    plotting_thread.daemon = False
-    plotting_thread.start()
-
-    gui_thread = threading.Thread(target=gui)
-    gui_thread.daemon = False
-    gui_thread.start()
-
+    # serial_thread = threading.Thread(target=usb_interface)
+    # serial_thread.daemon = False
+    # serial_thread.start()
+    #
+    # plotting_thread = threading.Thread(target=map_loop)
+    # plotting_thread.daemon = False
+    # plotting_thread.start()
+    #
+    # gui_thread = threading.Thread(target=gui)
+    # gui_thread.daemon = False
+    # gui_thread.start()
+    gui()
 
     def stop(a, b):
         global STOP
